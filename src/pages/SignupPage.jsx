@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import Button from '../components/Elements/Button';
+import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Input from '../components/Elements/Input';
+import Input from '../components/elements/Input';
 import {
   LoginModalWrapper,
   LoginText,

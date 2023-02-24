@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sidebar from '../components/Layout/Sidebar';
-import Input from '../components/Elements/Input';
-import Button from '../components/Elements/Button';
+import Input from '../components/elements/Input';
+import Button from '../components/elements/Button';
 import { useState } from 'react';
 import { FaUserAlt, FaLock, FaEnvelope } from 'react-icons/fa';
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs';

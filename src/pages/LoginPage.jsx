@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
-import Input from '../components/Elements/Input.jsx';
-import Button from '../components/Elements/Button';
+import Input from '../components/elements/Input.jsx';
+import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {

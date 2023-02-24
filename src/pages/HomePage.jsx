@@ -2,12 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 import useInputOnChange from '../hooks/useInputOnChange';
 import { FaSearch } from 'react-icons/fa';
+import { FcLikePlaceholder } from 'react-icons/fc';
 import HomeCardItem from '../components/home/HomeCardItem';
 import defaultImg from '../style/img/example.png';
 import { CustomHr } from '../style/Theme';
+import { useQuery } from 'react-query';
+import { userInfo } from '../util/api/userInfo';
 
 export default function HomePage() {
   const [{ search }, inputHandler] = useInputOnChange({ search: '' });
+
+  const { isLoading, isError, data } = useQuery('userQueryKey', userInfo);
+  console.log(data);
+  if (isLoading) {
+    return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
+  }
+
+  if (isError) {
+    return <CardEmptyContainer>오류가 발생했습니다.</CardEmptyContainer>;
+  }
+
   return (
     <>
       <HomeWrapper>
@@ -44,6 +58,7 @@ export default function HomePage() {
                 <SearchSpan>
                   답변 <span>1</span>
                 </SearchSpan>
+                <FcLikePlaceholder />
               </SearchHowMuchQuestions>
             </SearchInfoContainer>
           </SearchImgContainer>
@@ -51,20 +66,34 @@ export default function HomePage() {
         </HomeSearchImgWrapper>
 
         <HomeCardContainer>
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
-          <HomeCardItem nickName="정다정" />
+          {data.map((user, i) => (
+            <HomeCardItem
+              key={i}
+              nickName={user.nickname}
+              introduction={user.introduction}
+            >
+              {user.image !== '' ? (
+                <img src={user.image} alt=""></img>
+              ) : (
+                <img src={defaultImg} alt=""></img>
+              )}
+              <img src={defaultImg} alt=""></img>
+            </HomeCardItem>
+          ))}
         </HomeCardContainer>
       </HomeWrapper>
     </>
   );
 }
+
+const CardEmptyContainer = styled.div`
+  ${(props) => props.theme.FlexCol}
+  height: calc(100vh - 260px);
+  gap: 1rem;
+  span {
+    color: tomato;
+  }
+`;
 
 const HomeWrapper = styled.section`
   max-width: 1200px;
@@ -149,6 +178,11 @@ const SearchInfoContainer = styled.div`
 const SearchHowMuchQuestions = styled.div`
   ${(props) => props.theme.FlexRow};
   justify-content: flex-start;
+  align-items: flex-end;
+  svg {
+    font-size: ${(props) => props.theme.FS.xl};
+    margin-bottom: 0.3rem;
+  }
 `;
 const SearchSpan = styled.div`
   padding: 0.3rem 1rem;

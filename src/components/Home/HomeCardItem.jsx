@@ -1,5 +1,4 @@
 import React from 'react';
-import defaultImg from '../../style/img/example.png';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -8,13 +7,15 @@ export default function HomeCardItem(props) {
     <>
       <HomeCardItemWrapper>
         <CardContainer>
-          <CardImgLink>
-            <img src={defaultImg} alt=""></img>
-          </CardImgLink>
+          <CardImgLink>{props.children}</CardImgLink>
           <CardDescLink>
             <CardLinkContainer>
               <p>{props.nickName}</p>
-              <span>롤링페이퍼 쓰러가기</span>
+              <span>
+                {props.introduction.length > 14
+                  ? `${props.introduction.slice(0, 14)}...`
+                  : props.introduction}
+              </span>
             </CardLinkContainer>
           </CardDescLink>
         </CardContainer>
@@ -72,7 +73,11 @@ const CardLinkContainer = styled.div`
   transition: all 0.2s ease 0s;
   width: 100%;
   color: white;
+
   &:hover {
     bottom: 0px;
+  }
+  span {
+    font-size: ${(props) => props.theme.FS.s};
   }
 `;

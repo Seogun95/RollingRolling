@@ -25,10 +25,6 @@ export const GlobalStyle = createGlobalStyle`
     footer, header, hgroup, menu, nav, section {
         display: block;
     }
-    body {
-      background-color: #161616;
-      color: white;
-    }
     a {
     text-decoration: none; /* 언더바 제거 */
     color: inherit; /* 부모 요소의 색을 상속 받음 */

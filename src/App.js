@@ -2,7 +2,14 @@ import React from 'react';
 import Router from './shared/Router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from 'styled-components';
-import { FlexRow, FlexRowBetween, FlexCol, CL, FS } from './style/Theme';
+import {
+  FlexRow,
+  FlexRowBetween,
+  FlexCol,
+  CL,
+  FS,
+  DarkBlur,
+} from './style/Theme';
 const queryClient = new QueryClient();
 
 function App() {
@@ -12,6 +19,7 @@ function App() {
     FlexCol,
     CL,
     FS,
+    DarkBlur,
   };
 
   return (

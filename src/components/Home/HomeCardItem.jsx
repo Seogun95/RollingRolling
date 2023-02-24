@@ -1,5 +1,5 @@
 import React from 'react';
-import defaultImg from '../style/img/example.png';
+import defaultImg from '../../style/img/example.png';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 

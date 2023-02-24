@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import Sidebar from "../components/Layout/Sidebar";
+import React from 'react';
+import styled from 'styled-components';
+import Sidebar from '../components/layout/Sidebar';
 export default function Detailpage() {
   return (
     <DetailWrapper>
@@ -78,7 +78,7 @@ const MyQuestionBox = styled.div`
 
 const WrittenQuestionContainer = styled.div`
   ${(props) => props.theme.FlexRow};
-  margin-top: 5%;
+  margin-top: 4%;
   flex-direction: column;
   h2 {
     align-self: flex-start;

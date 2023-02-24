@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import useInputOnChange from '../hooks/useInputOnChange';
 import { FaSearch } from 'react-icons/fa';
-import HomeCardItem from '../components/HomCardItem';
+import HomeCardItem from '../components/HomeCardItem';
+import defaultImg from '../style/img/example.png';
+import { CustomHr } from '../style/Theme';
+
 export default function HomePage() {
   const [{ search }, inputHandler] = useInputOnChange({ search: '' });
   return (
@@ -27,6 +30,25 @@ export default function HomePage() {
             </SearchLabel>
           </HomeSearchForm>
         </HomeSearchContainer>
+
+        <HomeSearchImgWrapper>
+          <SearchImgContainer>
+            <img src={defaultImg} alt="" />
+            <SearchInfoContainer>
+              <h1>정다정</h1>
+              <h3>자기 소개가 들어올 자리입니다.</h3>
+              <SearchHowMuchQuestions>
+                <SearchSpan>
+                  질문 <span>1</span>
+                </SearchSpan>
+                <SearchSpan>
+                  답변 <span>1</span>
+                </SearchSpan>
+              </SearchHowMuchQuestions>
+            </SearchInfoContainer>
+          </SearchImgContainer>
+          <CustomHr />
+        </HomeSearchImgWrapper>
 
         <HomeCardContainer>
           <HomeCardItem nickName="정다정" />
@@ -95,4 +117,43 @@ const HomeCardContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 32px;
   display: grid;
+  justify-items: center;
+  padding: 2rem;
+`;
+
+const HomeSearchImgWrapper = styled.div`
+  ${(props) => props.theme.FlexCol};
+`;
+const SearchImgContainer = styled.div`
+  ${(props) => props.theme.FlexRow};
+  height: 250px;
+
+  img {
+    width: 300px;
+    height: 100%;
+    border-radius: 1rem 0 0 1rem;
+    object-fit: cover;
+  }
+`;
+const SearchInfoContainer = styled.div`
+  ${(props) => props.theme.FlexCol};
+  align-items: flex-start;
+  width: 100%;
+  background: #e9e9e9;
+  height: 100%;
+  border-radius: 0 10px 10px 0;
+  gap: 1rem;
+  padding-left: 1rem;
+`;
+
+const SearchHowMuchQuestions = styled.div`
+  ${(props) => props.theme.FlexRow};
+  justify-content: flex-start;
+`;
+const SearchSpan = styled.div`
+  padding: 0.3rem 1rem;
+  background: black;
+  color: white;
+  border-radius: 1rem;
+  margin: 2rem 1rem 0 0;
 `;

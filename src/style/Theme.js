@@ -1,4 +1,5 @@
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
+import scissors from '../style/img/scissors.png';
 
 export const FlexRow = css`
   display: flex;
@@ -41,3 +42,27 @@ export const FS = {
   s: '0.9rem', // button
   xs: '0.8rem', // message
 };
+
+export const CustomHr = styled.hr`
+  opacity: 1;
+  border: 0;
+  clear: both;
+  display: block;
+  margin: 4rem 0;
+  text-align: center;
+  width: 100%;
+  font-size: inherit;
+  background: 0 0;
+  border-bottom: 4px dashed #eeeeee82;
+  height: 0;
+  :before {
+    content: '';
+    background-image: url(${scissors});
+    background-size: cover;
+    display: block;
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    margin-top: -10px;
+  }
+`;

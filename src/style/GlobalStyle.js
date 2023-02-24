@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     /* reset.css */
@@ -24,10 +24,6 @@ export const GlobalStyle = createGlobalStyle`
     article, aside, details, figcaption, figure,
     footer, header, hgroup, menu, nav, section {
         display: block;
-    }
-    body {
-      background-color: #161616;
-      color: white;
     }
     a {
     text-decoration: none; /* 언더바 제거 */

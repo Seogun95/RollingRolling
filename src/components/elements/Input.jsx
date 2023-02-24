@@ -16,9 +16,14 @@ function Input(props) {
 export default Input;
 
 const LoginLabel = styled.label`
-    width: 100%;
     position: relative;
-    margin: 0.2rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 1.5rem 1rem 0.1rem 2.5rem;
+    border-radius: 0.5rem;
+    outline: none;
+    font-size: 0.9375rem;
+    background-color: white;
 `;
 
 const LoginInsideLabel = styled.label`
@@ -39,7 +44,6 @@ const LoginInputIcon = styled.span`
 const LoginInput = styled.input`
     width: 100%;
     border-radius: 0.5rem;
-    height: 3.125rem;
+    height: 30px;
     line-height: 4.375rem;
-    padding: 16px 35px 0;
 `;

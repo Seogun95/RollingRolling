@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import useInputOnChange from '../hooks/useInputOnChange';
 import { FaSearch } from 'react-icons/fa';
-import HomeCardItem from '../components/HomeCardItem';
+import HomeCardItem from '../components/Home/HomeCardItem';
 import defaultImg from '../style/img/example.png';
 import { CustomHr } from '../style/Theme';
 

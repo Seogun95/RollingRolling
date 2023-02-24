@@ -1,0 +1,10 @@
+{
+  "post": [
+    {
+      "postid": 1,
+      "nickname": "닉네임",
+      "content": "질문내용",
+      "createdAt": ""
+    }
+  ]
+}

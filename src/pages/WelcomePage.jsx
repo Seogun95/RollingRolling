@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../components/Elements/Button';
+import Button from '../components/elements/Button';
 
 export default function WelcomePage() {
   return (

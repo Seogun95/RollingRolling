@@ -8,17 +8,17 @@ import HomePage from '../pages/HomePage';
 import DetailPage from '../pages/DetailPage';
 
 const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="login/" element={<LoginPage />} />
-        <Route path="signup/" element={<SignupPage />} />
-        <Route path="home/" element={<HomePage />} />
-        <Route path="home/:id" element={<DetailPage />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<WelcomePage />} />
+                <Route path="login/" element={<LoginPage />} />
+                <Route path="signup/" element={<SignupPage />} />
+                <Route path="home/" element={<HomePage />} />
+                <Route path="home/:id" element={<DetailPage />} />
+            </Routes>
+        </BrowserRouter>
+    );
 };
 
 export default Router;

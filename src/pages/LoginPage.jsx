@@ -33,9 +33,7 @@ function LoginPage() {
     const pwChangeHandler = (e) => {
         setinputPw(e.target.value);
         const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
-
         if (!pwRegex.test(e.target.value)) {
-            // setPwMessage('영어 소문자와 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 반드시 사용해야 합니다.');
             setPwMessage('영어 소문자와 숫자, 특수문자 조합의 8-20자의 비밀번호만 작성할 수 있습니다.');
             setIsPw(false);
         } else {
@@ -47,7 +45,6 @@ function LoginPage() {
     //스크롤 방지
     useEffect(() => {
         document.body.style.overflow = 'hidden';
-
         return () => {
             document.body.style.overflow = 'unset';
         };

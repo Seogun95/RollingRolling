@@ -32,9 +32,15 @@ const HomeCardItemWrapper = styled.article`
   text-decoration: none;
   transition: all 0.2s ease 0s;
   height: 250px;
+  width: 90%;
   img {
     width: 100%;
     object-fit: cover;
+  }
+
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(-5px);
   }
 `;
 

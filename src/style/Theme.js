@@ -24,6 +24,11 @@ export const FlexCol = css`
   width: 100%;
 `;
 
+export const DarkBlur = css`
+  background: #161616aa;
+  backdrop-filter: blur(3px);
+`;
+
 export const CL = {
   brandColor: '#8CB46D',
   scroll: '#8FAE76',

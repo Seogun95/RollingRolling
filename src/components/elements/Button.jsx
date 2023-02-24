@@ -1,16 +1,16 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
+import React from "react";
+import styled, { css } from "styled-components";
 
 export default function Button(props) {
   return <ButtonWrapper {...props}>{props.children}</ButtonWrapper>;
 }
 Button.defaultProps = {
-  padding: '.5rem',
-  margin: '.2rem',
-  borderR: '.5rem',
-  border: 'none',
-  bg: 'transparent',
-  ts: '.2s ease',
+  padding: ".5rem",
+  margin: ".2rem",
+  borderR: ".5rem",
+  border: "none",
+  bg: "transparent",
+  ts: ".2s ease",
   onClick: () => {},
 };
 
@@ -30,11 +30,13 @@ const ButtonWrapper = styled.button`
   color: ${(props) => props.color};
 
   ${(props) =>
-    props.small &&
+    props.default &&
     css`
-      width: 6.25rem;
-      height: 2.5rem;
-      background-color: ${(props) => props.theme.CL.mint};
+      padding: 1rem;
+      font-size: 30px;
+      width: 29rem;
+      height: 5rem;
+      background-color: ${(props) => props.theme.CL.brandColor};
     `}
 
   & {

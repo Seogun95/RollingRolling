@@ -4,6 +4,14 @@ import DetailWriteQuestion from './DetailWriteQuestion';
 import DetailMyQuestion from './DetailMyQuestion';
 
 function DetailContent() {
+  // if (isLoading) {
+  //   return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
+  // }
+
+  // if (isError) {
+  //   return <CardEmptyContainer>오류가 발생했습니다.</CardEmptyContainer>;
+  // }
+
   return (
     <DetailContainer>
       <DetailScrollContainer>
@@ -13,8 +21,8 @@ function DetailContent() {
             같으면 -> DetailMyQuestion component
             다르면 -> DetailWriteQuestion component
        */}
-        <DetailWriteQuestion />
-        {/* <DetailMyQuestion /> */}
+        {/* <DetailWriteQuestion /> */}
+        <DetailMyQuestion />
       </DetailScrollContainer>
     </DetailContainer>
   );
@@ -24,19 +32,19 @@ export default DetailContent;
 
 const DetailContainer = styled.div`
   width: 60vw;
-  height: 750px;
-  padding: 30px;
-  border: 5px solid #58793e;
+  height: 46.875rem;
+  padding: 1.875rem;
+  border: 5px solid ${(props) => props.theme.CL.brandColor};
   border-radius: 30px;
-  box-shadow: 9px 9px 0px 1px #58793e;
+  box-shadow: 9px 9px 0px 1px ${(props) => props.theme.CL.brandColor};
 `;
 
 const DetailScrollContainer = styled.div`
   height: 100%;
-  padding-left: 30px;
+  padding-left: 1.875rem;
   // scroll
   overflow-y: auto;
   &::-webkit-scrollbar-thumb {
-    background-color: #58793e;
+    background-color: ${(props) => props.theme.CL.brandColor};
   }
 `;

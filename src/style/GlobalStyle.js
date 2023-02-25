@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
     /* reset.css */
@@ -19,6 +19,7 @@ export const GlobalStyle = createGlobalStyle`
         padding: 0;
         border: 0;
         vertical-align: baseline;
+        font-weight: normal;
     }
 
     article, aside, details, figcaption, figure,
@@ -46,30 +47,38 @@ export const GlobalStyle = createGlobalStyle`
     -moz-user-drag: none;
     -o-user-drag: none;
 }
-    *{
+    * {
       box-sizing: border-box;
-      @font-face {
-    font-family: 'IBMPlexSansKR-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    }
+    @font-face {
       font-family: 'IBMPlexSansKR-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/IBMPlexSansKR-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'BMJUA';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+      /* font-family: 'IBMPlexSansKR-Regular'; */
     }
 
     //반드시 overflow: overlay해야 -webkit-scrollbar-track 투명도를 설정할 수 있다.
     body {
       overflow: overlay;
+      font-family: 'IBMPlexSansKR-Regular';
     }
     ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+      width: 10px;
+      height: 10px;
     }
     ::-webkit-scrollbar-thumb {
-        background-clip: padding-box;
-        border: 0 solid transparent;
-        border-radius: 10px;
-        background-color: #0000008e;
+      background-clip: padding-box;
+      border: 0 solid transparent;
+      border-radius: 10px;
+      background-color: #0000008e;
     }
     ::-webkit-scrollbar-track {
       background-color: transparent;

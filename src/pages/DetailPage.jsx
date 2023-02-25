@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Sidebar from '../components/layout/Sidebar';
-import DetailContent from '../components/layout/DetailContent';
+import DetailContent from '../components/detail/DetailContent';
 
 export default function Detailpage() {
   return (

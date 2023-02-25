@@ -5,6 +5,8 @@ import Input from '../components/elements/Input.jsx';
 import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import useLoginInput from '../hooks/useLoginInput.jsx';
+import { api } from '../util/api/api';
+import Cookies from 'js-cookie';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -25,6 +27,26 @@ function LoginPage() {
     '사용 가능한 비밀번호 입니다.',
     pwRegex
   );
+
+  const loginBtnHandler = async (e) => {
+    e.preventDefault();
+    const expiryDate = new Date(Date.now() + 10 * 60 * 1000);
+    if (inputId !== '' && inputPw !== '') {
+      try {
+        const response = await api.post('api/user/login', {
+          username: inputId,
+          password: inputPw,
+        });
+        const { token } = response.data;
+        Cookies.set('token', token, { expires: expiryDate });
+        alert('로그인이 완료 되었습니다.');
+        navigate('/home');
+      } catch (error) {
+        // alert(error.response.data.message);
+        alert('로그인 정보가 없습니다.');
+      }
+    }
+  };
 
   //스크롤 방지
   useEffect(() => {
@@ -67,7 +89,12 @@ function LoginPage() {
           <LoginAlertSpan isIdOrPw={checkPwRegex} height={'50px'}>
             {alertPw}
           </LoginAlertSpan>
-          <Button bg={'#8CB46D'} h={'3.125rem'} size={'0.9rem'}>
+          <Button
+            onClick={loginBtnHandler}
+            bg={'#8CB46D'}
+            h={'3.125rem'}
+            size={'0.9rem'}
+          >
             로그인
           </Button>
         </LoginInputContainer>

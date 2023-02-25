@@ -82,6 +82,7 @@ function SignupPage() {
           nickname: inputNickName,
         });
         alert('회원가입이 완료 되었습니다.');
+        navigate(moveSignupPg);
       } catch (error) {
         alert(error.response.data.message);
       }

@@ -1,6 +1,11 @@
 import React from 'react';
 import ReactTypingEffect from 'react-typing-effect';
+import styled from 'styled-components';
 //npm i react-typing-effect
+const TypingTitle = styled.h1`
+  color: white;
+  text-shadow: 2px 2px 6px black;
+`;
 
 export default function MainTyping() {
   return (
@@ -10,15 +15,14 @@ export default function MainTyping() {
         cursorRenderer={(cursor) => <h1>{cursor}</h1>}
         speed={150}
         eraseSpeed={50}
-        cursorColor={'black'}
         displayTextRenderer={(text, i) => {
           return (
-            <h1 style={{ color: 'white' }}>
+            <TypingTitle>
               {text.split('').map((char, i) => {
                 const key = `${i}`;
                 return <span key={key}>{char}</span>;
               })}
-            </h1>
+            </TypingTitle>
           );
         }}
       />

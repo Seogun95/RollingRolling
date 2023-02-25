@@ -9,8 +9,8 @@ import MainTyping from '../components/home/MainTyping';
 
 export default function WelcomePage() {
   const backgrounds = [
-    'https://cdn.imweb.me/thumbnail/20230202/773c5ea9cd2a6.jpg',
-    'https://cdn.imweb.me/thumbnail/20230202/0a3395dd18559.jpg',
+    'https://i.imgur.com/SvyQWWU.jpg',
+    'https://i.imgur.com/GFBmTcM.jpg',
   ];
 
   const backgroundIndex = useBgAnimation(backgrounds);
@@ -24,7 +24,7 @@ export default function WelcomePage() {
           <MainTyping />
         </StP>
         <BtnContainer>
-          <Button default onClick={() => navigate('/login')}>
+          <Button defaultBorder onClick={() => navigate('/login')}>
             시작하기
           </Button>
         </BtnContainer>
@@ -50,6 +50,9 @@ const WelcomeTitleWrapper = styled.div`
   width: 100vw;
   height: 100vh;
 
+  * {
+    font-family: 'BMJUA';
+  }
   .fade-enter {
     opacity: 0;
   }

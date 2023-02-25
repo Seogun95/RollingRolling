@@ -39,7 +39,7 @@ const LoginInsideLabel = styled.label`
 `;
 const LoginInputIcon = styled.span`
   position: absolute;
-  top: 70%;
+  top: 74%;
   left: 10px;
   transform: translateY(-50%);
   color: #aeaeae;

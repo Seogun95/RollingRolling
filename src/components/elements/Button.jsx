@@ -39,6 +39,17 @@ const ButtonWrapper = styled.button`
       background-color: ${(props) => props.theme.CL.brandColor};
     `}
 
+  ${(props) =>
+    props.defaultBorder &&
+    css`
+      padding: 1rem;
+      font-size: 30px;
+      width: 29rem;
+      height: 5rem;
+      border: 2px ${(props) => props.theme.CL.brandColor};
+    `}
+
+
   & {
     cursor: pointer;
   }

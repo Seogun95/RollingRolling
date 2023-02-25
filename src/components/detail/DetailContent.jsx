@@ -2,27 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import DetailWriteQuestion from './DetailWriteQuestion';
 import DetailMyQuestion from './DetailMyQuestion';
+import { useParams } from 'react-router-dom';
 
 function DetailContent() {
-  // if (isLoading) {
-  //   return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
-  // }
-
-  // if (isError) {
-  //   return <CardEmptyContainer>오류가 발생했습니다.</CardEmptyContainer>;
-  // }
-
   return (
     <DetailContainer>
       <DetailScrollContainer>
         {/* 
         추후 조건문으로 컴포넌트 걸러줄 예정...?
-        ex) 파라미터로 id 받고, 클릭한 페이지 id값 받아서 비교한 후
+        ex) 파라미터로 id\Seogun95\RollingRolling\blob\main\.gitignore 받고, 클릭한 페이지 id값 받아서 비교한 후
             같으면 -> DetailMyQuestion component
             다르면 -> DetailWriteQuestion component
        */}
-        {/* <DetailWriteQuestion /> */}
-        <DetailMyQuestion />
+        <DetailWriteQuestion />
+        {/* <DetailMyQuestion /> */}
       </DetailScrollContainer>
     </DetailContainer>
   );

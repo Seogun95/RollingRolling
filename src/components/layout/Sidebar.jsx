@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
+import EditMyInfomation from '../detail/EditMyInfomation';
 
-export default function Sidebar() {
-  // 내가 A사람의  게시판 들어갔을때
+export default function Sidebar(props) {
+  const [display, setDisplay] = useState();
 
   return (
     <LayoutSidebar>
       {/* 추후 id값 비교해서 조건문으로 프로필 영역 변경 */}
       <Profile src={defaultImg} alt=""></Profile>
-      <MyUrl>www.rolling.com/dajeong</MyUrl>
+      <MyUrl>www.rolling.com/{props.userId}</MyUrl>
       <MyDesc placeholder="아직 작성된 소개글이 없습니다." readOnly></MyDesc>
 
       <Button
@@ -30,6 +31,7 @@ export default function Sidebar() {
       <Ring4></Ring4>
       <Ring5></Ring5>
       <Ring6></Ring6>
+      <EditMyInfomation />
     </LayoutSidebar>
   );
 }

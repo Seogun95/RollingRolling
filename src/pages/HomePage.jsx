@@ -13,7 +13,6 @@ export default function HomePage() {
   const [{ search }, inputHandler] = useInputOnChange({ search: '' });
 
   const { isLoading, isError, data } = useQuery('userQueryKey', userInfo);
-  console.log(data);
   if (isLoading) {
     return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
   }
@@ -72,12 +71,11 @@ export default function HomePage() {
               nickName={user.nickname}
               introduction={user.introduction}
             >
-              {user.image !== '' ? (
+              {user.image && user.image !== 'null' ? (
                 <img src={user.image} alt=""></img>
               ) : (
                 <img src={defaultImg} alt=""></img>
               )}
-              <img src={defaultImg} alt=""></img>
             </HomeCardItem>
           ))}
         </HomeCardContainer>

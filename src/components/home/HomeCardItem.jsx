@@ -12,9 +12,11 @@ export default function HomeCardItem(props) {
             <CardLinkContainer>
               <p>{props.nickName}</p>
               <span>
-                {props.introduction.length > 14
-                  ? `${props.introduction.slice(0, 14)}...`
-                  : props.introduction}
+                {props.introduction && props.introduction !== 'null'
+                  ? props.introduction.length > 14
+                    ? `${props.introduction.slice(0, 14)}...`
+                    : props.introduction
+                  : `${props.nickName} 개인 페이지로 이동`}
               </span>
             </CardLinkContainer>
           </CardDescLink>

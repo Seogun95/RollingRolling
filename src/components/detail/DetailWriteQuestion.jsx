@@ -24,41 +24,43 @@ function DetailWriteQuestion() {
 
 export default DetailWriteQuestion;
 
-const WriteQuestionContainer = styled.div`
-  background-color: #81a36648;
+export const WriteQuestionContainer = styled.div`
+  background-color: ${(props) => props.theme.CL.brandColorLight};
   border-radius: 30px;
 `;
-const QuestionContainer = styled.div`
+
+export const QuestionContainer = styled.div`
   ${(props) => props.theme.FlexCol};
-  padding: 20px;
+  padding: 1.25rem;
 
   label {
     width: 100%;
+    margin-bottom: 1rem;
     font-size: ${(props) => props.theme.FS.l};
     font-weight: bold;
-    color: #58793e;
-    margin-bottom: 10px;
+    color: ${(props) => props.theme.CL.brandColor};
   }
   textarea {
     width: 100%;
     min-height: 9.375rem;
-    padding: 20px;
+    padding: 1.25rem;
     border: none;
     border-radius: 30px;
     font-size: ${(props) => props.theme.FS.m};
     resize: none;
     &:focus {
-      outline: 2px solid #58793e;
+      outline: 2px solid ${(props) => props.theme.CL.brandColor};
     }
   }
 `;
 
-const QuestionBox = styled.div`
+export const QuestionBox = styled.div`
   width: 100%;
-  height: 160px;
-  margin-bottom: 10px;
-  padding: 20px;
+  height: 10rem;
+  margin-bottom: 0.625rem;
+  padding: 1.25rem;
   border: none;
   border-radius: 30px;
   background-color: white;
+  font-size: ${(props) => props.theme.FS.m};
 `;

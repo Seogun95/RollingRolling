@@ -1,6 +1,6 @@
-import { instance } from './api';
+import { api } from './api';
 
 export const userInfo = async () => {
-  const response = await instance.get('/user');
+  const response = await api.get('/user');
   return response.data;
 };

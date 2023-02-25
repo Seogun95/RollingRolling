@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import Sidebar from '../components/Layout/Sidebar';
-import Input from '../components/elements/Input';
-import Button from '../components/elements/Button';
+import Sidebar from '../layout/Sidebar';
+import Input from '../elements/Input';
+import Button from '../elements/Button';
 import { useState } from 'react';
 import { FaUserAlt, FaLock, FaEnvelope } from 'react-icons/fa';
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs';
-import { LoginInputContainer, LoginAlertSpan } from './LoginPage';
+import { LoginInputContainer, LoginAlertSpan } from '../../pages/LoginPage';
 import defaultImg from '../style/img/example.png';
 
-function EditMyPage() {
+function EditMyInfomation() {
   const [inputId, setinputId] = useState('');
   const [inputPw, setinputPw] = useState('');
   const [inputCheckPw, setinputCheckPw] = useState('');
@@ -81,7 +81,7 @@ function EditMyPage() {
   );
 }
 
-export default EditMyPage;
+export default EditMyInfomation;
 
 const EditWrapper = styled.div`
   ${(props) => props.theme.FlexRow};

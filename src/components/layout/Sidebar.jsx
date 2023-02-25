@@ -24,7 +24,7 @@ const LayoutSidebar = styled.div`
   width: 31.25rem;
   height: 46.875rem;
   border-radius: 30px;
-  margin-right: 0.625rem;
+  margin-right: 30px;
   box-shadow: 3px 0px 0px 3px ${(props) => props.theme.CL.scroll};
 `;
 
@@ -32,7 +32,7 @@ const Profile = styled.img`
   width: 250px;
   height: 250px;
   margin-top: 50px;
-  border-radius: 50%;
+  border-radius: 30px;
 `;
 
 const MyUrl = styled.span`

@@ -6,6 +6,7 @@ import defaultImg from '../../style/img/example.png';
 export default function Sidebar() {
   return (
     <LayoutSidebar>
+      {/* 추후 id값 비교해서 조건문으로 프로필 영역 변경 */}
       <Profile src={defaultImg} alt=""></Profile>
       <MyUrl>www.rolling.com/dajeong</MyUrl>
       <MyDesc placeholder="아직 작성된 소개글이 없습니다." readOnly></MyDesc>

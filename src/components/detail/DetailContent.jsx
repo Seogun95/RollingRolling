@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import DetailWriteQuestion from '../detail/DetailWriteQuestion';
-import DetailMyQuestion from '../detail/DetailMyQuestion';
+import DetailWriteQuestion from './DetailWriteQuestion';
+import DetailMyQuestion from './DetailMyQuestion';
 
 function DetailContent() {
   return (

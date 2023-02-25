@@ -65,10 +65,10 @@ export default function HomePage() {
         </HomeSearchImgWrapper>
 
         <HomeCardContainer>
-          {data.map((user, i) => (
+          {data.reverse().map((user, i) => (
             <HomeCardItem
               key={i}
-              nickName={user.nickname}
+              nickname={user.nickname}
               introduction={user.introduction}
             >
               {user.image && user.image !== 'null' ? (
@@ -129,7 +129,7 @@ const SearchInput = styled.input`
   font-size: ${(props) => props.theme.FS.m};
   width: 100%;
   background: transparent;
-  padding: 1rem 1rem 1rem 2.5rem;
+  padding: 1.5rem 1rem 1rem 2.5rem;
   &::placeholder {
     color: #00000046;
   }
@@ -137,15 +137,48 @@ const SearchInput = styled.input`
 
 const SearchIcon = styled.div`
   position: absolute;
-  top: 1.2rem;
+  top: 1.5rem;
   left: 0.5rem;
 `;
 const HomeCardContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 32px;
+  grid-gap: 2rem;
   display: grid;
   justify-items: center;
-  padding: 2rem;
+  margin: 2rem;
+
+  &:last-child {
+  }
+
+  article > a {
+    &:after {
+      content: '';
+      display: block;
+      height: 100%;
+      left: 0;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      transition: 0.3s ease;
+      z-index: 1;
+    }
+    &:hover:after {
+      background: transparent !important;
+    }
+  }
+  &:hover article > a {
+    &:after {
+      background: #00000094;
+    }
+  }
+
+  @media screen and (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const HomeSearchImgWrapper = styled.div`

@@ -31,8 +31,9 @@ export const DarkBlur = css`
 `;
 
 export const CL = {
-  brandColor: '#8CB46D',
-  scroll: '#8FAE76',
+  brandColor: '#58793e',
+  scroll: '#58793e',
+  brandColorLight: `#81a36648`,
 };
 
 export const FS = {

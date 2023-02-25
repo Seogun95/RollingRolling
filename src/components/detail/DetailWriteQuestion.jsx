@@ -25,8 +25,7 @@ function DetailWriteQuestion() {
 export default DetailWriteQuestion;
 
 const WriteQuestionContainer = styled.div`
-  background-color: #8f8f8f;
-  margin: 30px;
+  background-color: #81a36648;
   border-radius: 30px;
 `;
 const QuestionContainer = styled.div`
@@ -36,6 +35,8 @@ const QuestionContainer = styled.div`
   label {
     width: 100%;
     font-size: ${(props) => props.theme.FS.l};
+    font-weight: bold;
+    color: #58793e;
     margin-bottom: 10px;
   }
   textarea {
@@ -44,7 +45,11 @@ const QuestionContainer = styled.div`
     padding: 20px;
     border: none;
     border-radius: 30px;
+    font-size: ${(props) => props.theme.FS.m};
     resize: none;
+    &:focus {
+      outline: 2px solid #58793e;
+    }
   }
 `;
 

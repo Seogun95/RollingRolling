@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
+
 import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import Input from '../components/elements/Input';
+import useLoginInput from '../hooks/useLoginInput';
 import {
   LoginModalWrapper,
   LoginText,
@@ -14,83 +16,59 @@ import {
 } from './LoginPage';
 
 function SignupPage() {
-  const [inputId, setinputId] = useState('');
-  const [inputPw, setinputPw] = useState('');
-  const [inputCheckPw, setinputCheckPw] = useState('');
-  const [inputEmail, setinputEmail] = useState('');
-  const [inputNickname, setinputNickname] = useState('');
-
-  const [idMessage, setIdMessage] = useState('아이디를 입력해주세요');
-  const [pwMessage, setPwMessage] = useState('비밀번호를 입력해주세요');
-  const [checkPwMessage, setCheckPwMessage] =
-    useState('비밀번호를 다시 입력해주세요');
-  const [emailMessage, setEmailMessage] = useState('이메일을 입력해주세요');
-  const [nicknameMessage, setNicknameMessage] =
-    useState('닉네임을 입력해주세요');
-
-  const [isId, setIsId] = useState(false);
-  const [isPw, setIsPw] = useState(false);
-  const [isCheckPw, setIsCheckPw] = useState(false);
-  const [isEmail, setIsEmail] = useState(false);
-  const [isNickname, setIsNickname] = useState(false);
-
   const navigate = useNavigate();
 
-  // id input change
-  const idChangeHanlder = (e) => {
-    setinputId(e.target.value);
-    const idRegex = /^(?=.*?[0-9])(?=.*?[a-z]).{5,}$/;
-    if (!idRegex.test(e.target.value)) {
-      setIdMessage(
-        '아이디는 영어 소문자, 숫자 조합의 5자 이상의 형식으로 입력해주세요.'
-      );
-      setIsId(false);
-    } else {
-      setIdMessage('사용 가능한 아이디 입니다.');
-      setIsId(true);
-    }
-  };
-  // pw input change
-  const pwChangeHandler = (e) => {
-    setinputPw(e.target.value);
-    const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/;
-    if (!pwRegex.test(e.target.value)) {
-      setPwMessage(
-        '영문과 숫자, 특수문자 조합의 8-20자의 비밀번호를 사용해야 합니다.'
-      );
-      setIsPw(false);
-    } else {
-      setPwMessage('사용 가능한 비밀번호 입니다.');
-      setIsPw(true);
-    }
-  };
-  // pw check change
-  const checkPwChangeHandler = (e) => {
-    setinputCheckPw(e.target.value);
-    if (inputPw !== e.target.value) {
-      setCheckPwMessage('비밀번호가 같지 않습니다. 다시 입력해주세요.');
-      setIsCheckPw(false);
-    } else {
-      setCheckPwMessage('비밀번호가 같습니다.');
-      setIsCheckPw(true);
-    }
-  };
-  // email input change
-  const emailChangeHanlder = (e) => {
-    setinputEmail(e.target.value);
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(e.target.value)) {
-      setEmailMessage('이메일 형식으로 입력해주세요.');
-      setIsEmail(false);
-    } else {
-      setEmailMessage('사용 가능한 이메일 입니다.');
-      setIsEmail(true);
-    }
-  };
-  // nickname input change
-  const nicknameChangeHanlder = (e) => {
-    setinputNickname(e.target.value);
-  };
+  const idRegex = /^(?=.*?[0-9])(?=.*?[a-z]).{5,}$/;
+  const [inputId, inputIdHandler, alertId, checkIdRegex] = useLoginInput(
+    '',
+    '아이디를 입력해주세요.',
+    '아이디는 영어 소문자, 숫자 조합의 5자 이상의 형식으로 입력해주세요.',
+    '사용 가능한 아이디 입니다.',
+    idRegex
+  );
+
+  const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
+  const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
+    '',
+    '비밀번호를 입력해주세요.',
+    '영문과 숫자, 특수문자 조합의 8-20자의 비밀번호를 사용해야 합니다.',
+    '사용 가능한 비밀번호 입니다.',
+    pwRegex
+  );
+
+  const [inputCheckPw, , alertCheckPw, doubleCheckPwRegex, checkSame] =
+    useLoginInput(
+      '',
+      '비밀번호를 다시 입력해주세요',
+      '비밀번호가 같지 않습니다. 다시 입력해주세요.',
+      '비밀번호가 같습니다.',
+      pwRegex,
+      inputPw
+    );
+
+  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,}$/;
+  const [
+    inputNickName,
+    inputNickNameHandler,
+    alertNickName,
+    checkNickNameRegex,
+  ] = useLoginInput(
+    '',
+    '닉네임을 입력해주세요',
+    '특수문자를 제외한, 2글자 이상의 닉네임을 입력해주세요.',
+    '사용 가능한 닉네임 입니다.',
+    userNameReg
+  );
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [inputEmail, inputEmailHandler, alertEmail, checkEmailRegx] =
+    useLoginInput(
+      '',
+      '이메일을 입력해주세요.',
+      '이메일 형식으로 입력해주세요.',
+      '사용 가능한 이메일 입니다.',
+      emailRegex
+    );
 
   // 회원가입
   // const joinHandler = async (e) => {
@@ -130,57 +108,60 @@ function SignupPage() {
           <Input
             text={'아이디'}
             value={inputId}
-            onChange={idChangeHanlder}
+            onChange={inputIdHandler}
             type={'text'}
             width={'60%'}
           >
             <FaUserAlt />
           </Input>
-
-          <LoginAlertSpan isIdOrPw={isId}>{idMessage}</LoginAlertSpan>
+          <LoginAlertSpan isIdOrPw={checkIdRegex}>{alertId}</LoginAlertSpan>
 
           <Input
             text={'비밀번호'}
             value={inputPw}
-            onChange={pwChangeHandler}
+            onChange={inputPwHandler}
             type={'password'}
           >
             <FaLock />
           </Input>
-          <LoginAlertSpan isIdOrPw={isPw}>{pwMessage}</LoginAlertSpan>
+          <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
 
           <Input
             text={'비밀번호 확인'}
             value={inputCheckPw}
-            onChange={checkPwChangeHandler}
+            onChange={checkSame}
             type={'password'}
           >
             <FaLock />
           </Input>
-          <LoginAlertSpan isIdOrPw={isCheckPw}>{checkPwMessage}</LoginAlertSpan>
+          <LoginAlertSpan isIdOrPw={doubleCheckPwRegex}>
+            {alertCheckPw}
+          </LoginAlertSpan>
 
           <Input
             text={'닉네임'}
-            value={inputNickname}
-            onChange={nicknameChangeHanlder}
+            value={inputNickName}
+            onChange={inputNickNameHandler}
             type={'text'}
           >
-            <FaLock />
+            <BsEmojiSunglassesFill />
           </Input>
 
-          <LoginAlertSpan isIdOrPw={isNickname}>
-            {nicknameMessage}
+          <LoginAlertSpan isIdOrPw={checkNickNameRegex}>
+            {alertNickName}
           </LoginAlertSpan>
 
           <Input
             text={'이메일'}
             value={inputEmail}
-            onChange={emailChangeHanlder}
+            onChange={inputEmailHandler}
             type={'email'}
           >
-            <FaUserAlt />
+            <BsEnvelopeFill />
           </Input>
-          <LoginAlertSpan isIdOrPw={isEmail}>{emailMessage}</LoginAlertSpan>
+          <LoginAlertSpan isIdOrPw={checkEmailRegx}>
+            {alertEmail}
+          </LoginAlertSpan>
 
           <Button bg={'#8CB46D'} h={'3.125rem'} size={'0.9rem'}>
             회원가입

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { FaUserAlt, FaLock, FaEnvelope } from 'react-icons/fa';
 import { BsFillEmojiSunglassesFill } from 'react-icons/bs';
 import { LoginInputContainer, LoginAlertSpan } from '../../pages/LoginPage';
-import defaultImg from '../style/img/example.png';
+import defaultImg from '../../style/img/example.png';
 
 function EditMyInfomation() {
   const [inputId, setinputId] = useState('');
@@ -87,6 +87,7 @@ const EditWrapper = styled.div`
   ${(props) => props.theme.FlexRow};
   width: 100vw;
   height: 100vh;
+  display: hide;
 `;
 
 const EditContainer = styled.div`

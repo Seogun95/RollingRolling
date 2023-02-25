@@ -1,46 +1,42 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useQuery } from 'react-query';
-import { getMyPostList } from '../../util/api/detailList';
-import { useParams } from 'react-router-dom';
 import Button from '../elements/Button';
+import { useState } from 'react';
+import { useRef } from 'react';
 
 function DetailWriteQuestion() {
-  // 내가 A사람의 게시판 들어갔을때
-  // 1. 질문하기
+  const [content, setContent] = useState('');
+  const [anonymous, setAnonymous] = useState(false);
+  const anon = useRef();
 
-  // 2. 내가 남긴 질문 가져오기
+  const changeContent = (e) => {
+    setContent(e.target.value);
+  };
 
-  // 파라미터로 해당 게시글의 회원id 가져오기
-  const param = useParams();
-  // console.log(param); //{id: '55'} 게시글의 회원id
-
-  // 로그인한 유저가 이 게시글에 남긴 질문 가져오기
-  const { isLoading, isError, data } = useQuery('myPostList', getMyPostList);
-
-  if (isLoading) {
-    return <div>로딩중!!...</div>;
-  }
-  if (isError) {
-    return <div>오류가 발생했습니다.</div>;
-  }
+  const submitPostContent = async (e) => {
+    e.preventDefault();
+    //console.log(content, anon.current.checked);
+  };
 
   return (
     <WriteQuestionContainer>
-      <QuestionContainer>
+      <QuestionFormContainer onSubmit={submitPostContent}>
         <label>질문하기</label>
-        <textarea />
+        <textarea value={content} onChange={changeContent} />
         <QuestionSubmitContainer>
-          <input type="radio" value="익명" />
+          <input type="checkbox" value={anonymous} ref={anon} />
           <label>익명으로 작성</label>
           <Button w={'60px'} bg={'#58793e'} color={'white'}>
             확인
           </Button>
         </QuestionSubmitContainer>
-      </QuestionContainer>
+      </QuestionFormContainer>
       <QuestionContainer>
         <label>내가 남긴 질문</label>
-        {data.length === 0 ? (
+        <QuestionBox>
+          질문한 내역이 없습니다. 궁금한 점을 물어보세요 !
+        </QuestionBox>
+        {/* {data.length === 0 ? (
           <QuestionBox>
             질문한 내역이 없습니다. 궁금한 점을 물어보세요 !
           </QuestionBox>
@@ -48,7 +44,7 @@ function DetailWriteQuestion() {
           data.map((list) => (
             <QuestionBox key={list.postid}>{list.content}</QuestionBox>
           ))
-        )}
+        )} */}
       </QuestionContainer>
       <QuestionContainer>
         <label> dajeong 님에게 작성된 질문</label>
@@ -90,6 +86,8 @@ export const QuestionContainer = styled.div`
     }
   }
 `;
+
+const QuestionFormContainer = styled(QuestionContainer.withComponent('form'))``;
 
 export const QuestionBox = styled.div`
   width: 100%;

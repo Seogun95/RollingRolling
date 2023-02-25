@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
-
 import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import Input from '../components/elements/Input';
 import useLoginInput from '../hooks/useLoginInput';
+import { api } from '../util/api/api';
 import {
   LoginModalWrapper,
   LoginText,
@@ -23,7 +23,7 @@ function SignupPage() {
     '',
     '아이디를 입력해주세요.',
     '아이디는 영어 소문자, 숫자 조합의 5자 이상의 형식으로 입력해주세요.',
-    '사용 가능한 아이디 입니다.',
+    '',
     idRegex
   );
 
@@ -71,21 +71,22 @@ function SignupPage() {
     );
 
   // 회원가입
-  // const joinHandler = async (e) => {
-  //     e.preventDefault();
-  //     if (isId === true && isPw === true) {
-  //         try {
-  //             await jwtserver.post('/register', {
-  //                 id: inputId,
-  //                 password: inputPw,
-  //             });
-  //             alert('회원가입이 완료 되었습니다.');
-  //             moveSignupPg();
-  //         } catch (error) {
-  //             alert(error.response.data.message);
-  //         }
-  //     }
-  // };
+  const signUpHandler = async (e) => {
+    e.preventDefault();
+    if (checkIdRegex && checkPwRegex) {
+      try {
+        await api.post('api/user/signup', {
+          username: inputId,
+          password: inputPw,
+          email: inputEmail,
+          nickname: inputNickName,
+        });
+        alert('회원가입이 완료 되었습니다.');
+      } catch (error) {
+        alert(error.response.data.message);
+      }
+    }
+  };
 
   //스크롤 방지
   useEffect(() => {
@@ -163,7 +164,12 @@ function SignupPage() {
             {alertEmail}
           </LoginAlertSpan>
 
-          <Button bg={'#8CB46D'} h={'3.125rem'} size={'0.9rem'}>
+          <Button
+            onClick={signUpHandler}
+            bg={'#8CB46D'}
+            h={'3.125rem'}
+            size={'0.9rem'}
+          >
             회원가입
           </Button>
         </LoginInputContainer>
@@ -172,7 +178,7 @@ function SignupPage() {
           <span>로그인 페이지로 돌아갈까요? </span>
           <Button
             onClick={moveSignupPg}
-            color={'white'}
+            color={'black'}
             size={'0.9rem'}
             w={'auto'}
           >

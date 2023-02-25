@@ -62,7 +62,14 @@ export const GlobalStyle = createGlobalStyle`
       font-weight: normal;
       font-style: normal;
     }
-      /* font-family: 'IBMPlexSansKR-Regular'; */
+
+    @font-face {
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    }
+      font-family: 'GangwonEdu_OTFBoldA';
     }
 
     //반드시 overflow: overlay해야 -webkit-scrollbar-track 투명도를 설정할 수 있다.

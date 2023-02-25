@@ -137,7 +137,7 @@ const SearchInput = styled.input`
 
 const SearchIcon = styled.div`
   position: absolute;
-  top: 1.5rem;
+  top: 1.2rem;
   left: 0.5rem;
 `;
 const HomeCardContainer = styled.div`

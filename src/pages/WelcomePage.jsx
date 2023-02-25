@@ -51,7 +51,7 @@ const WelcomeTitleWrapper = styled.div`
   height: 100vh;
 
   * {
-    font-family: 'BMJUA';
+    /* font-family: 'BMJUA'; */
   }
   .fade-enter {
     opacity: 0;

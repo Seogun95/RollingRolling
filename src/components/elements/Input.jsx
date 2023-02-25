@@ -11,6 +11,7 @@ function Input(props) {
           value={props.value}
           onChange={props.onChange}
           type={props.type}
+          maxLength={props.len}
         ></LoginInput>
       </LoginLabel>
     </>
@@ -25,16 +26,15 @@ const LoginLabel = styled.label`
   padding: 1.5rem 1rem 0.1rem 2.5rem;
   border-radius: 0.5rem;
   outline: none;
-  font-size: 0.9375rem;
   background-color: white;
 `;
 
 const LoginInsideLabel = styled.label`
   position: absolute;
-  font-size: 11px;
-  top: 4px;
+  top: 7px;
   left: 1rem;
   transform: translateY(0);
+  font-size: ${(props) => props.theme.FS.s};
   color: black;
 `;
 const LoginInputIcon = styled.span`
@@ -48,5 +48,5 @@ const LoginInput = styled.input`
   width: 100%;
   border-radius: 0.5rem;
   height: 30px;
-  line-height: 4.375rem;
+  font-size: ${(props) => props.theme.FS.m};
 `;

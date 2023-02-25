@@ -5,6 +5,8 @@ import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
 
 export default function Sidebar() {
+  // 내가 A사람의  게시판 들어갔을때
+
   return (
     <LayoutSidebar>
       {/* 추후 id값 비교해서 조건문으로 프로필 영역 변경 */}
@@ -76,7 +78,7 @@ const MyDesc = styled.textarea`
 const Ring = styled.div`
   width: 6.25rem;
   height: 3.125rem;
-  border: 15px solid ${(props) => props.theme.CL.brandColor};
+  border: 13px solid ${(props) => props.theme.CL.brandColor};
   border-bottom: none;
   border-radius: 150px 150px 0 0;
 
@@ -84,7 +86,34 @@ const Ring = styled.div`
   top: 10%;
   right: -70px;
   z-index: 999;
+
+  // 다정이가 함^^
+  &::after {
+    display: block;
+    background-color: ${(props) => props.theme.CL.brandColor};
+    width: 25px;
+    height: 25px;
+    content: '';
+    border-radius: 50%;
+
+    position: absolute;
+    top: 43%;
+    right: -20px;
+  }
+  &::before {
+    display: block;
+    background-color: ${(props) => props.theme.CL.brandColor};
+    width: 25px;
+    height: 25px;
+    content: '';
+    border-radius: 50%;
+
+    position: absolute;
+    top: 43%;
+    left: -20px;
+  }
 `;
+
 const Ring2 = styled(Ring)`
   top: 17%;
 `;

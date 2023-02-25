@@ -4,6 +4,14 @@ import DetailWriteQuestion from './DetailWriteQuestion';
 import DetailMyQuestion from './DetailMyQuestion';
 
 function DetailContent() {
+  // if (isLoading) {
+  //   return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
+  // }
+
+  // if (isError) {
+  //   return <CardEmptyContainer>오류가 발생했습니다.</CardEmptyContainer>;
+  // }
+
   return (
     <DetailContainer>
       <DetailScrollContainer>

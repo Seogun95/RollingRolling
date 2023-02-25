@@ -20,14 +20,14 @@ export default function WelcomePage() {
   return (
     <WelcomeTitleWrapper>
       <WelcomeContainer>
-        <StP>
+        <WelcomeTitle>
           <MainTyping />
-        </StP>
-        <BtnContainer>
+        </WelcomeTitle>
+        <WelcomBtnContainer>
           <Button defaultBorder onClick={() => navigate('/login')}>
             시작하기
           </Button>
-        </BtnContainer>
+        </WelcomBtnContainer>
       </WelcomeContainer>
 
       {backgrounds.map((url, index) => (
@@ -74,6 +74,7 @@ const WelcomeTitleWrapper = styled.div`
 
 const WelcomeContainer = styled.div`
   ${(props) => props.theme.FlexCol}
+  width: 90%;
 `;
 
 const Background = styled.div`
@@ -87,13 +88,20 @@ const Background = styled.div`
   position: absolute;
 `;
 
-const StP = styled.h1`
-  font-size: 50px;
+const WelcomeTitle = styled.h1`
+  font-size: 3.125rem;
   position: relative;
+  color: white;
   z-index: 1;
+  @media screen and (max-width: 1000px) {
+    font-size: 2.5rem;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
-const BtnContainer = styled.div`
+const WelcomBtnContainer = styled.div`
   margin-top: 5rem;
   position: relative;
   z-index: 1;

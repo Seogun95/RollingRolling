@@ -10,13 +10,15 @@ export default function HomeCardItem(props) {
           <CardImgLink>{props.children}</CardImgLink>
           <CardDescLink>
             <CardLinkContainer>
-              <p>{props.nickName}</p>
+              <CardLinkNickName>
+                <p>{props.nickname}</p>
+              </CardLinkNickName>
               <span>
                 {props.introduction && props.introduction !== 'null'
                   ? props.introduction.length > 14
                     ? `${props.introduction.slice(0, 14)}...`
                     : props.introduction
-                  : `${props.nickName} 개인 페이지로 이동`}
+                  : `${props.nickname}에게 롤링페이퍼 쓰러가기`}
               </span>
             </CardLinkContainer>
           </CardDescLink>
@@ -33,9 +35,10 @@ const HomeCardItemWrapper = styled.article`
   padding: 0;
   position: relative;
   text-decoration: none;
-  transition: all 0.2s ease 0s;
+  transition: all 0.2s ease;
   height: 250px;
   width: 90%;
+  box-shadow: ${(props) => props.theme.Shadow.all};
   img {
     width: 100%;
     object-fit: cover;
@@ -44,15 +47,18 @@ const HomeCardItemWrapper = styled.article`
   transition: 0.2s ease-in-out;
   &:hover {
     transform: translateY(-5px);
+    box-shadow: ${(props) => props.theme.Shadow.bottom};
   }
 `;
 
 const CardImgLink = styled(Link)`
+  position: relative;
   display: flex;
   height: 100%;
+  z-index: 1;
 `;
 
-const CardContainer = styled.div`
+const CardContainer = styled(Link)`
   display: block;
   position: relative;
   height: 100%;
@@ -66,14 +72,16 @@ const CardDescLink = styled(Link)`
 const CardLinkContainer = styled.div`
   ${(props) => props.theme.FlexCol}
   ${(props) => props.theme.DarkBlur}
+  font-size: ${(props) => props.theme.FS.m};
   gap: 1rem;
   border-radius: 0;
-  bottom: -46px;
-  height: 90px;
+  bottom: -15%;
+  height: 80px;
   padding: 0.5rem 1rem;
   position: absolute;
   transition: all 0.2s ease 0s;
   width: 100%;
+  z-index: 2;
   color: white;
 
   &:hover {
@@ -82,4 +90,8 @@ const CardLinkContainer = styled.div`
   span {
     font-size: ${(props) => props.theme.FS.s};
   }
+`;
+
+const CardLinkNickName = styled.div`
+  height: 25px;
 `;

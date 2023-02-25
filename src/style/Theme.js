@@ -29,7 +29,6 @@ export const DarkBlur = css`
   background: #161616aa;
   backdrop-filter: blur(3px);
 `;
-
 export const CL = {
   brandColor: '#58793e',
   scroll: '#58793e',
@@ -44,6 +43,11 @@ export const FS = {
   xs: '0.8rem', // message
 };
 
+export const Shadow = {
+  all: 'rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 30%) 0 20px 25px -5px, rgb(0 0 0 / 20%) 0 8px 10px -6px',
+  bottom:
+    'rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 0%) 0 0 0 0, rgb(0 0 0 / 52%) 0 23px 34px -9px, rgb(0 0 0 / 14%) 0 11px 14px 3px',
+};
 export const CustomHr = styled.hr`
   opacity: 1;
   border: 0;

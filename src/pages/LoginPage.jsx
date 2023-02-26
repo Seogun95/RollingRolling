@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import Input from '../components/elements/Input.jsx';
@@ -6,16 +6,19 @@ import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import useLoginInput from '../hooks/useLoginInput.jsx';
 import { api } from '../util/api/api';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import isLogin from '../util/api/isLogin.js';
 
 function LoginPage() {
   const navigate = useNavigate();
   const idRegex = /^(?=.*?[0-9])(?=.*?[a-z])[a-zA-Z0-9]{4,10}$/;
   const [inputId, inputIdHandler, alertId, checkIdRegex] = useLoginInput(
     '',
-    '',
+    '아이디를 입력해주세요.',
     '아이디는 영어 소문자, 숫자 조합의 4-10자의 형식으로 입력해주세요.',
-    '사용 가능한 아이디 입니다.',
+    '',
     idRegex
   );
 
@@ -24,29 +27,79 @@ function LoginPage() {
     '',
     '비밀번호를 입력해주세요.',
     '영문과 숫자, 특수문자 조합의 8-20자의 비밀번호를 사용해야 합니다.',
-    '사용 가능한 비밀번호 입니다.',
+    '',
     pwRegex
   );
 
-  const loginBtnHandler = async (e) => {
+  // 토큰
+  useEffect(() => {
+    if (isLogin()) checkUser();
+  }, [isLogin()]);
+
+  const [cookies, setCookie] = useCookies();
+  const [now] = useState(new Date());
+  const [expiryDate] = useState(new Date());
+
+  // 로그인 버튼 클릭시
+  const loginHandler = async (e) => {
     e.preventDefault();
-    const expiryDate = new Date(Date.now() + 10 * 60 * 1000);
     if (inputId !== '' && inputPw !== '') {
       try {
         const response = await api.post('api/user/login', {
           username: inputId,
           password: inputPw,
         });
-        const { token } = response.data;
-        Cookies.set('token', token, { expires: expiryDate });
-        alert('로그인이 완료 되었습니다.');
+        const userToken = response.headers.authorization;
+        console.log('response:', response.headers.authorization);
+
+        // 토큰 시간 설정
+        expiryDate.setMinutes(now.getMinutes() + 60);
+        // hearder에 저장
+        axios.defaults.headers.common['Authorization'] = `${userToken}`;
+        setCookie('accessJWTToken', userToken, {
+          path: '/',
+          expires: expiryDate,
+        });
         navigate('/home');
       } catch (error) {
-        // alert(error.response.data.message);
-        alert('로그인 정보가 없습니다.');
+        console.log('로그인 버튼 클릭시 error : ', error);
+        alert('아이디 또는 비밀번호를 확인해주세요!');
+        // setMessage(error.response.data.message);
       }
     }
   };
+
+  // 회원인증 및 쿠키 확인 GET
+  const checkUser = () => {
+    const token = cookies.accessJWTToken;
+    api.post('api/user/login', {
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
+        'X-Custom-Header': 'value',
+      },
+    });
+  };
+
+  // const loginBtnHandler = async (e) => {
+  //   e.preventDefault();
+  //   const expiryDate = new Date(Date.now() + 10 * 60 * 1000);
+  //   if (inputId !== '' && inputPw !== '') {
+  //     try {
+  //       const response = await api.post('api/user/login', {
+  //         username: inputId,
+  //         password: inputPw,
+  //       });
+  //       const { token } = response.data;
+  //       Cookies.set('token', token, { expires: expiryDate });
+  //       alert('로그인이 완료 되었습니다.');
+  //       navigate('/home');
+  //     } catch (error) {
+  //       // alert(error.response.data.message);
+  //       alert('로그인 정보가 없습니다.');
+  //     }
+  //   }
+  // };
 
   //스크롤 방지
   useEffect(() => {
@@ -86,11 +139,9 @@ function LoginPage() {
           >
             <FaLock />
           </Input>
-          <LoginAlertSpan isIdOrPw={checkPwRegex} height={'50px'}>
-            {alertPw}
-          </LoginAlertSpan>
+          <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
           <Button
-            onClick={loginBtnHandler}
+            onClick={loginHandler}
             bg={'#8CB46D'}
             h={'3.125rem'}
             size={'0.9rem'}
@@ -146,7 +197,7 @@ export const LoginModal = styled.div`
 export const LoginAlertSpan = styled.div`
   font-size: 0.8rem;
   padding: 0.4rem 0.5rem 0.5rem;
-  height: ${(props) => props.height};
+  height: 1.75rem;
   color: ${(props) => (props.isIdOrPw ? '#58793e' : 'tomato')};
 `;
 

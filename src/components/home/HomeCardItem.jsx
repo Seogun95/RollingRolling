@@ -51,7 +51,7 @@ const HomeCardItemWrapper = styled.article`
   }
 `;
 
-const CardImgLink = styled(Link)`
+const CardImgLink = styled.div`
   position: relative;
   display: flex;
   height: 100%;
@@ -64,7 +64,7 @@ const CardContainer = styled(Link)`
   height: 100%;
 `;
 
-const CardDescLink = styled(Link)`
+const CardDescLink = styled.div`
   display: flex;
   justify-content: space-between;
 `;

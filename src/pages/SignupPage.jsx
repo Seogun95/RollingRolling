@@ -82,7 +82,7 @@ function SignupPage() {
           nickname: inputNickName,
         });
         alert('회원가입이 완료 되었습니다.');
-        navigate(moveSignupPg);
+        moveSigInPg();
       } catch (error) {
         alert(error.response.data.message);
       }
@@ -98,8 +98,8 @@ function SignupPage() {
     };
   }, []);
 
-  const moveSignupPg = () => {
-    navigate(-1);
+  const moveSigInPg = () => {
+    navigate('/login');
   };
 
   return (
@@ -178,7 +178,7 @@ function SignupPage() {
         <LoginGoToSignup>
           <span>로그인 페이지로 돌아갈까요? </span>
           <Button
-            onClick={moveSignupPg}
+            onClick={moveSigInPg}
             color={'black'}
             size={'0.9rem'}
             w={'auto'}

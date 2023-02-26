@@ -88,7 +88,7 @@ const Background = styled.div`
   position: absolute;
 `;
 
-const WelcomeTitle = styled.h1`
+const WelcomeTitle = styled.div`
   font-size: 3.125rem;
   position: relative;
   color: white;

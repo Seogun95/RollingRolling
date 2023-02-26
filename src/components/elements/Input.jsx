@@ -12,6 +12,7 @@ function Input(props) {
           onChange={props.onChange}
           type={props.type}
           maxLength={props.len}
+          readOnly={props.readOnly}
         ></LoginInput>
       </LoginLabel>
     </>

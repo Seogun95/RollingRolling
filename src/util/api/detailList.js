@@ -1,20 +1,12 @@
-import { useParams } from 'react-router-dom';
 import { api } from './api';
 
-// sidebar 게시글 user정보
-export const getMyPostList = async () => {
-  const response = await api.get('/api/post/mypost/');
-  return response.data;
-};
-// 질문하기
-// api/post/{username : 게시판 user}
-export const createPost = async () => {
-  const response = await api.get('/api/post/');
-  return response.data;
-};
-
-// 2. A사람의 모든 질문 가져오기
-export const getPostList = async () => {
-  const response = await api.get('/postList');
+// getPostList
+export const getPostList = async (data) => {
+  const response = await api.get(`/api/post/mypost/${data.id}`, {
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
+  });
+  //console.log('response: ', response.data); // 데이터 확인
   return response.data;
 };

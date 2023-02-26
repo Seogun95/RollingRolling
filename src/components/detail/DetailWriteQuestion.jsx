@@ -6,8 +6,7 @@ import { useRef } from 'react';
 
 function DetailWriteQuestion() {
   const [content, setContent] = useState('');
-  const [anonymous, setAnonymous] = useState(false);
-  const anon = useRef();
+  const anonymous = useRef();
 
   const changeContent = (e) => {
     setContent(e.target.value);
@@ -15,7 +14,10 @@ function DetailWriteQuestion() {
 
   const submitPostContent = async (e) => {
     e.preventDefault();
-    //console.log(content, anon.current.checked);
+    if (content !== '') {
+      // console.log(content, anonymous.current.checked);
+      // content / anonymous 체크여부 보내기
+    }
   };
 
   return (
@@ -24,7 +26,7 @@ function DetailWriteQuestion() {
         <label>질문하기</label>
         <textarea value={content} onChange={changeContent} />
         <QuestionSubmitContainer>
-          <input type="checkbox" value={anonymous} ref={anon} />
+          <input type="checkbox" ref={anonymous} />
           <label>익명으로 작성</label>
           <Button w={'60px'} bg={'#58793e'} color={'white'}>
             확인
@@ -36,19 +38,9 @@ function DetailWriteQuestion() {
         <QuestionBox>
           질문한 내역이 없습니다. 궁금한 점을 물어보세요 !
         </QuestionBox>
-        {/* {data.length === 0 ? (
-          <QuestionBox>
-            질문한 내역이 없습니다. 궁금한 점을 물어보세요 !
-          </QuestionBox>
-        ) : (
-          data.map((list) => (
-            <QuestionBox key={list.postid}>{list.content}</QuestionBox>
-          ))
-        )} */}
       </QuestionContainer>
       <QuestionContainer>
         <label> dajeong 님에게 작성된 질문</label>
-        <QuestionBox>질문한 내용~~</QuestionBox>
         <QuestionBox>질문한 내용~~</QuestionBox>
       </QuestionContainer>
     </WriteQuestionContainer>

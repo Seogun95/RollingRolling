@@ -1,111 +1,199 @@
 import React from 'react';
 import styled from 'styled-components';
-import Sidebar from '../layout/Sidebar';
 import Input from '../elements/Input';
 import Button from '../elements/Button';
-import { useState } from 'react';
 import { FaUserAlt, FaLock, FaEnvelope } from 'react-icons/fa';
-import { BsFillEmojiSunglassesFill } from 'react-icons/bs';
-import { LoginInputContainer, LoginAlertSpan } from '../../pages/LoginPage';
+import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
+import useLoginInput from '../../hooks/useLoginInput';
 import defaultImg from '../../style/img/example.png';
+import { useNavigate, useParams } from 'react-router';
+import { useState } from 'react';
 
-function EditMyInfomation() {
-  const [inputId, setinputId] = useState('');
-  const [inputPw, setinputPw] = useState('');
-  const [inputCheckPw, setinputCheckPw] = useState('');
-  const [inputEmail, setinputEmail] = useState('');
-  const [inputNickname, setinputNickname] = useState('');
+function EditMyInfomation({ setChoice }) {
+  const param = useParams();
+  const [myIntro, setMyIntro] = useState();
+  const navigate = useNavigate;
 
-  const [idMessage, setIdMessage] = useState('아이디를 입력해주세요');
-  const [pwMessage, setPwMessage] = useState('비밀번호를 입력해주세요');
-  const [checkPwMessage, setCheckPwMessage] =
-    useState('비밀번호를 다시 입력해주세요');
-  const [emailMessage, setEmailMessage] = useState('이메일을 입력해주세요');
-  const [nicknameMessage, setNicknameMessage] =
-    useState('닉네임을 입력해주세요');
+  const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
+  const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
+    '',
+    '비밀번호를 입력해주세요.',
+    '영문과 숫자, 특수문자 조합의 8-20자의 비밀번호를 사용해야 합니다.',
+    '사용 가능한 비밀번호 입니다.',
+    pwRegex
+  );
 
-  const [isId, setIsId] = useState(false);
-  const [isPw, setIsPw] = useState(false);
-  const [isCheckPw, setIsCheckPw] = useState(false);
-  const [isEmail, setIsEmail] = useState(false);
-  const [isNickname, setIsNickname] = useState(false);
+  const [inputCheckPw, , alertCheckPw, doubleCheckPwRegex, checkSame] =
+    useLoginInput(
+      '',
+      '비밀번호를 다시 입력해주세요',
+      '비밀번호가 같지 않습니다. 다시 입력해주세요.',
+      '비밀번호가 같습니다.',
+      pwRegex,
+      inputPw
+    );
+
+  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,}$/;
+  const [
+    inputNickName,
+    inputNickNameHandler,
+    alertNickName,
+    checkNickNameRegex,
+  ] = useLoginInput(
+    '',
+    '닉네임을 입력해주세요',
+    '특수문자를 제외한, 2글자 이상의 닉네임을 입력해주세요.',
+    '사용 가능한 닉네임 입니다.',
+    userNameReg
+  );
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [inputEmail, inputEmailHandler, alertEmail, checkEmailRegx] =
+    useLoginInput(
+      '',
+      '이메일을 입력해주세요.',
+      '이메일 형식으로 입력해주세요.',
+      '사용 가능한 이메일 입니다.',
+      emailRegex
+    );
+
+  // 취소 버튼 클릭시 -> myQuestion 페이지
+  const moveMyQuestion = () => {
+    navigate(`/home/${param.id}`);
+  };
+
+  const editMyInfoClick = (e) => {
+    e.preventDefault();
+    if (checkPwRegex && checkNickNameRegex && checkEmailRegx) {
+      setChoice('');
+    }
+  };
+
   return (
-    <EditWrapper>
-      <Sidebar />
-      <EditContainer>
-        <ProfileContainer>
-          <h1>Profile</h1>
-          <ProfileImgContainer>
-            <ProfileImg src={defaultImg} alt=""></ProfileImg>
-            <label>www.rolling.com/정다정</label>
-            <textarea placeholder="아직 작성된 소개글이 없습니다."></textarea>
-          </ProfileImgContainer>
-        </ProfileContainer>
+    <EditMyInfoContainer>
+      <EditInputContainer>
+        <Input text={'아이디'} type={'text'} width={'60%'} readOnly>
+          <FaUserAlt />
+        </Input>
 
-        <LoginInputContainer>
-          <Input text={'아이디'} type={'text'}>
-            <FaUserAlt />
-          </Input>
+        <Input
+          text={'비밀번호'}
+          value={inputPw}
+          onChange={inputPwHandler}
+          type={'password'}
+        >
+          <FaLock />
+        </Input>
+        <InputMessageSpan isIdOrPw={checkPwRegex}>{alertPw}</InputMessageSpan>
 
-          <Input text={'비밀번호'} value={inputPw} type={'password'}>
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={isPw}>{pwMessage}</LoginAlertSpan>
+        <Input
+          text={'비밀번호 확인'}
+          value={inputCheckPw}
+          onChange={checkSame}
+          type={'password'}
+        >
+          <FaLock />
+        </Input>
+        <InputMessageSpan isIdOrPw={doubleCheckPwRegex}>
+          {alertCheckPw}
+        </InputMessageSpan>
 
-          <Input text={'비밀번호 확인'} value={inputCheckPw} type={'password'}>
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={isCheckPw}>{checkPwMessage}</LoginAlertSpan>
+        <Input
+          text={'닉네임'}
+          value={inputNickName}
+          onChange={inputNickNameHandler}
+          type={'text'}
+        >
+          <BsEmojiSunglassesFill />
+        </Input>
 
-          <Input text={'닉네임'} value={inputNickname} type={'text'}>
-            <BsFillEmojiSunglassesFill />
-          </Input>
+        <InputMessageSpan isIdOrPw={checkNickNameRegex}>
+          {alertNickName}
+        </InputMessageSpan>
 
-          <LoginAlertSpan isIdOrPw={isNickname}>
-            {nicknameMessage}
-          </LoginAlertSpan>
+        <Input
+          text={'이메일'}
+          value={inputEmail}
+          onChange={inputEmailHandler}
+          type={'email'}
+        >
+          <BsEnvelopeFill />
+        </Input>
+        <InputMessageSpan isIdOrPw={checkEmailRegx}>
+          {alertEmail}
+        </InputMessageSpan>
 
-          <Input text={'이메일'} value={inputEmail} type={'email'}>
-            <FaEnvelope />
-          </Input>
-          <LoginAlertSpan isIdOrPw={isEmail}>{emailMessage}</LoginAlertSpan>
-
-          <Button bg={'#8CB46D'} h={'3.125rem'} size={'0.9rem'}>
-            회원가입
+        <EditButtonContainer>
+          <Button
+            bg={'#58793e'}
+            h={'2.8rem'}
+            w={'100px'}
+            size={'0.9rem'}
+            color={'white'}
+            onClick={moveMyQuestion}
+          >
+            취소
           </Button>
-          <button>취소</button>
-          <button>수정</button>
-        </LoginInputContainer>
-      </EditContainer>
-    </EditWrapper>
+          <Button
+            bg={'#58793e'}
+            h={'2.8rem'}
+            w={'100px'}
+            size={'0.9rem'}
+            color={'white'}
+            onClick={editMyInfoClick}
+          >
+            수정
+          </Button>
+        </EditButtonContainer>
+      </EditInputContainer>
+
+      <ProfileContainer>
+        <ProfileImgContainer>
+          <ProfileImg src={defaultImg} alt=""></ProfileImg>
+          <textarea
+            value={myIntro}
+            onChange={(e) => setMyIntro(e.target.value)}
+          ></textarea>
+        </ProfileImgContainer>
+      </ProfileContainer>
+    </EditMyInfoContainer>
   );
 }
 
 export default EditMyInfomation;
 
-const EditWrapper = styled.div`
-  ${(props) => props.theme.FlexRow};
-  width: 100vw;
-  height: 100vh;
-  display: hide;
+const EditMyInfoContainer = styled.form`
+  ${(props) => props.theme.FlexRow}
+  justify-content: space-between;
+
+  background-color: ${(props) => props.theme.CL.brandColorLight};
+  height: 100%;
+  padding: 1.25rem 3rem;
+  border-radius: 30px;
 `;
 
-const EditContainer = styled.div`
-  /* background-color: ${(props) => props.theme.CL.brandColor}; */
-  ${(props) => props.theme.FlexRow}
-  background-color: #4c4b4b;
-  border-radius: 30px;
-  width: 60vw;
-  min-height: 90vh;
-  padding: 50px 150px;
+const EditInputContainer = styled.div`
+  ${(props) => props.theme.FlexCol}
   align-items: flex-start;
+  margin: 1rem 0;
+  margin-right: 50px;
+`;
+
+const InputMessageSpan = styled.div`
+  font-size: 0.8rem;
+  padding: 0.4rem 0.5rem 0.5rem;
+  height: ${(props) => props.height};
+  color: ${(props) => (props.isIdOrPw ? '#58793e' : 'tomato')};
+`;
+
+const EditButtonContainer = styled.div`
+  ${(props) => props.theme.FlexRow}
+  margin-top: 30px;
 `;
 
 const ProfileContainer = styled.div`
-  background-color: pink;
   width: 400px;
-  margin: 20px;
-  margin-right: 50px;
+
   > h1 {
     width: 100%;
     margin-bottom: 30px;
@@ -116,19 +204,26 @@ const ProfileContainer = styled.div`
 const ProfileImgContainer = styled.div`
   ${(props) => props.theme.FlexCol}
 
-  > label {
-    font-size: ${(props) => props.theme.FS.s};
-    margin-bottom: 30px;
-  }
-
   > textarea {
     width: 300px;
-    height: 200px;
+    height: 220px;
+    margin-top: 30px;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 30px;
+    background-color: ${(props) => props.theme.CL.brandColorLight};
+    font-size: ${(props) => props.theme.FS.s};
+    box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
+    resize: none;
+    outline: none;
   }
 `;
 
 const ProfileImg = styled.img`
+  width: 250px;
   height: 250px;
-  border-radius: 50%;
+  border: 5px solid ${(props) => props.theme.CL.brandColor};
+  border-radius: 30px;
   margin-bottom: 30px;
+  box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
 `;

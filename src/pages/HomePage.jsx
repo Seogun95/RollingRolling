@@ -147,9 +147,6 @@ const HomeCardContainer = styled.div`
   justify-items: center;
   margin: 2rem;
 
-  &:last-child {
-  }
-
   article > a {
     &:after {
       content: '';

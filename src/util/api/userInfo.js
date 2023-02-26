@@ -13,6 +13,6 @@ import { api } from './api';
 //회원 전체 조회
 export const userInfo = async () => {
   const response = await api.get('api/home/1');
-  console.log(response.data);
+  // console.log(response.data);
   return response.data;
 };

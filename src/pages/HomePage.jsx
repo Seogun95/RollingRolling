@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
-import useInputOnChange from '../hooks/useInputOnChange';
+import React, { useCallback, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { FcLikePlaceholder } from 'react-icons/fc';
 import HomeCardItem from '../components/home/HomeCardItem';
@@ -10,7 +9,18 @@ import { useQuery } from 'react-query';
 import { userInfo } from '../util/api/userInfo';
 
 export default function HomePage() {
-  const [{ search }, inputHandler] = useInputOnChange({ search: '' });
+  const [search, setSearch] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const handleInputFocus = () => {
+    setIsInputFocused(true);
+  };
+  const handleInputBlur = () => {
+    setIsInputFocused(false);
+  };
+
+  const handleInputChange = useCallback((e) => {
+    setSearch(e.target.value);
+  }, []);
 
   const { isLoading, isError, data } = useQuery('userQueryKey', userInfo);
   if (isLoading) {
@@ -24,25 +34,24 @@ export default function HomePage() {
   return (
     <>
       <HomeWrapper>
-        <HomeSearchContainer>
+        <HomeSearchWrapper>
           <h1>친구 찾기</h1>
-          <HomeSearchForm>
-            <SearchLabel>
-              찾고 싶은 친구의 닉네임을 적어보세요
-              <SearchInputContainer>
-                <SearchInput
-                  value={search}
-                  onChange={inputHandler}
-                  name={'search'}
-                  placeholder="닉네임을 입력해주세요"
-                />
-                <SearchIcon>
-                  <FaSearch size={'1.2rem'} />
-                </SearchIcon>
-              </SearchInputContainer>
-            </SearchLabel>
-          </HomeSearchForm>
-        </HomeSearchContainer>
+          <HomeSearchContainer>
+            <SearchForm>
+              <SearchIcon isInputFocused={isInputFocused}>
+                <FaSearch size={'1.2rem'} />
+              </SearchIcon>
+              <SearchInput
+                value={search}
+                onChange={handleInputChange}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                name={'search'}
+                placeholder="찾고 싶은 친구의 닉네임을 적어보세요"
+              />
+            </SearchForm>
+          </HomeSearchContainer>
+        </HomeSearchWrapper>
 
         <HomeSearchImgWrapper>
           <SearchImgContainer>
@@ -65,7 +74,7 @@ export default function HomePage() {
         </HomeSearchImgWrapper>
 
         <HomeCardContainer>
-          {data.reverse().map((user, i) => (
+          {data.map((user, i) => (
             <HomeCardItem
               key={i}
               nickname={user.nickname}
@@ -101,45 +110,51 @@ const HomeWrapper = styled.section`
   margin: 0 auto;
 `;
 
-const HomeSearchContainer = styled.div`
+const HomeSearchWrapper = styled.div`
   margin: 2rem;
 `;
 
-const HomeSearchForm = styled.form`
-  position: relative;
-  width: 100%;
-  font-size: 0.9375rem;
-  border: 0;
-  border-radius: 0.5rem;
-  outline: none;
-  background-color: rgb(233, 233, 233);
-  padding: 0.8rem;
-  margin-top: 0.5rem;
+const HomeSearchContainer = styled.div`
+  ${(props) => props.theme.FlexRow}
+  height: 56px;
+  padding: 0 0 0 24px;
+  border-radius: 56px;
+  background-color: #e9e9e9;
+  border: none;
+  backdrop-filter: blur(12px);
+  margin: 2rem 0;
 `;
 
-const SearchLabel = styled.label`
-  font-size: 0.8rem;
-`;
-
-const SearchInputContainer = styled.div`
-  position: relative;
+const SearchForm = styled.form`
+  ${(props) => props.theme.FlexRow}
+  font-size: .8rem;
+  flex: auto;
+  min-width: 32px;
 `;
 
 const SearchInput = styled.input`
   font-size: ${(props) => props.theme.FS.m};
-  width: 100%;
-  background: transparent;
-  padding: 1.5rem 1rem 1rem 2.5rem;
+  flex: auto;
+  padding: 8px;
+  border: none;
+  background: none;
+  margin: 0;
+  min-width: 30px;
   &::placeholder {
     color: #00000046;
   }
 `;
 
 const SearchIcon = styled.div`
-  position: absolute;
-  top: 1.5rem;
-  left: 0.5rem;
+  ${(props) => props.theme.FlexRow}
+  width: unset;
+  background: none;
+  color: ${(props) => (props.isInputFocused ? 'black' : 'gray')};
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding-left: 1rem;
 `;
+
 const HomeCardContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 2rem;

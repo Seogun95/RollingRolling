@@ -31,11 +31,6 @@ function LoginPage() {
     pwRegex
   );
 
-  // 토큰
-  useEffect(() => {
-    if (isLogin()) checkUser();
-  }, [isLogin()]);
-
   const [cookies, setCookie] = useCookies();
   const [now] = useState(new Date());
   const [expiryDate] = useState(new Date());
@@ -50,7 +45,7 @@ function LoginPage() {
           password: inputPw,
         });
         const userToken = response.headers.authorization;
-        console.log('response:', response.headers.authorization);
+        console.log('userToken----->', userToken);
 
         // 토큰 시간 설정
         expiryDate.setMinutes(now.getMinutes() + 60);
@@ -64,10 +59,14 @@ function LoginPage() {
       } catch (error) {
         console.log('로그인 버튼 클릭시 error : ', error);
         alert('아이디 또는 비밀번호를 확인해주세요!');
-        // setMessage(error.response.data.message);
       }
     }
   };
+
+  // 토큰
+  useEffect(() => {
+    if (isLogin()) checkUser();
+  }, [isLogin()]);
 
   // 회원인증 및 쿠키 확인 GET
   const checkUser = () => {
@@ -80,26 +79,6 @@ function LoginPage() {
       },
     });
   };
-
-  // const loginBtnHandler = async (e) => {
-  //   e.preventDefault();
-  //   const expiryDate = new Date(Date.now() + 10 * 60 * 1000);
-  //   if (inputId !== '' && inputPw !== '') {
-  //     try {
-  //       const response = await api.post('api/user/login', {
-  //         username: inputId,
-  //         password: inputPw,
-  //       });
-  //       const { token } = response.data;
-  //       Cookies.set('token', token, { expires: expiryDate });
-  //       alert('로그인이 완료 되었습니다.');
-  //       navigate('/home');
-  //     } catch (error) {
-  //       // alert(error.response.data.message);
-  //       alert('로그인 정보가 없습니다.');
-  //     }
-  //   }
-  // };
 
   //스크롤 방지
   useEffect(() => {

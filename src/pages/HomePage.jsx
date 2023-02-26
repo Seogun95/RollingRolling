@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { FcLikePlaceholder } from 'react-icons/fc';
 import HomeCardItem from '../components/home/HomeCardItem';
@@ -102,10 +102,9 @@ const CardEmptyContainer = styled.div`
   }
 `;
 
-const HomeWrapper = styled.section`
+const HomeWrapper = styled.div`
   max-width: 1200px;
   width: 100%;
-  height: 100%;
   padding: 2rem;
   margin: 0 auto;
 `;

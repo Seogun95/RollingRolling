@@ -7,14 +7,36 @@ import SignupPage from '../pages/SignupPage';
 import HomePage from '../pages/HomePage';
 import DetailPage from '../pages/DetailPage';
 import Layout from '../components/layout/Layout';
+import MainBgLayout from '../components/layout/MainBgLayout';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="login/" element={<LoginPage />} />
-        <Route path="signup/" element={<SignupPage />} />
+        <Route
+          path="/"
+          element={
+            <MainBgLayout>
+              <WelcomePage />
+            </MainBgLayout>
+          }
+        />
+        <Route
+          path="login/"
+          element={
+            <MainBgLayout>
+              <LoginPage />
+            </MainBgLayout>
+          }
+        />
+        <Route
+          path="signup/"
+          element={
+            <MainBgLayout>
+              <SignupPage />
+            </MainBgLayout>
+          }
+        />
         <Route
           path="home/"
           element={

@@ -13,7 +13,7 @@ export default function Detailpage() {
   console.log('detailpage : ', choice);
 
   const param = useParams();
-  const [cookies, setCookie] = useCookies();
+  const [cookies] = useCookies();
   const token = cookies.accessJWTToken.split(' ')[1];
 
   const { isLoading, isError, data } = useQuery('getPost', () =>

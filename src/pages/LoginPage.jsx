@@ -93,69 +93,57 @@ function LoginPage() {
   };
 
   return (
-    <LoginModalWrapper height={'500px'}>
-      <LoginModal>
-        <LoginText>로그인</LoginText>
-        <LoginInputContainer>
-          <Input
-            text={'아이디'}
-            value={inputId}
-            onChange={inputIdHandler}
-            type={'id'}
-            len={'10'}
-          >
-            <FaUserAlt />
-          </Input>
-          <LoginAlertSpan height={'25px'} isIdOrPw={checkIdRegex}>
-            {alertId}
-          </LoginAlertSpan>
-          <Input
-            text={'비밀번호'}
-            value={inputPw}
-            onChange={inputPwHandler}
-            type={'password'}
-            len={'15'}
-          >
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
-          <Button
-            onClick={loginHandler}
-            bg={'#8CB46D'}
-            h={'3.125rem'}
-            size={'0.9rem'}
-          >
-            로그인
-          </Button>
-        </LoginInputContainer>
+    <LoginModal>
+      <LoginText>로그인</LoginText>
+      <LoginInputContainer>
+        <Input
+          text={'아이디'}
+          value={inputId}
+          onChange={inputIdHandler}
+          type={'id'}
+          len={'10'}
+        >
+          <FaUserAlt />
+        </Input>
+        <LoginAlertSpan height={'25px'} isIdOrPw={checkIdRegex}>
+          {alertId}
+        </LoginAlertSpan>
+        <Input
+          text={'비밀번호'}
+          value={inputPw}
+          onChange={inputPwHandler}
+          type={'password'}
+          len={'15'}
+        >
+          <FaLock />
+        </Input>
+        <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
+        <Button
+          onClick={loginHandler}
+          bg={'#8CB46D'}
+          h={'3.125rem'}
+          size={'0.9rem'}
+        >
+          로그인
+        </Button>
+      </LoginInputContainer>
 
-        <LoginGoToSignup>
-          <span>RollingRolling 회원이 아니신가요? </span>
-          <Button
-            onClick={moveRegistrationPg}
-            color={'black'}
-            size={'0.9rem'}
-            w={'auto'}
-          >
-            가입하기
-          </Button>
-        </LoginGoToSignup>
-      </LoginModal>
-    </LoginModalWrapper>
+      <LoginGoToSignup>
+        <span>RollingRolling 회원이 아니신가요? </span>
+        <Button
+          onClick={moveRegistrationPg}
+          color={'black'}
+          size={'0.9rem'}
+          w={'auto'}
+        >
+          가입하기
+        </Button>
+      </LoginGoToSignup>
+    </LoginModal>
   );
 }
 
 export default LoginPage;
-
-export const LoginModalWrapper = styled.div`
-  ${(props) => props.theme.FlexRow}
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: url('https://i.imgur.com/GFBmTcM.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
 
 export const LoginText = styled.h1`
   font-size: ${(props) => props.theme.FS.xl};

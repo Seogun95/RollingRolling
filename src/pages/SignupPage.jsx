@@ -7,7 +7,6 @@ import Input from '../components/elements/Input';
 import useLoginInput from '../hooks/useLoginInput';
 import { api } from '../util/api/api';
 import {
-  LoginModalWrapper,
   LoginText,
   LoginModal,
   LoginInputContainer,
@@ -103,91 +102,87 @@ function SignupPage() {
   };
 
   return (
-    <LoginModalWrapper>
-      <LoginModal height={'730px'}>
-        <LoginText>회원가입</LoginText>
-        <LoginInputContainer>
-          <Input
-            text={'아이디'}
-            value={inputId}
-            onChange={inputIdHandler}
-            type={'text'}
-            width={'60%'}
-          >
-            <FaUserAlt />
-          </Input>
-          <LoginAlertSpan isIdOrPw={checkIdRegex}>{alertId}</LoginAlertSpan>
+    <LoginModal height={'730px'}>
+      <LoginText>회원가입</LoginText>
+      <LoginInputContainer>
+        <Input
+          text={'아이디'}
+          value={inputId}
+          onChange={inputIdHandler}
+          type={'text'}
+          width={'60%'}
+        >
+          <FaUserAlt />
+        </Input>
+        <LoginAlertSpan isIdOrPw={checkIdRegex}>{alertId}</LoginAlertSpan>
 
-          <Input
-            text={'비밀번호'}
-            value={inputPw}
-            onChange={inputPwHandler}
-            type={'password'}
-          >
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
+        <Input
+          text={'비밀번호'}
+          value={inputPw}
+          onChange={inputPwHandler}
+          type={'password'}
+        >
+          <FaLock />
+        </Input>
+        <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
 
-          <Input
-            text={'비밀번호 확인'}
-            value={inputCheckPw}
-            onChange={checkSame}
-            type={'password'}
-          >
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={doubleCheckPwRegex}>
-            {alertCheckPw}
-          </LoginAlertSpan>
+        <Input
+          text={'비밀번호 확인'}
+          value={inputCheckPw}
+          onChange={checkSame}
+          type={'password'}
+        >
+          <FaLock />
+        </Input>
+        <LoginAlertSpan isIdOrPw={doubleCheckPwRegex}>
+          {alertCheckPw}
+        </LoginAlertSpan>
 
-          <Input
-            text={'닉네임'}
-            value={inputNickName}
-            onChange={inputNickNameHandler}
-            type={'text'}
-          >
-            <BsEmojiSunglassesFill />
-          </Input>
+        <Input
+          text={'닉네임'}
+          value={inputNickName}
+          onChange={inputNickNameHandler}
+          type={'text'}
+        >
+          <BsEmojiSunglassesFill />
+        </Input>
 
-          <LoginAlertSpan isIdOrPw={checkNickNameRegex}>
-            {alertNickName}
-          </LoginAlertSpan>
+        <LoginAlertSpan isIdOrPw={checkNickNameRegex}>
+          {alertNickName}
+        </LoginAlertSpan>
 
-          <Input
-            text={'이메일'}
-            value={inputEmail}
-            onChange={inputEmailHandler}
-            type={'email'}
-          >
-            <BsEnvelopeFill />
-          </Input>
-          <LoginAlertSpan isIdOrPw={checkEmailRegx}>
-            {alertEmail}
-          </LoginAlertSpan>
+        <Input
+          text={'이메일'}
+          value={inputEmail}
+          onChange={inputEmailHandler}
+          type={'email'}
+        >
+          <BsEnvelopeFill />
+        </Input>
+        <LoginAlertSpan isIdOrPw={checkEmailRegx}>{alertEmail}</LoginAlertSpan>
 
-          <Button
-            onClick={signUpHandler}
-            bg={'#8CB46D'}
-            h={'3.125rem'}
-            size={'0.9rem'}
-          >
-            회원가입
-          </Button>
-        </LoginInputContainer>
+        <Button
+          onClick={signUpHandler}
+          bg={'#8CB46D'}
+          h={'3.125rem'}
+          size={'0.9rem'}
+        >
+          회원가입
+        </Button>
+      </LoginInputContainer>
 
-        <LoginGoToSignup>
-          <span>로그인 페이지로 돌아갈까요? </span>
-          <Button
-            onClick={moveSigInPg}
-            color={'black'}
-            size={'0.9rem'}
-            w={'auto'}
-          >
-            돌아가기
-          </Button>
-        </LoginGoToSignup>
-      </LoginModal>
-    </LoginModalWrapper>
+      <LoginGoToSignup>
+        <span>로그인 페이지로 돌아갈까요? </span>
+        <Button
+          onClick={moveSigInPg}
+          color={'black'}
+          size={'0.9rem'}
+          w={'auto'}
+        >
+          돌아가기
+        </Button>
+      </LoginGoToSignup>
+    </LoginModal>
   );
 }
 

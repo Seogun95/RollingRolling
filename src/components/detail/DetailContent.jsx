@@ -2,20 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 import DetailWriteQuestion from './DetailWriteQuestion';
 import DetailMyQuestion from './DetailMyQuestion';
-import { useParams } from 'react-router-dom';
+import EditMyInfomation from './EditMyInfomation';
 
-function DetailContent() {
+function DetailContent({ data, choice, setChoice }) {
+  console.log('detailContent choice: ', choice);
+
   return (
     <DetailContainer>
       <DetailScrollContainer>
         {/* 
         추후 조건문으로 컴포넌트 걸러줄 예정...?
-        ex) 파라미터로 id\Seogun95\RollingRolling\blob\main\.gitignore 받고, 클릭한 페이지 id값 받아서 비교한 후
-            같으면 -> DetailMyQuestion component
-            다르면 -> DetailWriteQuestion component
+        로그인 유저와 게시판 유저 back에서 걸러줌
+        값 넘겨줄거 없고 get만 해오면 됨....
        */}
-        <DetailWriteQuestion />
-        {/* <DetailMyQuestion /> */}
+
+        {/* <DetailWriteQuestion /> */}
+        {choice === 'edit' ? (
+          <EditMyInfomation setChoice={setChoice} />
+        ) : (
+          <DetailMyQuestion />
+        )}
       </DetailScrollContainer>
     </DetailContainer>
   );

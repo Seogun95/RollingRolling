@@ -3,17 +3,24 @@ import styled from 'styled-components';
 import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
-import EditMyInfomation from '../detail/EditMyInfomation';
 
-export default function Sidebar(props) {
-  const [display, setDisplay] = useState();
+export default function Sidebar({ data, setChoice }) {
+  const editMyProfileClick = () => {
+    setChoice('edit');
+  };
 
   return (
     <LayoutSidebar>
-      {/* 추후 id값 비교해서 조건문으로 프로필 영역 변경 */}
-      <Profile src={defaultImg} alt=""></Profile>
-      <MyUrl>www.rolling.com/{props.userId}</MyUrl>
-      <MyDesc placeholder="아직 작성된 소개글이 없습니다." readOnly></MyDesc>
+      <Profile src={data.image ? data.image : defaultImg} alt=""></Profile>
+      <MyUrl>www.rolling.com/{data.username}</MyUrl>
+      <MyDesc
+        value={
+          data.introduction !== null
+            ? data.introduction
+            : '아직 작성된 소개글이 없습니다.'
+        }
+        readOnly
+      ></MyDesc>
 
       <Button
         bg={'#597741'}
@@ -21,17 +28,18 @@ export default function Sidebar(props) {
         h={'3.125rem'}
         size={'1rem'}
         color={'white'}
+        onClick={editMyProfileClick}
       >
         <FiEdit3 />
         프로필 수정
       </Button>
+
       <Ring></Ring>
       <Ring2></Ring2>
       <Ring3></Ring3>
       <Ring4></Ring4>
       <Ring5></Ring5>
       <Ring6></Ring6>
-      <EditMyInfomation />
     </LayoutSidebar>
   );
 }
@@ -54,6 +62,7 @@ const Profile = styled.img`
   margin-top: 50px;
   border: 5px solid ${(props) => props.theme.CL.brandColor};
   border-radius: 30px;
+  box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
 `;
 
 const MyUrl = styled.span`
@@ -68,11 +77,12 @@ const MyDesc = styled.textarea`
   height: 13.75rem;
   margin-top: 1.875rem;
   margin-bottom: 1.875rem;
-  padding: 1.25rem;
+  padding: 1.5rem;
   border: none;
   border-radius: 30px;
   background-color: ${(props) => props.theme.CL.brandColorLight};
   font-size: ${(props) => props.theme.FS.s};
+  box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
   resize: none;
   outline: none;
 `;
@@ -89,7 +99,6 @@ const Ring = styled.div`
   right: -70px;
   z-index: 999;
 
-  // 다정이가 함^^
   &::after {
     display: block;
     background-color: ${(props) => props.theme.CL.brandColor};

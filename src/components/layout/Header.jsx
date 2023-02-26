@@ -4,8 +4,10 @@ import styled, { css } from 'styled-components';
 import Button from '../elements/Button';
 import isLogin from '../../util/api/isLogin';
 import { useCookies } from 'react-cookie';
+import logo from '../../style/img/logo.svg';
+import HomeSidebar from '../home/HomeSidebar';
 
-export default function Header() {
+export default function Header({ toggle, state }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [, , removeCookie] = useCookies();
   const navigate = useNavigate();
@@ -37,23 +39,31 @@ export default function Header() {
     navigate('/');
   };
 
+  const [showSidebar, setShowSidebar] = useState(false);
+  function toggleSidebar() {
+    setShowSidebar((prveShowSide) => !prveShowSide);
+  }
+
   return (
     <HeaderStyles
       className={isScrolled ? 'isScrolled' : !isScrolled ? '' : 'isScrolled'}
     >
       <HeaderContainer>
         <HeaderLogoContainer>
-          <Link to="/">
-            <Logo>롤링롤링</Logo>
+          <Link to="/home">
+            <LogoImg src={logo} alt="롤링롤링" />
           </Link>
         </HeaderLogoContainer>
         <HeaderLogOutContainer>
           <Button onClick={logoutHandler}>로그아웃</Button>
         </HeaderLogOutContainer>
+
         <HeaderMyProfileContainer>
-          <Button>
+          <Button onClick={toggleSidebar}>
             <img src="https://i.imgur.com/P2iWTOH.png" alt="" />
           </Button>
+
+          <HomeSidebar state={showSidebar} setState={setShowSidebar} />
         </HeaderMyProfileContainer>
       </HeaderContainer>
     </HeaderStyles>
@@ -91,9 +101,10 @@ const HeaderContainer = styled.div`
 const HeaderLogoContainer = styled.div`
   flex: 0 0 auto;
 `;
-
-const Logo = styled.h1`
-  margin: 0;
+const LogoImg = styled.img`
+  height: 40px;
+  display: block;
+  /* filter: drop-shadow(0 0 2px black); */
 `;
 
 const HeaderLogOutContainer = styled.div`

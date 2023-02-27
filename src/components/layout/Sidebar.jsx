@@ -4,35 +4,39 @@ import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
 
-export default function Sidebar({ data, setChoice }) {
+export default function Sidebar({ data, setEdit }) {
   const editMyProfileClick = () => {
-    setChoice('edit');
+    setEdit('edit');
   };
 
   return (
     <LayoutSidebar>
-      <Profile src={data.image ? data.image : defaultImg} alt=""></Profile>
-      <MyUrl>www.rolling.com/{data.username}</MyUrl>
+      <Profile
+        src={data.user.image ? data.user.image : defaultImg}
+        alt=""
+      ></Profile>
+      <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
       <MyDesc
         value={
-          data.introduction !== null
-            ? data.introduction
+          data.user.introduction !== null
+            ? data.user.introduction
             : '아직 작성된 소개글이 없습니다.'
         }
         readOnly
       ></MyDesc>
-
-      <Button
-        bg={'#597741'}
-        w={'350px'}
-        h={'3.125rem'}
-        size={'1rem'}
-        color={'white'}
-        onClick={editMyProfileClick}
-      >
-        <FiEdit3 />
-        프로필 수정
-      </Button>
+      {data.myPost && (
+        <Button
+          bg={'#597741'}
+          w={'350px'}
+          h={'3.125rem'}
+          size={'1rem'}
+          color={'white'}
+          onClick={editMyProfileClick}
+        >
+          <FiEdit3 />
+          프로필 수정
+        </Button>
+      )}
 
       <Ring></Ring>
       <Ring2></Ring2>
@@ -62,7 +66,6 @@ const Profile = styled.img`
   margin-top: 50px;
   border: 5px solid ${(props) => props.theme.CL.brandColor};
   border-radius: 30px;
-  box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
 `;
 
 const MyUrl = styled.span`

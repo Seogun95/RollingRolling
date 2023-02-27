@@ -9,8 +9,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 
 export default function Detailpage() {
-  const [choice, setChoice] = useState();
-  // console.log('detailpage : ', choice);
+  const [edit, setEdit] = useState();
 
   const param = useParams();
   const getToken = Cookies.get('accessJWTToken');
@@ -31,8 +30,8 @@ export default function Detailpage() {
 
   return (
     <DetailWrapper>
-      <Sidebar data={data.user} setChoice={setChoice} />
-      <DetailContent data={data} choice={choice} setChoice={setChoice} />
+      <Sidebar data={data} setEdit={setEdit} />
+      <DetailContent data={data} edit={edit} setEdit={setEdit} />
     </DetailWrapper>
   );
 }

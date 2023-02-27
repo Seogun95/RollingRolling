@@ -72,7 +72,13 @@ function SignupPage() {
   // 회원가입
   const signUpHandler = async (e) => {
     e.preventDefault();
-    if (checkIdRegex && checkPwRegex) {
+    if (
+      checkIdRegex &&
+      checkPwRegex &&
+      doubleCheckPwRegex &&
+      checkNickNameRegex &&
+      checkEmailRegx
+    ) {
       try {
         await api.post('api/user/signup', {
           username: inputId,
@@ -80,7 +86,6 @@ function SignupPage() {
           email: inputEmail,
           nickname: inputNickName,
         });
-
         alert('회원가입이 완료 되었습니다.');
         moveSigInPg();
       } catch (error) {
@@ -164,10 +169,17 @@ function SignupPage() {
         <LoginAlertSpan isIdOrPw={checkEmailRegx}>{alertEmail}</LoginAlertSpan>
 
         <Button
+          login
           onClick={signUpHandler}
-          bg={'#8CB46D'}
-          h={'3.125rem'}
-          size={'0.9rem'}
+          disabled={
+            !(
+              checkIdRegex &&
+              checkPwRegex &&
+              doubleCheckPwRegex &&
+              checkNickNameRegex &&
+              checkEmailRegx
+            )
+          }
         >
           회원가입
         </Button>

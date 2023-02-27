@@ -6,7 +6,7 @@ export default function HomeCardItem(props) {
   return (
     <>
       <HomeCardItemWrapper>
-        <CardContainer>
+        <CardContainer to={`/home/${props.userid}`}>
           <CardImgLink>{props.children}</CardImgLink>
           <CardDescLink>
             <CardLinkContainer>

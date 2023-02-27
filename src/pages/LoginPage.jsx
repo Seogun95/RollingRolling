@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import Input from '../components/elements/Input.jsx';
@@ -6,10 +6,9 @@ import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import useLoginInput from '../hooks/useLoginInput.jsx';
 import { api } from '../util/api/api';
-// import Cookies from 'js-cookie';
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 import axios from 'axios';
-import isLogin from '../util/api/isLogin.js';
+import { LoginTokenCheck } from '../hooks/useTokenCheck.jsx';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -31,53 +30,32 @@ function LoginPage() {
     pwRegex
   );
 
-  const [cookies, setCookie] = useCookies();
-  const [now] = useState(new Date());
-  const [expiryDate] = useState(new Date());
+  const moveRegistrationPg = () => navigate('/signup');
 
-  // 로그인 버튼 클릭시
+  LoginTokenCheck(navigate);
+
   const loginHandler = async (e) => {
     e.preventDefault();
-    if (inputId !== '' && inputPw !== '') {
-      try {
-        const response = await api.post('api/user/login', {
-          username: inputId,
-          password: inputPw,
-        });
-        const userToken = response.headers.authorization;
-        console.log('userToken----->', userToken);
+    // 토큰 만료 시간
+    const expiryDate = new Date(Date.now() + 60 * 60 * 1000);
+    try {
+      const response = await api.post('api/user/login', {
+        username: inputId,
+        password: inputPw,
+      });
+      console.log(response);
+      const { token } = response.data;
+      const Token = response.headers.authorization;
 
-        // 토큰 시간 설정
-        expiryDate.setMinutes(now.getMinutes() + 60);
-        // hearder에 저장
-        axios.defaults.headers.common['Authorization'] = `${userToken}`;
-        setCookie('accessJWTToken', userToken, {
-          path: '/',
-          expires: expiryDate,
-        });
-        navigate('/home');
-      } catch (error) {
-        console.log('로그인 버튼 클릭시 error : ', error);
-        alert('아이디 또는 비밀번호를 확인해주세요!');
-      }
+      // hearder에 저장
+      axios.defaults.headers.common['authorization'] = `Bearer ${token}`;
+
+      // 쿠키 설정
+      Cookies.set('accessJWTToken', Token, { expires: expiryDate });
+      navigate('/home');
+    } catch (error) {
+      alert(error.response.data.result);
     }
-  };
-
-  // 토큰
-  useEffect(() => {
-    if (isLogin()) checkUser();
-  }, [isLogin()]);
-
-  // 회원인증 및 쿠키 확인 GET
-  const checkUser = () => {
-    const token = cookies.accessJWTToken;
-    api.post('api/user/login', {
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
-        'X-Custom-Header': 'value',
-      },
-    });
   };
 
   //스크롤 방지
@@ -87,10 +65,6 @@ function LoginPage() {
       document.body.style.overflow = 'unset';
     };
   }, []);
-
-  const moveRegistrationPg = () => {
-    navigate('/signup');
-  };
 
   return (
     <LoginModal>

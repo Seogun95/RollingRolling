@@ -79,6 +79,7 @@ export default function HomePage() {
               key={i}
               nickname={user.nickname}
               introduction={user.introduction}
+              userid={user.username}
             >
               {user.image && user.image !== 'null' ? (
                 <img src={user.image} alt=""></img>

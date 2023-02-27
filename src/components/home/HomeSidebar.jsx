@@ -1,15 +1,31 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import useOutsideClick from '../../hooks/useOutsideClick';
+import Button from '../elements/Button';
+import useJwtDecode from '../../hooks/useJwtDecode';
+import { Link } from 'react-router-dom';
 
 export default function HomeSidebar(props) {
-  function toggleSidebar() {
-    props.setState((prveShowSide) => !prveShowSide);
-  }
+  const loginUserName = useJwtDecode();
   const modalRef = useRef(null);
   useOutsideClick(modalRef, () => {
     props.setState(false);
   });
+
+  useEffect(() => {
+    function handleScroll() {
+      props.setState(false);
+    }
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [props]);
+
+  function toggleSidebar() {
+    props.setState((prevShowSide) => !prevShowSide);
+  }
+
   return (
     <>
       <SidebarContainer
@@ -18,18 +34,25 @@ export default function HomeSidebar(props) {
         ref={modalRef}
       >
         <CloseButton onClick={toggleSidebar}>x</CloseButton>
+
         <h2>롤링롤링</h2>
-        <p>마이페이지로 이동</p>
+        <Link>마이페이지</Link>
+        <p>{loginUserName}</p>
+
+        <Button color={'white'} onClick={props.logoutHandler}>
+          로그아웃
+        </Button>
       </SidebarContainer>
     </>
   );
 }
+
 const SidebarContainer = styled.div`
   position: fixed;
   top: 0;
   right: 0;
   transform: translateX(100%);
-  width: 12.5rem;
+  width: 15rem;
   padding: 0.875rem;
   border-radius: 0.25rem 0 0.25rem 0.25rem;
   ${(props) => props.theme.DarkBlur}

@@ -2,22 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Button from '../elements/Button';
-import isLogin from '../../util/api/isLogin';
-import { useCookies } from 'react-cookie';
 import logo from '../../style/img/logo.svg';
 import HomeSidebar from '../home/HomeSidebar';
+import Cookies from 'js-cookie';
+import { HomeTokenCheck } from '../../hooks/useTokenCheck';
+import useJwtDecode from '../../hooks/useJwtDecode';
 
-export default function Header({ toggle, state }) {
+export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [, , removeCookie] = useCookies();
+  const loginUserName = useJwtDecode();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLogin()) {
-      alert('토큰이 만료되어 로그아웃 되었습니다');
-      navigate('/');
-    }
-  }, [isLogin()]);
+  HomeTokenCheck(navigate);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,8 +30,8 @@ export default function Header({ toggle, state }) {
   }, []);
 
   const logoutHandler = () => {
-    removeCookie('accessJWTToken', { path: '/' });
-    navigate('/');
+    Cookies.remove('accessJWTToken');
+    navigate('/login');
   };
 
   const [showSidebar, setShowSidebar] = useState(false);
@@ -54,16 +49,20 @@ export default function Header({ toggle, state }) {
             <LogoImg src={logo} alt="롤링롤링" />
           </Link>
         </HeaderLogoContainer>
-        <HeaderLogOutContainer>
-          <Button onClick={logoutHandler}>로그아웃</Button>
-        </HeaderLogOutContainer>
+        <HeaderUserNameContainer>
+          <span>{loginUserName}</span>님 환영합니다!
+        </HeaderUserNameContainer>
 
         <HeaderMyProfileContainer>
           <Button onClick={toggleSidebar}>
             <img src="https://i.imgur.com/P2iWTOH.png" alt="" />
           </Button>
 
-          <HomeSidebar state={showSidebar} setState={setShowSidebar} />
+          <HomeSidebar
+            state={showSidebar}
+            setState={setShowSidebar}
+            logoutHandler={logoutHandler}
+          />
         </HeaderMyProfileContainer>
       </HeaderContainer>
     </HeaderStyles>
@@ -91,11 +90,11 @@ const HeaderStyles = styled.header`
   }
 `;
 const HeaderContainer = styled.div`
-  max-width: 1830px;
+  max-width: 1900px;
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 0 32px;
+  padding: 0 1rem;
   justify-content: space-between;
 `;
 const HeaderLogoContainer = styled.div`
@@ -107,8 +106,11 @@ const LogoImg = styled.img`
   /* filter: drop-shadow(0 0 2px black); */
 `;
 
-const HeaderLogOutContainer = styled.div`
+const HeaderUserNameContainer = styled.div`
   margin-left: auto;
+  span {
+    color: ${(props) => props.theme.CL.brandColor};
+  }
 `;
 
 const HeaderMyProfileContainer = styled.div`

@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import Button from '../components/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import MainTyping from '../components/home/MainTyping';
+import { LoginTokenCheck } from '../hooks/useTokenCheck';
 
 export default function WelcomePage() {
   const navigate = useNavigate();
+
+  LoginTokenCheck(navigate);
 
   return (
     <WelcomeContainer>

@@ -5,21 +5,22 @@ import DetailContent from '../components/detail/DetailContent';
 import { useParams } from 'react-router';
 import { getPostList } from '../util/api/detailList';
 import { useQuery } from 'react-query';
-import { useCookies } from 'react-cookie';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export default function Detailpage() {
   const [choice, setChoice] = useState();
-  console.log('detailpage : ', choice);
+  // console.log('detailpage : ', choice);
 
   const param = useParams();
-  const [cookies] = useCookies();
-  const token = cookies.accessJWTToken.split(' ')[1];
+  const getToken = Cookies.get('accessJWTToken');
+  const token = getToken.split(' ')[1];
 
   const { isLoading, isError, data } = useQuery('getPost', () =>
     getPostList({ id: param.id, token })
   );
-  // console.log('data', data); // 데이터 확인
+
+  console.log('data', data); // 데이터 확인
 
   if (isLoading) {
     return <div>로딩중!!...</div>;
@@ -38,6 +39,8 @@ export default function Detailpage() {
 
 const DetailWrapper = styled.div`
   ${(props) => props.theme.FlexRow};
-  width: 100vw;
-  height: 100vh;
+  width: 95%;
+  max-width: 100vw;
+  margin: 0 auto;
+  height: calc(100vh - 4rem);
 `;

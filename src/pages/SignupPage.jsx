@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../components/elements/Input';
 import useLoginInput from '../hooks/useLoginInput';
 import { api } from '../util/api/api';
+import { LoginTokenCheck } from '../hooks/useTokenCheck';
 import {
   LoginText,
   LoginModal,
@@ -80,6 +81,7 @@ function SignupPage() {
           email: inputEmail,
           nickname: inputNickName,
         });
+
         alert('회원가입이 완료 되었습니다.');
         moveSigInPg();
       } catch (error) {
@@ -87,6 +89,8 @@ function SignupPage() {
       }
     }
   };
+
+  LoginTokenCheck(navigate);
 
   //스크롤 방지
   useEffect(() => {

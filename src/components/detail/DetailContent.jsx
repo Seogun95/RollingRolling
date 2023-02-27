@@ -13,8 +13,10 @@ function DetailContent({ data, edit, setEdit }) {
       <DetailScrollContainer>
         {!data.myPost ? (
           <DetailWriteQuestion />
-        ) : edit === 'edit' ? (
+        ) : edit === 'pwCheck' ? (
           <EditMyInfoPasswordCheck setEdit={setEdit} />
+        ) : edit === 'edit' ? (
+          <EditMyInfomation setEdit={setEdit} />
         ) : (
           <DetailMyQuestion />
         )}

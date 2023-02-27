@@ -1,18 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
 import Input from '../elements/Input';
-import Button from '../elements/Button';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
 import useLoginInput from '../../hooks/useLoginInput';
 import defaultImg from '../../style/img/example.png';
 import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
+import { editMyInfo } from '../../util/api/detailList';
+import useSliceToken from '../../hooks/useSliceToken';
+import SuccessCheckButton from './SuccessCheckButton';
 
 function EditMyInfomation({ setEdit }) {
   const param = useParams();
-  const [myIntro, setMyIntro] = useState();
   const navigate = useNavigate;
+  const [myIntro, setMyIntro] = useState();
 
   const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
@@ -47,32 +50,41 @@ function EditMyInfomation({ setEdit }) {
     userNameReg
   );
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const [inputEmail, inputEmailHandler, alertEmail, checkEmailRegx] =
-    useLoginInput(
-      '',
-      '이메일을 입력해주세요.',
-      '이메일 형식으로 입력해주세요.',
-      '사용 가능한 이메일 입니다.',
-      emailRegex
-    );
-
   // 취소 버튼 클릭시 -> myQuestion 페이지
   const moveMyQuestion = () => {
     navigate(`/home/${param.id}`);
   };
 
+  // 토큰
+  const token = useSliceToken();
+  // 수정 버튼 클릭시 정보수정 : img는 아직
   const editMyInfoClick = (e) => {
     e.preventDefault();
-    if (checkPwRegex && checkNickNameRegex && checkEmailRegx) {
+
+    if (checkPwRegex && checkNickNameRegex) {
+      const newInfo = {
+        newPassword: inputPw,
+        newPasswordConfirm: inputCheckPw,
+        nickname: inputNickName,
+        image: '',
+        introduction: myIntro,
+      };
+      editInfo.mutate({ token, newInfo });
       setEdit('');
     }
   };
+  // api
+  const editInfo = useMutation('editinfo', editMyInfo, {
+    onSuccess: (data, variable, context) => {
+      console.log('mutation : ', data);
+    },
+  });
 
+  // 사진은 아직
   const [proImg, setProImg] = useState();
 
   const uploadProfile = (e) => {
-    // console.log(e.target.files);
+    console.log(e.target.files);
     setProImg(e.target.files);
   };
 
@@ -122,40 +134,16 @@ function EditMyInfomation({ setEdit }) {
           {alertNickName}
         </InputMessageSpan>
 
-        <Input
-          text={'이메일'}
-          value={inputEmail}
-          onChange={inputEmailHandler}
-          type={'email'}
-        >
+        <Input text={'이메일'} type={'email'} readOnly>
           <BsEnvelopeFill />
         </Input>
-        <InputMessageSpan isIdOrPw={checkEmailRegx}>
-          {alertEmail}
-        </InputMessageSpan>
 
-        <EditButtonContainer>
-          <Button
-            bg={'#58793e'}
-            h={'2.8rem'}
-            w={'100px'}
-            size={'0.9rem'}
-            color={'white'}
-            onClick={moveMyQuestion}
-          >
-            취소
-          </Button>
-          <Button
-            bg={'#58793e'}
-            h={'2.8rem'}
-            w={'100px'}
-            size={'0.9rem'}
-            color={'white'}
-            onClick={editMyInfoClick}
-          >
-            수정
-          </Button>
-        </EditButtonContainer>
+        <SuccessCheckButton
+          name1={'취소'}
+          name2={'수정'}
+          click1={moveMyQuestion}
+          click2={editMyInfoClick}
+        />
       </EditInputContainer>
 
       <ProfileContainer>
@@ -203,11 +191,6 @@ const InputMessageSpan = styled.div`
   padding: 0.4rem 0.5rem 0.5rem;
   height: ${(props) => props.height};
   color: ${(props) => (props.isIdOrPw ? '#58793e' : 'tomato')};
-`;
-
-const EditButtonContainer = styled.div`
-  ${(props) => props.theme.FlexRow}
-  margin-top: 30px;
 `;
 
 const ProfileContainer = styled.div`

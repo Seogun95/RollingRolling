@@ -6,20 +6,17 @@ import { useParams } from 'react-router';
 import { getPostList } from '../util/api/detailList';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
-import Cookies from 'js-cookie';
+import useSliceToken from '../hooks/useSliceToken';
 
 export default function Detailpage() {
   const [edit, setEdit] = useState();
 
   const param = useParams();
-  const getToken = Cookies.get('accessJWTToken');
-  const token = getToken.split(' ')[1];
-
+  // 토큰
+  const token = useSliceToken();
   const { isLoading, isError, data } = useQuery('getPost', () =>
     getPostList({ id: param.id, token })
   );
-
-  console.log('data', data); // 데이터 확인
 
   if (isLoading) {
     return <div>로딩중!!...</div>;

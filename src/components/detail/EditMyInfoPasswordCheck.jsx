@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Input from '../elements/Input';
 import { FaLock } from 'react-icons/fa';
 import { useState } from 'react';
-import Button from '../elements/Button';
-import { useNavigate } from 'react-router';
-import { useParams } from 'react-router';
-import useJwtDecode from '../../hooks/useJwtDecode';
+import { useMutation } from 'react-query';
+import { passwordCheck } from '../../util/api/detailList';
+import useSliceToken from '../../hooks/useSliceToken';
+import SuccessCheckButton from './SuccessCheckButton';
 
 function EditMyInfoPasswordCheck({ setEdit }) {
   const [inputPw, setInputPw] = useState('');
@@ -15,16 +15,26 @@ function EditMyInfoPasswordCheck({ setEdit }) {
     setInputPw(e.target.value);
   };
 
-  const backPage = (e) => {
+  // 뒤로가기
+  const backPage = () => {
     setEdit('');
   };
 
-  const username = useJwtDecode();
+  // 토큰
+  const token = useSliceToken();
+  // info수정 페이지 이동
   const moveEditMyInfo = (e) => {
-    console.log(username, inputPw);
+    e.preventDefault();
 
-    //setEdit('');
+    pwCheck.mutate({ password: inputPw, token });
+    setEdit('edit');
   };
+  // api
+  const pwCheck = useMutation('passwordCheck', passwordCheck, {
+    onSuccess: (data, variable, context) => {
+      console.log('mutation : ', data);
+    },
+  });
 
   return (
     <EditContainer>
@@ -38,28 +48,12 @@ function EditMyInfoPasswordCheck({ setEdit }) {
         >
           <FaLock />
         </Input>
-        <SuccessButtonContainer>
-          <Button
-            bg={'#58793e'}
-            h={'2.8rem'}
-            w={'100px'}
-            size={'0.9rem'}
-            color={'white'}
-            onClick={backPage}
-          >
-            취소
-          </Button>
-          <Button
-            bg={'#58793e'}
-            h={'2.8rem'}
-            w={'100px'}
-            size={'0.9rem'}
-            color={'white'}
-            onClick={moveEditMyInfo}
-          >
-            수정
-          </Button>
-        </SuccessButtonContainer>
+        <SuccessCheckButton
+          name1={'취소'}
+          name2={'확인'}
+          click1={backPage}
+          click2={moveEditMyInfo}
+        />
       </PasswordContainer>
     </EditContainer>
   );
@@ -85,8 +79,4 @@ const PasswordContainer = styled.div`
   > span {
     font-size: ${(props) => props.theme.FS.l};
   }
-`;
-
-const SuccessButtonContainer = styled.div`
-  ${(props) => props.theme.FlexRow};
 `;

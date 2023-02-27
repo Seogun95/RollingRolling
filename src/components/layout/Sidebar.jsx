@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
@@ -6,7 +6,7 @@ import { FiEdit3 } from 'react-icons/fi';
 
 export default function Sidebar({ data, setEdit }) {
   const editMyProfileClick = () => {
-    setEdit('edit');
+    setEdit('pwCheck');
   };
 
   return (

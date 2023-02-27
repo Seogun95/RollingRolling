@@ -8,7 +8,6 @@ import useLoginInput from '../hooks/useLoginInput.jsx';
 import { api } from '../util/api/api';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { LoginTokenCheck } from '../hooks/useTokenCheck.jsx';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -31,8 +30,6 @@ function LoginPage() {
   );
 
   const moveRegistrationPg = () => navigate('/signup');
-
-  LoginTokenCheck(navigate);
 
   const loginHandler = async (e) => {
     e.preventDefault();

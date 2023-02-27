@@ -3,13 +3,16 @@ import styled from 'styled-components';
 import { CSSTransition } from 'react-transition-group';
 import { useBgAnimation } from '../../hooks/useBgAnimation';
 import logo from '../../style/img/logo.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { LoginTokenCheck } from '../../hooks/useTokenCheck';
 
 export default function MainBgLayout(props) {
   const [backgrounds, setBackgrounds] = useState([
     'https://i.imgur.com/SvyQWWU.jpg',
     'https://i.imgur.com/GFBmTcM.jpg',
   ]);
+  const navigate = useNavigate();
+  LoginTokenCheck(navigate);
 
   useEffect(() => {
     const shuffledBackgrounds = shuffleArray(backgrounds);

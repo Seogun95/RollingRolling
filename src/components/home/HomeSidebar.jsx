@@ -36,7 +36,7 @@ export default function HomeSidebar(props) {
         <CloseButton onClick={toggleSidebar}>x</CloseButton>
 
         <h2>롤링롤링</h2>
-        <Link>마이페이지</Link>
+        <Link to={`${`/home/${loginUserName}`}`}>마이페이지</Link>
         <p>{loginUserName}</p>
 
         <Button color={'white'} onClick={props.logoutHandler}>

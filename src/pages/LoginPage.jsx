@@ -90,10 +90,9 @@ function LoginPage() {
         </Input>
         <LoginAlertSpan isIdOrPw={checkPwRegex}>{alertPw}</LoginAlertSpan>
         <Button
+          login
           onClick={loginHandler}
-          bg={'#8CB46D'}
-          h={'3.125rem'}
-          size={'0.9rem'}
+          disabled={!(checkIdRegex && checkPwRegex)}
         >
           로그인
         </Button>

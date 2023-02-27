@@ -28,7 +28,7 @@ const ButtonWrapper = styled.button`
   background-color: ${(props) => props.bg};
   transition: ${(props) => props.ts};
   color: ${(props) => props.color};
-
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'pointer')};
   ${(props) =>
     props.default &&
     css`
@@ -47,6 +47,14 @@ const ButtonWrapper = styled.button`
       width: 29rem;
       height: 5rem;
       border: 2px ${(props) => props.theme.CL.brandColor};
+    `}
+
+    ${(props) =>
+    props.login &&
+    css`
+      font-size: 0.9rem;
+      height: 3.125rem;
+      background: ${(props) => (props.disabled ? '#1d1d1d4e' : '#8CB46D')};
     `}
 
 

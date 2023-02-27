@@ -3,22 +3,18 @@ import styled from 'styled-components';
 import DetailWriteQuestion from './DetailWriteQuestion';
 import DetailMyQuestion from './DetailMyQuestion';
 import EditMyInfomation from './EditMyInfomation';
+import EditMyInfoPasswordCheck from './EditMyInfoPasswordCheck';
 
-function DetailContent({ data, choice, setChoice }) {
-  console.log('detailContent choice: ', choice);
+function DetailContent({ data, edit, setEdit }) {
+  // data.myPost : 게시판 유저와 로그인 유저가 같으면 true / 다르면 false
 
   return (
     <DetailContainer>
       <DetailScrollContainer>
-        {/* 
-        추후 조건문으로 컴포넌트 걸러줄 예정...?
-        로그인 유저와 게시판 유저 back에서 걸러줌
-        값 넘겨줄거 없고 get만 해오면 됨....
-       */}
-
-        {/* <DetailWriteQuestion /> */}
-        {choice === 'edit' ? (
-          <EditMyInfomation setChoice={setChoice} />
+        {!data.myPost ? (
+          <DetailWriteQuestion />
+        ) : edit === 'edit' ? (
+          <EditMyInfoPasswordCheck setEdit={setEdit} />
         ) : (
           <DetailMyQuestion />
         )}
@@ -39,6 +35,7 @@ const DetailContainer = styled.div`
 `;
 
 const DetailScrollContainer = styled.div`
+  justify-content: center;
   height: 100%;
   padding-left: 1.875rem;
   // scroll

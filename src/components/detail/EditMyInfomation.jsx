@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import Input from '../elements/Input';
 import Button from '../elements/Button';
-import { FaUserAlt, FaLock, FaEnvelope } from 'react-icons/fa';
+import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
 import useLoginInput from '../../hooks/useLoginInput';
 import defaultImg from '../../style/img/example.png';
 import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
 
-function EditMyInfomation({ setChoice }) {
+function EditMyInfomation({ setEdit }) {
   const param = useParams();
   const [myIntro, setMyIntro] = useState();
   const navigate = useNavigate;
@@ -65,8 +65,15 @@ function EditMyInfomation({ setChoice }) {
   const editMyInfoClick = (e) => {
     e.preventDefault();
     if (checkPwRegex && checkNickNameRegex && checkEmailRegx) {
-      setChoice('');
+      setEdit('');
     }
+  };
+
+  const [proImg, setProImg] = useState();
+
+  const uploadProfile = (e) => {
+    // console.log(e.target.files);
+    setProImg(e.target.files);
   };
 
   return (
@@ -76,8 +83,12 @@ function EditMyInfomation({ setChoice }) {
           <FaUserAlt />
         </Input>
 
+        <Input text={'현재 비밀번호'} type={'password'} readOnly>
+          <FaLock />
+        </Input>
+
         <Input
-          text={'비밀번호'}
+          text={'새 비밀번호'}
           value={inputPw}
           onChange={inputPwHandler}
           type={'password'}
@@ -87,7 +98,7 @@ function EditMyInfomation({ setChoice }) {
         <InputMessageSpan isIdOrPw={checkPwRegex}>{alertPw}</InputMessageSpan>
 
         <Input
-          text={'비밀번호 확인'}
+          text={'새 비밀번호 확인'}
           value={inputCheckPw}
           onChange={checkSame}
           type={'password'}
@@ -149,7 +160,16 @@ function EditMyInfomation({ setChoice }) {
 
       <ProfileContainer>
         <ProfileImgContainer>
-          <ProfileImg src={defaultImg} alt=""></ProfileImg>
+          <ImgContainer htmlFor="inputProfile">
+            <ProfileImg src={defaultImg} alt=""></ProfileImg>
+            <input
+              id="inputProfile"
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={uploadProfile}
+            ></input>
+          </ImgContainer>
           <textarea
             value={myIntro}
             onChange={(e) => setMyIntro(e.target.value)}
@@ -165,7 +185,6 @@ export default EditMyInfomation;
 const EditMyInfoContainer = styled.form`
   ${(props) => props.theme.FlexRow}
   justify-content: space-between;
-
   background-color: ${(props) => props.theme.CL.brandColorLight};
   height: 100%;
   padding: 1.25rem 3rem;
@@ -218,6 +237,9 @@ const ProfileImgContainer = styled.div`
     outline: none;
   }
 `;
+const ImgContainer = styled.label`
+  position: relative;
+`;
 
 const ProfileImg = styled.img`
   width: 250px;
@@ -226,4 +248,18 @@ const ProfileImg = styled.img`
   border-radius: 30px;
   margin-bottom: 30px;
   box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
+  position: relative;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(30%);
+  }
+`;
+
+const ChangeImg = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 40%;
+  left: 38%;
 `;

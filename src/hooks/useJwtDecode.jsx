@@ -8,8 +8,10 @@ export default function useJwtDecode() {
 
   useEffect(() => {
     const getToken = Cookies.get('accessJWTToken');
-    const jwtdecode = jwt_decode(getToken).sub;
-    setUserName(jwtdecode);
+    if (getToken) {
+      const jwtdecode = jwt_decode(getToken).sub;
+      setUserName(jwtdecode);
+    }
   }, []);
 
   return userName;

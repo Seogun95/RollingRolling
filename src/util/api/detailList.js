@@ -10,6 +10,19 @@ export const getPostList = async (data) => {
   return response.data;
 };
 
+export const addQuestion = async ({ id, content, token }) => {
+  try {
+    const response = await api.post(`/api/post/${id}`, content, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // pw check
 export const passwordCheck = async (data) => {
   console.log('pwcheck : ', data);

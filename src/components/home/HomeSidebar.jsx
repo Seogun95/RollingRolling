@@ -5,6 +5,8 @@ import Button from '../elements/Button';
 import { Link } from 'react-router-dom';
 import { BsPersonLinesFill } from 'react-icons/bs';
 import defaultImg from '../../style/img/example.png';
+import { MdEmail } from 'react-icons/md';
+import { SlLogout } from 'react-icons/sl';
 
 export default function HomeSidebar(props) {
   const modalRef = useRef(null);
@@ -44,24 +46,33 @@ export default function HomeSidebar(props) {
             )}
             <ProfileInfo>
               <p>닉네임 : {props.nickname}</p>
-              <p>아이디 : {props.username}</p> <br />
+              <p>아이디 : {props.username}</p>
             </ProfileInfo>
           </ProfileDiv>
         </Info>
-        <Email>
-          <p>이메일 : {props.email}</p>
-        </Email>
 
-        <BottomBox>
-          <MyPage>
-            <Link to={`${`/home/${props.username}`}`}>
-              <BsPersonLinesFill /> &nbsp; 마이페이지
-            </Link>
-          </MyPage>
-          <Button color={'white'} onClick={props.logoutHandler}>
+        <IconContainer>
+          <Icon>
+            <MdEmail />
+          </Icon>
+          {props.email}
+        </IconContainer>
+
+        <IconContainer>
+          <Icon>
+            <BsPersonLinesFill />
+          </Icon>
+          <Link to={`${`/home/${props.username}`}`}>마이페이지</Link>
+        </IconContainer>
+
+        <IconContainer>
+          <Icon>
+            <SlLogout />
+          </Icon>
+          <Button mypage onClick={props.logoutHandler}>
             로그아웃
           </Button>
-        </BottomBox>
+        </IconContainer>
       </SidebarContainer>
     </>
   );
@@ -105,33 +116,30 @@ const CloseButton = styled.button`
 `;
 
 const Info = styled.div`
-  margin-top: 3%;
+  margin-top: 1rem;
 `;
 
 const ProfileDiv = styled.div`
-  box-shadow: 0px 2px 0px white;
-  margin-left: 0%;
-  padding-left: 10%;
+  padding-left: 1.5rem;
   display: flex;
   align-items: center;
+  box-shadow: 0px 2px 0px white;
 `;
 
 const ProfileInfo = styled.div`
-  margin: 10% 0 0 10%;
+  margin: 1rem 0 1rem 1rem;
   display: flex;
   flex-direction: column;
 `;
 
-const Email = styled.div`
+const IconContainer = styled.div`
   display: flex;
-  justify-content: center;
-  margin: 9% 0 10% 0;
+  justify-content: start;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
 `;
 
-const MyPage = styled.div`
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
+const Icon = styled.div`
+  width: 2rem;
 `;
-
-const BottomBox = styled.div``;

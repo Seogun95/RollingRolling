@@ -57,6 +57,16 @@ const ButtonWrapper = styled.button`
       background: ${(props) => (props.disabled ? '#1d1d1d4e' : '#8CB46D')};
     `}
 
+    ${(props) =>
+    props.mypage &&
+    css`
+      justify-content: flex-start;
+      padding: 0;
+      margin: 0;
+      color: white;
+      margin-left: 0.4rem;
+    `}
+
 
   & {
     cursor: pointer;

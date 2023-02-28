@@ -4,7 +4,7 @@ import Input from '../elements/Input';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
 import useLoginInput from '../../hooks/useLoginInput';
-// import defaultImg from '../../style/img/example.png';
+import defaultImg from '../../style/img/example.png';
 import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
@@ -66,6 +66,8 @@ function EditMyInfomation({ setEdit }) {
       }
     },
   });
+
+  console.log(getInfo);
   useEffect(() => {
     getInfo.mutate({ token });
   }, [token]);
@@ -144,6 +146,7 @@ function EditMyInfomation({ setEdit }) {
     <EditMyInfoContainer>
       <EditInputContainer>
         <Input
+          disabled
           text={'아이디'}
           type={'text'}
           width={'60%'}
@@ -180,6 +183,7 @@ function EditMyInfomation({ setEdit }) {
         </InputMessageSpan>
 
         <Input
+          disabled
           text={'닉네임'}
           onChange={changeNickname}
           type={'text'}
@@ -189,6 +193,7 @@ function EditMyInfomation({ setEdit }) {
         </Input>
 
         <Input
+          disabled
           text={'이메일'}
           type={'email'}
           value={
@@ -212,7 +217,11 @@ function EditMyInfomation({ setEdit }) {
       <ProfileContainer>
         <ProfileImgContainer>
           <ImgContainer htmlFor="inputProfile">
-            <ProfileImg src={profileImg.viewUrl} alt=""></ProfileImg>
+            {getInfo.data?.image !== null ? (
+              <ProfileImg src={profileImg.viewUrl} alt=""></ProfileImg>
+            ) : (
+              <ProfileImg src={defaultImg} alt=""></ProfileImg>
+            )}
             <input
               id="inputProfile"
               type="file"
@@ -292,11 +301,7 @@ const ProfileImg = styled.img`
   margin-bottom: 30px;
   box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
   position: relative;
-
-  &:hover {
-    cursor: pointer;
-    filter: brightness(30%);
-  }
+  cursor: pointer;
 `;
 
 // const ChangeImg = styled.div`

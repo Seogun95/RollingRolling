@@ -8,10 +8,11 @@ import useLoginInput from '../../hooks/useLoginInput';
 import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { editMyInfo, imgUpload, getMyInfo } from '../../util/api/detailList';
+import { editMyInfo, imgUpload } from '../../util/api/detailList';
 import SuccessCheckButton from './SuccessCheckButton';
 import imageCompression from 'browser-image-compression';
 import Cookies from 'js-cookie';
+import { loginInfo } from '../../util/api/userInfo';
 
 function EditMyInfomation({ setEdit }) {
   const param = useParams();
@@ -55,7 +56,7 @@ function EditMyInfomation({ setEdit }) {
   const token = Cookies.get('accessJWTToken');
 
   // 회원정보 불러오기
-  const getInfo = useMutation('getInfo', getMyInfo, {
+  const getInfo = useMutation('getInfo', loginInfo, {
     onSuccess: (data) => {
       setMyIntro(data.introduction);
       if (data.nickname !== null) {

@@ -70,7 +70,12 @@ function DetailWriteQuestion() {
       </QuestionContainer>
       <QuestionContainer>
         <label> dajeong 님에게 작성된 질문</label>
-        <QuestionBox>질문한 내용~~</QuestionBox>
+        {data?.bottomPost.content.map((item) => (
+          <QuestionBox key={item.id}>
+            <span>{item.nickname}</span>
+            <h3>{item.content}</h3>
+          </QuestionBox>
+        ))}
       </QuestionContainer>
     </WriteQuestionContainer>
   );

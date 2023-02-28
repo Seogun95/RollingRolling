@@ -33,6 +33,7 @@ export const CL = {
   brandColor: '#58793e',
   scroll: '#58793e',
   brandColorLight: `#81a36648`,
+  brandColorWhite: '#9fcb7c',
 };
 
 export const FS = {
@@ -58,7 +59,7 @@ export const CustomHr = styled.hr`
   width: 100%;
   font-size: inherit;
   background: 0 0;
-  border-bottom: 4px dashed #eeeeee82;
+  border-bottom: 4px dashed #c8c8c8c2;
   height: 0;
   :before {
     content: '';
@@ -69,5 +70,6 @@ export const CustomHr = styled.hr`
     height: 25px;
     position: absolute;
     margin-top: -10px;
+    left: 64px;
   }
 `;

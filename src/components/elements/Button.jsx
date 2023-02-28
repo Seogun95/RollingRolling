@@ -65,6 +65,7 @@ const ButtonWrapper = styled.button`
       margin: 0;
       color: white;
       margin-left: 0.4rem;
+      font-size: 1rem;
     `}
 
 

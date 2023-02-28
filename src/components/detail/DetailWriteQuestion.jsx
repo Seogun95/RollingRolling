@@ -3,20 +3,45 @@ import styled from 'styled-components';
 import Button from '../elements/Button';
 import { useState } from 'react';
 import { useRef } from 'react';
+import Cookies from 'js-cookie';
+import { addQuestion, getPostList } from '../../util/api/detailList';
+import { useParams } from 'react-router-dom';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
 
 function DetailWriteQuestion() {
-  const [content, setContent] = useState('');
+  const [question, setQuestion] = useState('');
   const anonymous = useRef();
+  const param = useParams();
+  const token = Cookies.get('accessJWTToken');
+
+  // GET 데이터 불러옴
+  const { data } = useQuery('getPost', () =>
+    getPostList({ id: param.id, token })
+  );
+
+  console.log(data);
 
   const changeContent = (e) => {
-    setContent(e.target.value);
+    setQuestion(e.target.value);
   };
+  const queryClient = useQueryClient();
+  //POST 데이터 추가
+  const muation = useMutation(addQuestion, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getPost');
+    },
+  });
 
-  const submitPostContent = async (e) => {
+  const submitPostContent = (e) => {
     e.preventDefault();
-    if (content !== '') {
-      // console.log(content, anonymous.current.checked);
-      // content / anonymous 체크여부 보내기
+    if (question !== '') {
+      const form = {
+        content: question,
+        anonymous: anonymous.current.checked,
+      };
+      muation.mutate({ id: param.id, token: token, content: form });
+      setQuestion('');
+      anonymous.current.checked = false;
     }
   };
 
@@ -24,7 +49,7 @@ function DetailWriteQuestion() {
     <WriteQuestionContainer>
       <QuestionFormContainer onSubmit={submitPostContent}>
         <label>질문하기</label>
-        <textarea value={content} onChange={changeContent} />
+        <textarea name="content" value={question} onChange={changeContent} />
         <QuestionSubmitContainer>
           <input type="checkbox" ref={anonymous} />
           <label>익명으로 작성</label>
@@ -35,9 +60,13 @@ function DetailWriteQuestion() {
       </QuestionFormContainer>
       <QuestionContainer>
         <label>내가 남긴 질문</label>
-        <QuestionBox>
-          질문한 내역이 없습니다. 궁금한 점을 물어보세요 !
-        </QuestionBox>
+
+        {data?.upperPost.map((item) => (
+          <QuestionBox key={item.id}>
+            <span>{item.nickname}</span>
+            <h3>{item.content}</h3>
+          </QuestionBox>
+        ))}
       </QuestionContainer>
       <QuestionContainer>
         <label> dajeong 님에게 작성된 질문</label>

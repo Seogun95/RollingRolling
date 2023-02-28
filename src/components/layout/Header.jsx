@@ -6,11 +6,9 @@ import logo from '../../style/img/logo.svg';
 import HomeSidebar from '../home/HomeSidebar';
 import Cookies from 'js-cookie';
 import { HomeTokenCheck } from '../../hooks/useTokenCheck';
-import useJwtDecode from '../../hooks/useJwtDecode';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const loginUserName = useJwtDecode();
   const navigate = useNavigate();
   HomeTokenCheck(navigate);
 
@@ -50,7 +48,7 @@ export default function Header() {
           </Link>
         </HeaderLogoContainer>
         <HeaderUserNameContainer>
-          <span>{loginUserName}</span>님 환영합니다!
+          <span></span>님 환영합니다!
         </HeaderUserNameContainer>
 
         <HeaderMyProfileContainer>

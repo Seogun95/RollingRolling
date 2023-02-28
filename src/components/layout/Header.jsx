@@ -6,16 +6,12 @@ import logo from '../../style/img/logo.svg';
 import HomeSidebar from '../home/HomeSidebar';
 import Cookies from 'js-cookie';
 import { HomeTokenCheck } from '../../hooks/useTokenCheck';
-import { useQuery } from 'react-query';
-import { loginInfo } from '../../util/api/userInfo';
 import defaultImg from '../../style/img/example.png';
+import { useLoginUserCheck } from '../../hooks/useLoginUserCheck';
 
 export default function Header() {
-  const token = Cookies.get('accessJWTToken');
+  const loginInfo = useLoginUserCheck();
 
-  // GET 데이터 불러옴
-  const { data } = useQuery('info', () => loginInfo({ token }));
-  console.log(data);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   HomeTokenCheck(navigate);
@@ -37,7 +33,7 @@ export default function Header() {
 
   const logoutHandler = () => {
     Cookies.remove('accessJWTToken');
-    navigate('/login');
+    navigate('/');
   };
 
   const [showSidebar, setShowSidebar] = useState(false);
@@ -56,23 +52,24 @@ export default function Header() {
           </Link>
         </HeaderLogoContainer>
         <HeaderUserNameContainer>
-          <span>{data?.nickname}</span>님 환영합니다!
+          <span className="nickname">{loginInfo?.nickname}</span>
+          <span className="welcomspan">님 환영합니다!</span>
         </HeaderUserNameContainer>
 
         <HeaderMyProfileContainer>
           <Button onClick={toggleSidebar}>
-            {data?.image && data?.image !== 'null' ? (
-              <img src={data.image} alt=""></img>
+            {loginInfo?.image && loginInfo?.image !== 'null' ? (
+              <img src={loginInfo.image} alt=""></img>
             ) : (
               <img src={defaultImg} alt=""></img>
             )}
           </Button>
 
           <HomeSidebar
-            image={data?.image}
-            email={data?.email}
-            nickname={data?.nickname}
-            username={data?.username}
+            image={loginInfo?.image}
+            email={loginInfo?.email}
+            nickname={loginInfo?.nickname}
+            username={loginInfo?.username}
             state={showSidebar}
             setState={setShowSidebar}
             logoutHandler={logoutHandler}
@@ -99,7 +96,7 @@ const HeaderStyles = styled.header`
   &.isScrolled {
     ${(props) => props.theme.DarkBlur};
     * {
-      color: white;
+      color: white !important;
     }
   }
 `;
@@ -122,8 +119,8 @@ const LogoImg = styled.img`
 
 const HeaderUserNameContainer = styled.div`
   margin-left: auto;
-  span {
-    color: ${(props) => props.theme.CL.brandColor};
+  .nickname {
+    color: #234b04;
   }
 `;
 

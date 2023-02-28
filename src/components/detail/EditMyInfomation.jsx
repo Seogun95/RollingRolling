@@ -4,13 +4,14 @@ import Input from '../elements/Input';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
 import useLoginInput from '../../hooks/useLoginInput';
-import defaultImg from '../../style/img/example.png';
+// import defaultImg from '../../style/img/example.png';
 import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { editMyInfo } from '../../util/api/detailList';
-import useSliceToken from '../../hooks/useSliceToken';
+import { editMyInfo, imgUpload } from '../../util/api/detailList';
 import SuccessCheckButton from './SuccessCheckButton';
+import imageCompression from 'browser-image-compression';
+import Cookies from 'js-cookie';
 
 function EditMyInfomation({ setEdit }) {
   const param = useParams();
@@ -56,7 +57,7 @@ function EditMyInfomation({ setEdit }) {
   };
 
   // 토큰
-  const token = useSliceToken();
+  const token = Cookies.get('accessJWTToken');
   // 수정 버튼 클릭시 정보수정 : img는 아직
   const editMyInfoClick = (e) => {
     e.preventDefault();
@@ -80,13 +81,47 @@ function EditMyInfomation({ setEdit }) {
     },
   });
 
-  // 사진은 아직
-  const [proImg, setProImg] = useState();
+  const [profileImg, setProfileImg] = useState({ proImg: '', viewUrl: '' });
 
-  const uploadProfile = (e) => {
-    console.log(e.target.files);
-    setProImg(e.target.files);
+  // 이미지 클릭시 change event
+  const uploadProfile = async (e) => {
+    const profileImg = e.target.files[0];
+
+    const formImg = new FormData();
+    formImg.append('img', profileImg);
+
+    //console.log('Before Compression: ', profileImg.size);
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(profileImg, options);
+      console.log('After Compression: ', compressedFile.size);
+      const fileReader = new FileReader();
+      // console.log(compressedFile);
+      fileReader.readAsDataURL(compressedFile);
+
+      fileReader.onload = () => {
+        setProfileImg({
+          viewUrl: String(fileReader.result),
+        });
+      };
+    } catch (error) {
+      console.log(error);
+    }
+
+    uploadImg.mutate({ token, profileImg });
+    //=> 여기까지 img 변경 됨!!
   };
+
+  // api
+  const uploadImg = useMutation('uploadImg', imgUpload, {
+    onSuccess: (data) => {
+      console.log('mutation : ', data);
+    },
+  });
 
   return (
     <EditMyInfoContainer>
@@ -149,7 +184,7 @@ function EditMyInfomation({ setEdit }) {
       <ProfileContainer>
         <ProfileImgContainer>
           <ImgContainer htmlFor="inputProfile">
-            <ProfileImg src={defaultImg} alt=""></ProfileImg>
+            <ProfileImg src={profileImg.viewUrl} alt=""></ProfileImg>
             <input
               id="inputProfile"
               type="file"
@@ -239,10 +274,10 @@ const ProfileImg = styled.img`
   }
 `;
 
-const ChangeImg = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 40%;
-  left: 38%;
-`;
+// const ChangeImg = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   position: absolute;
+//   top: 40%;
+//   left: 38%;
+// `;

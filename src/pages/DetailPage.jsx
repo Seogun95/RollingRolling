@@ -6,14 +6,14 @@ import { useParams } from 'react-router';
 import { getPostList } from '../util/api/detailList';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
-import useSliceToken from '../hooks/useSliceToken';
+import Cookies from 'js-cookie';
 
 export default function Detailpage() {
   const [edit, setEdit] = useState();
 
   const param = useParams();
   // 토큰
-  const token = useSliceToken();
+  const token = Cookies.get('accessJWTToken');
   const { isLoading, isError, data } = useQuery('getPost', () =>
     getPostList({ id: param.id, token })
   );

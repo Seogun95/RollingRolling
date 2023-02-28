@@ -2,11 +2,11 @@ import React, { useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import Button from '../elements/Button';
-import useJwtDecode from '../../hooks/useJwtDecode';
 import { Link } from 'react-router-dom';
+import { BsPersonLinesFill } from 'react-icons/bs';
+import defaultImg from '../../style/img/example.png';
 
 export default function HomeSidebar(props) {
-  const loginUserName = useJwtDecode();
   const modalRef = useRef(null);
   useOutsideClick(modalRef, () => {
     props.setState(false);
@@ -34,14 +34,34 @@ export default function HomeSidebar(props) {
         ref={modalRef}
       >
         <CloseButton onClick={toggleSidebar}>x</CloseButton>
-
         <h2>롤링롤링</h2>
-        <Link to={`${`/home/${loginUserName}`}`}>마이페이지</Link>
-        <p>{loginUserName}</p>
+        <Info>
+          <ProfileDiv>
+            {props.image && props.image !== 'null' ? (
+              <img src={props.image} alt=""></img>
+            ) : (
+              <img src={defaultImg} alt=""></img>
+            )}
+            <ProfileInfo>
+              <p>닉네임 : {props.nickname}</p>
+              <p>아이디 : {props.username}</p> <br />
+            </ProfileInfo>
+          </ProfileDiv>
+        </Info>
+        <Email>
+          <p>이메일 : {props.email}</p>
+        </Email>
 
-        <Button color={'white'} onClick={props.logoutHandler}>
-          로그아웃
-        </Button>
+        <BottomBox>
+          <MyPage>
+            <Link to={`${`/home/${props.username}`}`}>
+              <BsPersonLinesFill /> &nbsp; 마이페이지
+            </Link>
+          </MyPage>
+          <Button color={'white'} onClick={props.logoutHandler}>
+            로그아웃
+          </Button>
+        </BottomBox>
       </SidebarContainer>
     </>
   );
@@ -83,3 +103,35 @@ const CloseButton = styled.button`
     opacity: 0.8;
   }
 `;
+
+const Info = styled.div`
+  margin-top: 3%;
+`;
+
+const ProfileDiv = styled.div`
+  box-shadow: 0px 2px 0px white;
+  margin-left: 0%;
+  padding-left: 10%;
+  display: flex;
+  align-items: center;
+`;
+
+const ProfileInfo = styled.div`
+  margin: 10% 0 0 10%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Email = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 9% 0 10% 0;
+`;
+
+const MyPage = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+`;
+
+const BottomBox = styled.div``;

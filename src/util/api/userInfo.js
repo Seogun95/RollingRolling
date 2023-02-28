@@ -18,3 +18,17 @@ export const userInfo = async () => {
 };
 
 //로그인한 회원 정보 조회
+export const loginInfo = async ({ token }) => {
+  try {
+    const response = await api.get(`api/user/info`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -6,8 +6,16 @@ import logo from '../../style/img/logo.svg';
 import HomeSidebar from '../home/HomeSidebar';
 import Cookies from 'js-cookie';
 import { HomeTokenCheck } from '../../hooks/useTokenCheck';
+import { useQuery } from 'react-query';
+import { loginInfo } from '../../util/api/userInfo';
+import defaultImg from '../../style/img/example.png';
 
 export default function Header() {
+  const token = Cookies.get('accessJWTToken');
+
+  // GET 데이터 불러옴
+  const { data } = useQuery('info', () => loginInfo({ token }));
+  console.log(data);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   HomeTokenCheck(navigate);
@@ -48,15 +56,23 @@ export default function Header() {
           </Link>
         </HeaderLogoContainer>
         <HeaderUserNameContainer>
-          <span></span>님 환영합니다!
+          <span>{data?.nickname}</span>님 환영합니다!
         </HeaderUserNameContainer>
 
         <HeaderMyProfileContainer>
           <Button onClick={toggleSidebar}>
-            <img src="https://i.imgur.com/P2iWTOH.png" alt="" />
+            {data?.image && data?.image !== 'null' ? (
+              <img src={data.image} alt=""></img>
+            ) : (
+              <img src={defaultImg} alt=""></img>
+            )}
           </Button>
 
           <HomeSidebar
+            image={data?.image}
+            email={data?.email}
+            nickname={data?.nickname}
+            username={data?.username}
             state={showSidebar}
             setState={setShowSidebar}
             logoutHandler={logoutHandler}

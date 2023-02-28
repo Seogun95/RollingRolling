@@ -85,3 +85,19 @@ export const imgUpload = async (data) => {
     console.log('사진 err:', err);
   }
 };
+
+export const getMyInfo = async (data) => {
+  try {
+    const response = await api({
+      url: `/api/user/info`,
+      method: 'get',
+      headers: {
+        Authorization: data,
+      },
+    });
+    console.log('getMyInfo : ', response);
+    return response.data;
+  } catch (err) {
+    return err.response.data;
+  }
+};

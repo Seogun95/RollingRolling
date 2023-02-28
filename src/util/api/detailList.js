@@ -25,7 +25,6 @@ export const addQuestion = async ({ id, content, token }) => {
 
 // pw check
 export const passwordCheck = async (data) => {
-  console.log('pwcheck : ', data);
   try {
     const response = await api({
       url: '/api/user/checkpwd',
@@ -37,9 +36,9 @@ export const passwordCheck = async (data) => {
         Authorization: data.token,
       },
     });
-    console.log('비번체크', response);
+    return response.data;
   } catch (err) {
-    console.log('err:', err);
+    return err.response.data;
   }
 };
 
@@ -83,21 +82,5 @@ export const imgUpload = async (data) => {
     console.log('사진', response);
   } catch (err) {
     console.log('사진 err:', err);
-  }
-};
-
-export const getMyInfo = async (data) => {
-  try {
-    const response = await api({
-      url: `/api/user/info`,
-      method: 'get',
-      headers: {
-        Authorization: data,
-      },
-    });
-    console.log('getMyInfo : ', response);
-    return response.data;
-  } catch (err) {
-    return err.response.data;
   }
 };

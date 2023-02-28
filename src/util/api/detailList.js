@@ -1,11 +1,10 @@
 import { api } from './api';
-import axios from 'axios';
 
 // getPostList
 export const getPostList = async (data) => {
   const response = await api.get(`/api/post/${data.id}`, {
     headers: {
-      Authorization: `Bearer ${data.token}`,
+      Authorization: data.token,
     },
   });
   return response.data;
@@ -15,14 +14,14 @@ export const getPostList = async (data) => {
 export const passwordCheck = async (data) => {
   console.log('pwcheck : ', data);
   try {
-    const response = await axios({
-      url: 'http://13.125.20.30:8080/api/user/checkpwd',
+    const response = await api({
+      url: '/api/user/checkpwd',
       method: 'post',
       data: {
         password: data.password,
       },
       headers: {
-        Authorization: `Bearer ${data.token}`,
+        Authorization: data.token,
       },
     });
     console.log('비번체크', response);
@@ -35,8 +34,8 @@ export const passwordCheck = async (data) => {
 export const editMyInfo = async (data) => {
   console.log('editMyInfo : ', data);
   try {
-    const response = await axios({
-      url: `http://13.125.20.30:8080/api/mypage`,
+    const response = await api({
+      url: `/api/mypage`,
       method: 'put',
       data: {
         newPassword: data.newInfo.newPassword,
@@ -46,11 +45,30 @@ export const editMyInfo = async (data) => {
         introduction: data.newInfo.introduction,
       },
       headers: {
-        Authorization: `Bearer ${data.token}`,
+        Authorization: data.token,
       },
     });
     console.log('정보수정', response);
   } catch (err) {
     console.log('정보수정 err:', err);
+  }
+};
+
+// img upload
+export const imgUpload = async (data) => {
+  console.log('imgUpload : ', data);
+  try {
+    const response = await api({
+      url: `/api/upload`,
+      method: 'post',
+      data: data.formImg,
+      headers: {
+        Authorization: data.token,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('사진', response);
+  } catch (err) {
+    console.log('사진 err:', err);
   }
 };

@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Button from '../elements/Button';
 import { useParams } from 'react-router';
 import { useQuery } from 'react-query';
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 import {
   WriteQuestionContainer,
   QuestionContainer,
@@ -15,7 +15,6 @@ function DetailMyQuestion() {
   const [display, setDisplay] = useState(false);
   const [comment, setComment] = useState('');
   const param = useParams();
-  const [cookies, setCookie] = useCookies();
 
   // 답변 textarea
   const answer = useRef();
@@ -29,7 +28,7 @@ function DetailMyQuestion() {
   const submitComment = () => {
     if (comment !== '') {
       // 토큰 헤더 저장
-      const token = cookies.accessJWTToken.split(' ')[1];
+      const token = Cookies.get('accessJWTToken');
       // const { isLoading, isError, data } = useQuery('getPost', () =>
       //   getPostList({ id: param.id, token })
       // );

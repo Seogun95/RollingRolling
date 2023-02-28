@@ -5,8 +5,8 @@ import { FaLock } from 'react-icons/fa';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { passwordCheck } from '../../util/api/detailList';
-import useSliceToken from '../../hooks/useSliceToken';
 import SuccessCheckButton from './SuccessCheckButton';
+import Cookies from 'js-cookie';
 
 function EditMyInfoPasswordCheck({ setEdit }) {
   const [inputPw, setInputPw] = useState('');
@@ -21,7 +21,7 @@ function EditMyInfoPasswordCheck({ setEdit }) {
   };
 
   // 토큰
-  const token = useSliceToken();
+  const token = Cookies.get('accessJWTToken');
   // info수정 페이지 이동
   const moveEditMyInfo = (e) => {
     e.preventDefault();

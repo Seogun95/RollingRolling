@@ -67,7 +67,7 @@ function EditMyInfomation({ setEdit }) {
     },
   });
   useEffect(() => {
-    getInfo.mutate(token);
+    getInfo.mutate({ token });
   }, [token]);
 
   /*
@@ -136,6 +136,7 @@ function EditMyInfomation({ setEdit }) {
     onSuccess: (data) => {
       console.log('mutation : ', data);
       alert('정보가 수정되었습니다.');
+      setEdit('');
     },
   });
 

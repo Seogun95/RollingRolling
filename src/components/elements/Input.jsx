@@ -4,7 +4,7 @@ import styled from 'styled-components';
 function Input(props) {
   return (
     <>
-      <LoginLabel>
+      <LoginLabel disabled={props.disabled}>
         <LoginInsideLabel>{props.text}</LoginInsideLabel>
         <LoginInputIcon>{props.children}</LoginInputIcon>
         <LoginInput
@@ -13,6 +13,7 @@ function Input(props) {
           type={props.type}
           maxLength={props.len}
           readOnly={props.readOnly}
+          disabled={props.disabled}
         ></LoginInput>
       </LoginLabel>
     </>
@@ -27,7 +28,8 @@ const LoginLabel = styled.label`
   padding: 1.5rem 1rem 0.1rem 2.5rem;
   border-radius: 0.5rem;
   outline: none;
-  background-color: white;
+  border: 1px solid white;
+  background: ${(props) => (props.disabled ? '#ececec' : 'white')};
 `;
 
 const LoginInsideLabel = styled.label`
@@ -50,4 +52,5 @@ const LoginInput = styled.input`
   border-radius: 0.5rem;
   height: 30px;
   font-size: ${(props) => props.theme.FS.m};
+  background: ${(props) => (props.disabled ? '#ececec' : 'white')};
 `;

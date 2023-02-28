@@ -43,5 +43,5 @@ const DetailWrapper = styled.div`
   width: 95%;
   max-width: 100vw;
   margin: 0 auto;
-  height: calc(100vh - 4rem);
+  height: calc(100vh);
 `;

@@ -7,9 +7,16 @@ import Cookies from 'js-cookie';
 import { addQuestion, getPostList } from '../../util/api/detailList';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { useLoginUserCheck } from '../../hooks/useLoginUserCheck';
+import { FcUnlock, FcLock } from 'react-icons/fc';
 
 function DetailWriteQuestion() {
+  const loginInfo = useLoginUserCheck();
   const [question, setQuestion] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
   const anonymous = useRef();
   const param = useParams();
   const token = Cookies.get('accessJWTToken');
@@ -48,30 +55,56 @@ function DetailWriteQuestion() {
   return (
     <WriteQuestionContainer>
       <QuestionFormContainer onSubmit={submitPostContent}>
-        <label>질문하기</label>
+        <label>
+          <NicknameSpan>{data.user.nickname}</NicknameSpan>님에게 질문하기
+        </label>
         <textarea name="content" value={question} onChange={changeContent} />
         <QuestionSubmitContainer>
-          <input type="checkbox" ref={anonymous} />
-          <label>익명으로 작성</label>
+          <input
+            type="checkbox"
+            ref={anonymous}
+            id={'anonymous'}
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+          {/* <lable style={{ paddingRight: '5px' }}>익명으로 작성</lable> */}
+          <label htmlFor={'anonymous'}>
+            {isChecked ? <FcLock fill="tomato" /> : <FcUnlock />}
+          </label>
+
           <Button w={'60px'} bg={'#58793e'} color={'white'}>
             확인
           </Button>
         </QuestionSubmitContainer>
       </QuestionFormContainer>
       <QuestionContainer>
-        <label>내가 남긴 질문</label>
-
-        {data?.upperPost.map((item) => (
-          <QuestionBox key={item.id}>
+        {data.upperPost.length !== 0 && (
+          <label>
+            <NicknameSpan>{loginInfo.nickname}</NicknameSpan>님이 남긴 질문
+          </label>
+        )}
+        {data?.upperPost.map((item, i) => (
+          <QuestionBox key={i}>
             <span>{item.nickname}</span>
             <h3>{item.content}</h3>
           </QuestionBox>
         ))}
       </QuestionContainer>
       <QuestionContainer>
-        <label> dajeong 님에게 작성된 질문</label>
-        {data?.bottomPost.content.map((item) => (
-          <QuestionBox key={item.id}>
+        {data.bottomPost.content.length !== 0 ? (
+          <label>
+            <NicknameSpan>{data.user.nickname}</NicknameSpan>님에게 작성된 질문
+          </label>
+        ) : (
+          <label>
+            <EmptyQuestion>
+              다른 사람이<NicknameSpan> {data.user.nickname} </NicknameSpan>
+              님에게 질문을 작성하지 않았어요
+            </EmptyQuestion>
+          </label>
+        )}
+        {data?.bottomPost.content.map((item, i) => (
+          <QuestionBox key={i}>
             <span>{item.nickname}</span>
             <h3>{item.content}</h3>
           </QuestionBox>
@@ -86,6 +119,11 @@ export default DetailWriteQuestion;
 export const WriteQuestionContainer = styled.div`
   background-color: ${(props) => props.theme.CL.brandColorLight};
   border-radius: 30px;
+`;
+
+export const NicknameSpan = styled.span`
+  color: #aa7d0a;
+  padding-left: 0.3125rem;
 `;
 
 export const QuestionContainer = styled.div`
@@ -117,7 +155,8 @@ const QuestionFormContainer = styled(QuestionContainer.withComponent('form'))``;
 
 export const QuestionBox = styled.div`
   width: 100%;
-  height: 10rem;
+  min-height: 2rem;
+  height: 100%;
   margin-bottom: 0.625rem;
   padding: 1.25rem;
   border: none;
@@ -125,20 +164,53 @@ export const QuestionBox = styled.div`
   background-color: white;
   font-size: ${(props) => props.theme.FS.m};
 `;
-
+export const EmptyQuestion = styled.div`
+  ${(props) => props.theme.FlexRow};
+`;
 const QuestionSubmitContainer = styled.div`
   ${(props) => props.theme.FlexRow};
   justify-content: end;
   margin-top: 10px;
 
   > input {
-    margin: 0;
-    margin-right: 10px;
+    display: none;
+  }
+  input:checked + label,
+  input + label:hover:not(input:checked + label) {
+    animation: 4.72s infinite shake;
+    @keyframes shake {
+      0% {
+        transform: translate(0, 0);
+      }
+      1.78571% {
+        transform: translate(5px, 0);
+      }
+      3.57143% {
+        transform: translate(0, 0);
+      }
+      5.35714% {
+        transform: translate(5px, 0);
+      }
+      7.14286% {
+        transform: translate(0, 0);
+      }
+      8.92857% {
+        transform: translate(5px, 0);
+      }
+      10.71429% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
   }
   > label {
     width: auto;
     font-size: ${(props) => props.theme.FS.m};
-    margin: 0;
-    margin-right: 10px;
+    margin: 4px 10px 0 0;
+    svg {
+      font-size: ${(props) => props.theme.FS.xl};
+    }
   }
 `;

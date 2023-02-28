@@ -5,12 +5,11 @@ import { useBgAnimation } from '../../hooks/useBgAnimation';
 import logo from '../../style/img/logo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoginTokenCheck } from '../../hooks/useTokenCheck';
+import bg1 from '../../style/img/bg1.jpeg';
+import bg2 from '../../style/img/bg2.jpeg';
 
 export default function MainBgLayout(props) {
-  const [backgrounds, setBackgrounds] = useState([
-    'https://i.imgur.com/SvyQWWU.jpg',
-    'https://i.imgur.com/GFBmTcM.jpg',
-  ]);
+  const [backgrounds, setBackgrounds] = useState([bg1, bg2]);
   const navigate = useNavigate();
   LoginTokenCheck(navigate);
 

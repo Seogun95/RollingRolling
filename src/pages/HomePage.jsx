@@ -4,6 +4,8 @@ import { FaSearch } from 'react-icons/fa';
 import { FcLikePlaceholder } from 'react-icons/fc';
 import HomeCardItem from '../components/home/HomeCardItem';
 import defaultImg from '../style/img/example.png';
+import bg1 from '../style/img/bg1.jpeg';
+import { ReactComponent as PaperHr } from '../style/img/hr.svg';
 import { CustomHr } from '../style/Theme';
 import { useQuery } from 'react-query';
 import { userInfo } from '../util/api/userInfo';
@@ -34,45 +36,56 @@ export default function HomePage() {
   return (
     <>
       <HomeWrapper>
-        <HomeSearchWrapper>
-          <h1>친구 찾기</h1>
-          <HomeSearchContainer>
-            <SearchForm>
-              <SearchIcon isInputFocused={isInputFocused}>
-                <FaSearch size={'1.2rem'} />
-              </SearchIcon>
-              <SearchInput
-                value={search}
-                onChange={handleInputChange}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}
-                name={'search'}
-                placeholder="찾고 싶은 친구의 닉네임을 적어보세요"
-              />
-            </SearchForm>
-          </HomeSearchContainer>
-        </HomeSearchWrapper>
+        <HomeMainContainer bgimg={bg1}>
+          <HomeSearchWrapper>
+            <h1>친구 찾기</h1>
+            <span>
+              롤링페이퍼를 남길 친구를 쉽게 찾고, 친구들에게 궁금한점을
+              물어보세요!
+            </span>
+            <HomeSearchContainer>
+              <SearchForm>
+                <SearchIcon isInputFocused={isInputFocused}>
+                  <FaSearch size={'1.2rem'} />
+                </SearchIcon>
+                <SearchInput
+                  value={search}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  onBlur={handleInputBlur}
+                  name={'search'}
+                  placeholder="찾고 싶은 친구의 닉네임을 적어보세요"
+                />
+              </SearchForm>
+            </HomeSearchContainer>
 
-        <HomeSearchImgWrapper>
-          <SearchImgContainer>
-            <img src={defaultImg} alt="" />
-            <SearchInfoContainer>
-              <h1>정다정</h1>
-              <h3>자기 소개가 들어올 자리입니다.</h3>
-              <SearchHowMuchQuestions>
-                <SearchSpan>
-                  질문 <span>1</span>
-                </SearchSpan>
-                <SearchSpan>
-                  답변 <span>1</span>
-                </SearchSpan>
-                <FcLikePlaceholder />
-              </SearchHowMuchQuestions>
-            </SearchInfoContainer>
-          </SearchImgContainer>
+            <HomeSearchImgWrapper>
+              <SearchImgContainer>
+                <img src={defaultImg} alt="" />
+                <SearchInfoContainer>
+                  <h1>정다정</h1>
+                  <h3>자기 소개가 들어올 자리입니다.</h3>
+                  <SearchHowMuchQuestions>
+                    <SearchSpan>
+                      질문 <span>1</span>
+                    </SearchSpan>
+                    <SearchSpan>
+                      답변 <span>1</span>
+                    </SearchSpan>
+                    <FcLikePlaceholder />
+                  </SearchHowMuchQuestions>
+                </SearchInfoContainer>
+              </SearchImgContainer>
+            </HomeSearchImgWrapper>
+          </HomeSearchWrapper>
+          <PaperHrContainer>
+            <PaperHr fill="white" />
+          </PaperHrContainer>
+        </HomeMainContainer>
+
+        <div style={{ padding: '0 3rem' }}>
           <CustomHr />
-        </HomeSearchImgWrapper>
-
+        </div>
         <HomeCardContainer>
           {data.map((user, i) => (
             <HomeCardItem
@@ -94,6 +107,18 @@ export default function HomePage() {
   );
 }
 
+const HomeMainContainer = styled.div`
+  position: relative;
+  width: 100%;
+  background-image: linear-gradient(
+      0deg,
+      rgb(0 0 0 / 64%),
+      rgb(224 224 224 / 39%)
+    ),
+    url(${(props) => props.bgimg});
+  background-size: cover;
+  padding-bottom: 10rem;
+`;
 const CardEmptyContainer = styled.div`
   ${(props) => props.theme.FlexCol}
   height: calc(100vh - 260px);
@@ -103,15 +128,29 @@ const CardEmptyContainer = styled.div`
   }
 `;
 
-const HomeWrapper = styled.div`
-  max-width: 1200px;
+const PaperHrContainer = styled.div`
   width: 100%;
-  padding: 2rem;
+  position: absolute;
+  bottom: -10px;
+`;
+const HomeWrapper = styled.div`
+  width: 100%;
   margin: 0 auto;
+  padding-bottom: 5rem;
 `;
 
 const HomeSearchWrapper = styled.div`
-  margin: 2rem;
+  padding: 8rem 5rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  > h1 {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  > span {
+    color: white;
+  }
 `;
 
 const HomeSearchContainer = styled.div`
@@ -119,7 +158,7 @@ const HomeSearchContainer = styled.div`
   height: 56px;
   padding: 0 0 0 24px;
   border-radius: 56px;
-  background-color: #e9e9e9;
+  background-color: #e9e9e966;
   border: none;
   backdrop-filter: blur(12px);
   margin: 2rem 0;
@@ -141,7 +180,7 @@ const SearchInput = styled.input`
   margin: 0;
   min-width: 30px;
   &::placeholder {
-    color: #00000046;
+    color: #00000081;
   }
 `;
 
@@ -149,18 +188,19 @@ const SearchIcon = styled.div`
   ${(props) => props.theme.FlexRow}
   width: unset;
   background: none;
-  color: ${(props) => (props.isInputFocused ? 'black' : 'gray')};
+  color: ${(props) => (props.isInputFocused ? 'black' : '#5d5d5d')};
   cursor: pointer;
   font-size: 1.5rem;
-  padding-left: 1rem;
+  padding: 0 0.5rem 0 1rem;
 `;
 
 const HomeCardContainer = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 2rem;
   display: grid;
   justify-items: center;
-  margin: 2rem;
 
   article > a {
     &:after {
@@ -195,6 +235,7 @@ const HomeCardContainer = styled.div`
 
 const HomeSearchImgWrapper = styled.div`
   ${(props) => props.theme.FlexCol};
+  padding: 0 2rem;
 `;
 const SearchImgContainer = styled.div`
   ${(props) => props.theme.FlexRow};

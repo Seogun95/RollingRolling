@@ -5,8 +5,7 @@ import Header from './Header';
 
 const MainWrapper = styled.div`
   width: calc(100%);
-  height: calc(100vh - 64px);
-  margin-top: 64px;
+  height: calc(100vh);
 `;
 
 const BodyWrapper = styled.div`

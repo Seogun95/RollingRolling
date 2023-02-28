@@ -11,6 +11,9 @@ export default function Sidebar({ data, setEdit }) {
 
   return (
     <LayoutSidebar>
+      <AdminNickNameBubble>
+        <div>{data.user.nickname}</div>
+      </AdminNickNameBubble>
       <Profile
         src={data.user.image ? data.user.image : defaultImg}
         alt=""
@@ -48,6 +51,42 @@ export default function Sidebar({ data, setEdit }) {
   );
 }
 
+const AdminNickNameBubble = styled.div`
+  position: absolute;
+  min-width: 20px;
+  top: -20px;
+  background: ${(props) => props.theme.CL.brandColor};
+  color: white;
+  border-radius: 0.625rem;
+  padding: 0.45rem 1rem;
+  filter: drop-shadow(2px 3px 1px black);
+  animation: upAndDown 2s infinite;
+  &:after {
+    content: '';
+    border-top: 10px solid ${(props) => props.theme.CL.brandColor};
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 0px solid transparent;
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  div {
+    ${(props) => props.theme.FlexCol}
+    font-size: 1.5rem;
+  }
+
+  @keyframes upAndDown {
+    0%,
+    100% {
+      transform: translateY(-5px);
+    }
+    50% {
+      transform: translateY(0px);
+    }
+  }
+`;
 const LayoutSidebar = styled.div`
   ${(props) => props.theme.FlexCol}
   justify-content: flex-start;

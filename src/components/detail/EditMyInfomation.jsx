@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Input from '../elements/Input';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
@@ -8,7 +8,7 @@ import useLoginInput from '../../hooks/useLoginInput';
 import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
 import { useMutation } from 'react-query';
-import { editMyInfo, imgUpload } from '../../util/api/detailList';
+import { editMyInfo, imgUpload, getMyInfo } from '../../util/api/detailList';
 import SuccessCheckButton from './SuccessCheckButton';
 import imageCompression from 'browser-image-compression';
 import Cookies from 'js-cookie';
@@ -16,7 +16,8 @@ import Cookies from 'js-cookie';
 function EditMyInfomation({ setEdit }) {
   const param = useParams();
   const navigate = useNavigate;
-  const [myIntro, setMyIntro] = useState();
+  const [myIntro, setMyIntro] = useState('아직 등록된 자기소개가 없습니다.');
+  const [nickname, setNickname] = useState('');
 
   const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
@@ -37,59 +38,53 @@ function EditMyInfomation({ setEdit }) {
       inputPw
     );
 
-  const userNameReg = /^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]{2,}$/;
-  const [
-    inputNickName,
-    inputNickNameHandler,
-    alertNickName,
-    checkNickNameRegex,
-  ] = useLoginInput(
-    '',
-    '닉네임을 입력해주세요',
-    '특수문자를 제외한, 2글자 이상의 닉네임을 입력해주세요.',
-    '사용 가능한 닉네임 입니다.',
-    userNameReg
-  );
-
   // 취소 버튼 클릭시 -> myQuestion 페이지
   const moveMyQuestion = () => {
     navigate(`/home/${param.id}`);
   };
+  // textarea
+  const changeIntro = (e) => {
+    setMyIntro(e.target.value);
+  };
+  // nickname
+  const changeNickname = (e) => {
+    setNickname(e.target.value);
+  };
 
   // 토큰
   const token = Cookies.get('accessJWTToken');
-  // 수정 버튼 클릭시 정보수정 : img는 아직
-  const editMyInfoClick = (e) => {
-    e.preventDefault();
 
-    if (checkPwRegex && checkNickNameRegex) {
-      const newInfo = {
-        newPassword: inputPw,
-        newPasswordConfirm: inputCheckPw,
-        nickname: inputNickName,
-        image: '',
-        introduction: myIntro,
-      };
-      editInfo.mutate({ token, newInfo });
-      setEdit('');
-    }
-  };
-  // api
-  const editInfo = useMutation('editinfo', editMyInfo, {
-    onSuccess: (data, variable, context) => {
-      console.log('mutation : ', data);
+  // 회원정보 불러오기
+  const getInfo = useMutation('getInfo', getMyInfo, {
+    onSuccess: (data) => {
+      setMyIntro(data.introduction);
+      if (data.nickname !== null) {
+        setNickname(data.nickname);
+      } else {
+        setNickname(data.username);
+      }
     },
   });
+  useEffect(() => {
+    getInfo.mutate(token);
+  }, [token]);
 
+  /*
+    이미지 클릭시 formdata 형식으로 저장..
+    수정 버튼 눌렀을때
+    api/upload 먼저 보낸 후 response 200 오면
+    모든 정보 db 저장 !!
+  */
   const [profileImg, setProfileImg] = useState({ proImg: '', viewUrl: '' });
+
+  const formImg = new FormData();
 
   // 이미지 클릭시 change event
   const uploadProfile = async (e) => {
     const profileImg = e.target.files[0];
 
-    const formImg = new FormData();
     formImg.append('img', profileImg);
-
+    //console.log(formImg);
     //console.log('Before Compression: ', profileImg.size);
     const options = {
       maxSizeMB: 1,
@@ -112,26 +107,52 @@ function EditMyInfomation({ setEdit }) {
       console.log(error);
     }
 
-    uploadImg.mutate({ token, profileImg });
-    //=> 여기까지 img 변경 됨!!
+    //uploadImg.mutate({ token, img: formImg });
   };
 
-  // api
+  // img api
   const uploadImg = useMutation('uploadImg', imgUpload, {
     onSuccess: (data) => {
       console.log('mutation : ', data);
     },
   });
 
+  // 수정 버튼 클릭시 정보수정 : img는 아직
+  const editMyInfoClick = (e) => {
+    e.preventDefault();
+
+    const newInfo = {
+      newPassword: inputPw,
+      newPasswordConfirm: inputCheckPw,
+      nickname: nickname,
+      image: '',
+      introduction: myIntro,
+    };
+    editInfo.mutate({ token, newInfo });
+  };
+  // api
+  const editInfo = useMutation('editinfo', editMyInfo, {
+    onSuccess: (data) => {
+      console.log('mutation : ', data);
+      alert('정보가 수정되었습니다.');
+    },
+  });
+
   return (
     <EditMyInfoContainer>
       <EditInputContainer>
-        <Input text={'아이디'} type={'text'} width={'60%'} readOnly>
+        <Input
+          text={'아이디'}
+          type={'text'}
+          width={'60%'}
+          value={
+            getInfo.data && getInfo.data.username !== null
+              ? getInfo.data && getInfo.data.username
+              : ''
+          }
+          readOnly
+        >
           <FaUserAlt />
-        </Input>
-
-        <Input text={'현재 비밀번호'} type={'password'} readOnly>
-          <FaLock />
         </Input>
 
         <Input
@@ -158,18 +179,23 @@ function EditMyInfomation({ setEdit }) {
 
         <Input
           text={'닉네임'}
-          value={inputNickName}
-          onChange={inputNickNameHandler}
+          onChange={changeNickname}
           type={'text'}
+          value={nickname}
         >
           <BsEmojiSunglassesFill />
         </Input>
 
-        <InputMessageSpan isIdOrPw={checkNickNameRegex}>
-          {alertNickName}
-        </InputMessageSpan>
-
-        <Input text={'이메일'} type={'email'} readOnly>
+        <Input
+          text={'이메일'}
+          type={'email'}
+          value={
+            getInfo.data && getInfo.data.email !== null
+              ? getInfo.data && getInfo.data.email
+              : ''
+          }
+          readOnly
+        >
           <BsEnvelopeFill />
         </Input>
 
@@ -193,10 +219,7 @@ function EditMyInfomation({ setEdit }) {
               onChange={uploadProfile}
             ></input>
           </ImgContainer>
-          <textarea
-            value={myIntro}
-            onChange={(e) => setMyIntro(e.target.value)}
-          ></textarea>
+          <textarea value={myIntro} onChange={changeIntro}></textarea>
         </ProfileImgContainer>
       </ProfileContainer>
     </EditMyInfoContainer>

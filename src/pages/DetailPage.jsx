@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Sidebar from '../components/layout/Sidebar';
 import DetailContent from '../components/detail/DetailContent';
@@ -14,9 +14,14 @@ export default function Detailpage() {
   const param = useParams();
   // 토큰
   const token = Cookies.get('accessJWTToken');
-  const { isLoading, isError, data } = useQuery('getPost', () =>
+
+  const { isLoading, isError, data, refetch } = useQuery('getPost', () =>
     getPostList({ id: param.id, token })
   );
+
+  useEffect(() => {
+    refetch();
+  }, [param, refetch]);
 
   if (isLoading) {
     return <div>로딩중!!...</div>;

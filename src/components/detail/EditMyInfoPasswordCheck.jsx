@@ -27,12 +27,16 @@ function EditMyInfoPasswordCheck({ setEdit }) {
     e.preventDefault();
 
     pwCheck.mutate({ password: inputPw, token });
-    setEdit('edit');
   };
   // api
   const pwCheck = useMutation('passwordCheck', passwordCheck, {
-    onSuccess: (data, variable, context) => {
-      console.log('mutation : ', data);
+    onSuccess: (data) => {
+      if (!data) {
+        alert('비밀번호가 틀렸습니다. 다시 입력해주세요');
+        setInputPw('');
+      } else {
+        setEdit('edit');
+      }
     },
   });
 

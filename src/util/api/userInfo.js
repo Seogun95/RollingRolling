@@ -16,3 +16,5 @@ export const userInfo = async () => {
   // console.log(response.data);
   return response.data;
 };
+
+//로그인한 회원 정보 조회

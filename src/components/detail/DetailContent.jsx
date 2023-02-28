@@ -18,7 +18,7 @@ function DetailContent({ data, edit, setEdit }) {
         ) : edit === 'edit' ? (
           <EditMyInfomation setEdit={setEdit} />
         ) : (
-          <DetailMyQuestion />
+          <DetailMyQuestion data={data} />
         )}
       </DetailScrollContainer>
     </DetailContainer>

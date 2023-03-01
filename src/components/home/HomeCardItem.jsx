@@ -93,7 +93,7 @@ const CardLinkContainer = styled.div`
   position: absolute;
   transition: all 0.2s ease 0s;
   width: 100%;
-  z-index: 2;
+  z-index: 4;
   color: white;
 
   &:hover {

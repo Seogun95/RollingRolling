@@ -110,6 +110,8 @@ function DetailWriteQuestion() {
             nickname={item.nickname}
             content={item.content}
             date={item.createdAt}
+            postId={item.postId}
+            comment={item.commentResponseDto}
           />
         ))}
       </QuestionContainer>

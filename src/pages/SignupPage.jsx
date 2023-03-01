@@ -111,7 +111,7 @@ function SignupPage() {
   return (
     <LoginModal height={'730px'}>
       <LoginText>회원가입</LoginText>
-      <LoginInputContainer>
+      <LoginInputContainer onSubmit={signUpHandler}>
         <Input
           text={'아이디'}
           value={inputId}
@@ -170,7 +170,6 @@ function SignupPage() {
 
         <Button
           login
-          onClick={signUpHandler}
           disabled={
             !(
               checkIdRegex &&

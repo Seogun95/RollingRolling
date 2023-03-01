@@ -1,12 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useRef } from 'react';
-import Button from '../elements/Button';
-import { useParams } from 'react-router';
-import { useQuery } from 'react-query';
-import Cookies from 'js-cookie';
-import { useQueryClient, useMutation } from 'react-query';
-import { getPostList } from '../../util/api/detailList';
+import React from 'react';
+
 import MyQuestion from './components/MyQuestion';
 import {
   WriteQuestionContainer,
@@ -63,16 +56,3 @@ function DetailMyQuestion({ data }) {
 }
 
 export default DetailMyQuestion;
-
-const NewQuestionContainer = styled.div`
-  ${(props) => props.theme.FlexCol};
-  padding: 1.5rem;
-
-  label {
-    width: 100%;
-    margin-bottom: 1rem;
-    font-size: ${(props) => props.theme.FS.l};
-    font-weight: bold;
-    color: ${(props) => props.theme.CL.brandColor};
-  }
-`;

@@ -84,6 +84,21 @@ export const imgUpload = async (data) => {
   }
 };
 
+
+export const deleteQuestion = async ({ id, token }) => {
+  try {
+    const response = await api.delete(`/api/post/${id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response.data;
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // question - comment 작성
 export const addComment = async ({ id, content, token }) => {
   try {
@@ -98,3 +113,4 @@ export const addComment = async ({ id, content, token }) => {
     console.log(error);
   }
 };
+

@@ -5,8 +5,10 @@ import 'moment/locale/ko';
 import { RiUser3Line, RiTimer2Line } from 'react-icons/ri';
 
 export default function QuestionBoxs(props) {
+  //console.log(props.comment.content);
+
   return (
-    <>
+    <DoneContainer>
       <QuestionBox>
         <QuestionBoxHead>
           <NickName>
@@ -26,9 +28,42 @@ export default function QuestionBoxs(props) {
           </div>
         </QuestionBoxBotton>
       </QuestionBox>
-    </>
+      {props.comment ? (
+        <CommentBox>
+          <QuestionBoxHead>
+            <NickName>
+              <div>
+                <RiUser3Line />
+                {props.comment?.nickname}
+              </div>
+            </NickName>
+          </QuestionBoxHead>
+          <Contents>{props.comment?.content}</Contents>
+          <QuestionBoxBotton>
+            <div>
+              <RiTimer2Line />
+              <Moment locale="ko" fromNow>
+                {props.comment?.createdAt}
+              </Moment>
+            </div>
+          </QuestionBoxBotton>
+        </CommentBox>
+      ) : (
+        '아직 답변이 없습니다.'
+      )}
+    </DoneContainer>
   );
 }
+
+const DoneContainer = styled.div`
+  background-color: lightblue;
+  ${(props) => props.theme.FlexCol};
+  margin-bottom: 50px;
+`;
+// comment
+const CommentBox = styled.div`
+  width: 100%;
+`;
 
 export const QuestionBox = styled.div`
   width: 100%;
@@ -69,6 +104,7 @@ export const Contents = styled.p`
   line-height: 2;
   box-sizing: border-box;
   font-size: ${(props) => props.theme.FS.m};
+  white-space: pre-wrap;
 `;
 
 export const QuestionBoxBotton = styled.div`

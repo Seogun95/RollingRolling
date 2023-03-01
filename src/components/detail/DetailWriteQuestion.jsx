@@ -27,8 +27,6 @@ function DetailWriteQuestion() {
     getPostList({ id: param.id, token })
   );
 
-  console.log(data);
-
   const changeContent = (e) => {
     setQuestion(e.target.value);
   };
@@ -81,7 +79,7 @@ function DetailWriteQuestion() {
       <QuestionContainer>
         {data.upperPost.length !== 0 && (
           <label>
-            <NicknameSpan>{loginInfo.nickname}</NicknameSpan>님이 남긴 질문
+            <NicknameSpan>내가</NicknameSpan> 남긴 질문
           </label>
         )}
         {data?.upperPost.map((item, i) => (

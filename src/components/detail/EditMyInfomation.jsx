@@ -110,7 +110,7 @@ function EditMyInfomation({ setEdit }) {
       console.log(error);
     }
 
-    //uploadImg.mutate({ token, img: formImg });
+    uploadImg.mutate({ token, img: formImg });
   };
 
   // img api
@@ -217,7 +217,7 @@ function EditMyInfomation({ setEdit }) {
       <ProfileContainer>
         <ProfileImgContainer>
           <ImgContainer htmlFor="inputProfile">
-            {getInfo.data?.image !== null ? (
+            {profileImg.proImg !== '' ? (
               <ProfileImg src={profileImg.viewUrl} alt=""></ProfileImg>
             ) : (
               <ProfileImg src={defaultImg} alt=""></ProfileImg>

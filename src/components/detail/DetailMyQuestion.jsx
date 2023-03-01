@@ -7,12 +7,13 @@ import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { useQueryClient, useMutation } from 'react-query';
 import { getPostList } from '../../util/api/detailList';
-import MyQuestion from './MyQuestion';
+import MyQuestion from './components/MyQuestion';
 import {
   WriteQuestionContainer,
   QuestionContainer,
-  QuestionBox,
+  EmptyQuestion,
 } from './DetailWriteQuestion';
+import QuestionBoxs from './components/QuestionBoxs';
 
 function DetailMyQuestion({ data }) {
   const [display, setDisplay] = useState(false);
@@ -48,22 +49,42 @@ function DetailMyQuestion({ data }) {
 
   return (
     <WriteQuestionContainer>
-      <NewQuestionContainer>
-        <label>새 질문</label>
+      <QuestionContainer>
+        {data.upperPost.length !== 0 ? (
+          <label>새 질문</label>
+        ) : (
+          <label>
+            <EmptyQuestion>새로운 질문이 존재하지 않습니다.</EmptyQuestion>
+          </label>
+        )}
         {data.upperPost.map((list) => {
-          return <MyQuestion key={list.postId} list={list} />;
+          return (
+            <MyQuestion
+              key={list.postId}
+              nickname={list.nickname}
+              content={list.content}
+              date={list.createdAt}
+            />
+          );
         })}
-      </NewQuestionContainer>
+      </QuestionContainer>
 
       <QuestionContainer>
-        <label>답변완료</label>
-        {data.bottomPost.content.length === 0 ? (
-          <QuestionBox>아직 답변 완료된 질문이 없습니다.</QuestionBox>
+        {data.bottomPost.content.length !== 0 ? (
+          <label>답변완료</label>
         ) : (
-          data.bottomPost.content.map((list) => {
-            <MyQuestion key={list.postId} list={list} />;
-          })
+          <label>
+            <EmptyQuestion>아직 완료된 답변이 존재하지 않습니다.</EmptyQuestion>
+          </label>
         )}
+        {data.bottomPost.content.map((list, i) => (
+          <QuestionBoxs
+            key={i}
+            nickname={list.nickname}
+            content={list.content}
+            date={list.createdAt}
+          />
+        ))}
       </QuestionContainer>
     </WriteQuestionContainer>
   );

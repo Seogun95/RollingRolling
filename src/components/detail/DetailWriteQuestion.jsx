@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
 import { useLoginUserCheck } from '../../hooks/useLoginUserCheck';
 import { FcUnlock, FcLock } from 'react-icons/fc';
+import QuestionBoxs from './components/QuestionBoxs';
 
 function DetailWriteQuestion() {
   const loginInfo = useLoginUserCheck();
@@ -84,10 +85,12 @@ function DetailWriteQuestion() {
           </label>
         )}
         {data?.upperPost.map((item, i) => (
-          <QuestionBox key={i}>
-            <span>{item.nickname}</span>
-            <h3>{item.content}</h3>
-          </QuestionBox>
+          <QuestionBoxs
+            key={i}
+            nickname={item.nickname}
+            content={item.content}
+            date={item.createdAt}
+          />
         ))}
       </QuestionContainer>
       <QuestionContainer>
@@ -104,10 +107,12 @@ function DetailWriteQuestion() {
           </label>
         )}
         {data?.bottomPost.content.map((item, i) => (
-          <QuestionBox key={i}>
-            <span>{item.nickname}</span>
-            <h3>{item.content}</h3>
-          </QuestionBox>
+          <QuestionBoxs
+            key={i}
+            nickname={item.nickname}
+            content={item.content}
+            date={item.createdAt}
+          />
         ))}
       </QuestionContainer>
     </WriteQuestionContainer>
@@ -153,17 +158,6 @@ export const QuestionContainer = styled.div`
 
 const QuestionFormContainer = styled(QuestionContainer.withComponent('form'))``;
 
-export const QuestionBox = styled.div`
-  width: 100%;
-  min-height: 2rem;
-  height: 100%;
-  margin-bottom: 0.625rem;
-  padding: 1.25rem;
-  border: none;
-  border-radius: 30px;
-  background-color: white;
-  font-size: ${(props) => props.theme.FS.m};
-`;
 export const EmptyQuestion = styled.div`
   ${(props) => props.theme.FlexRow};
 `;

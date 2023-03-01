@@ -32,14 +32,14 @@ export const DarkBlur = css`
 export const CL = {
   brandColor: '#58793e',
   scroll: '#58793e',
-  brandColorLight: `#81a36648`,
+  brandColorLight: `#dde6d7`,
   brandColorWhite: '#9fcb7c',
 };
 
 export const FS = {
   xl: '1.8rem', // header
-  l: '1.6rem', // title
-  m: '1.3rem', // content, input
+  l: '1.4rem', // title
+  m: '1.1rem', // content, input
   s: '0.9rem', // button
   xs: '0.8rem', // message
 };

@@ -25,6 +25,7 @@ export default function HomePage() {
   }, []);
 
   const { isLoading, isError, data } = useQuery('userQueryKey', userInfo);
+  console.log(data);
   if (isLoading) {
     return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
   }
@@ -213,7 +214,7 @@ const HomeCardContainer = styled.div`
       top: 0;
       width: 100%;
       transition: 0.3s ease;
-      z-index: 1;
+      z-index: 3;
     }
     &:hover:after {
       background: transparent !important;

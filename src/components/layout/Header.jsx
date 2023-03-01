@@ -129,11 +129,9 @@ const HeaderMyProfileContainer = styled.div`
   align-items: center;
   margin-left: 8px;
   img {
-    width: 100%;
-    height: 100%;
     border-radius: 50%;
-    max-width: 40px;
-    max-height: 40px;
+    width: 40px;
+    height: 40px;
   }
 `;
 

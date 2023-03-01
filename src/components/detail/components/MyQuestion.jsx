@@ -4,6 +4,7 @@ import Button from '../../elements/Button';
 import Moment from 'react-moment';
 import 'moment/locale/ko';
 import { RiUser3Line, RiTimer2Line } from 'react-icons/ri';
+import { FaRegCommentAlt } from 'react-icons/fa';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useMutation } from 'react-query';
@@ -53,7 +54,7 @@ function MyQuestion(props) {
   return (
     <QuestionBox>
       <QuestionBoxHead>
-        <NickName>
+        <NickName bg={'#58793e'} color={'white'}>
           <div>
             <RiUser3Line />
             {props.nickname}
@@ -61,11 +62,11 @@ function MyQuestion(props) {
         </NickName>
       </QuestionBoxHead>
       <Contents>{props.content}</Contents>
-      <AnswerText onClick={writeComment}>답변하기</AnswerText>
       <AnswerContainer isShow={display}>
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          placeholder="댓글을 작성해주세요"
         ></textarea>
         <WriterButtonContainer>
           <Button
@@ -79,12 +80,15 @@ function MyQuestion(props) {
           </Button>
         </WriterButtonContainer>
       </AnswerContainer>
-      <QuestionBoxBotton>
+      <QuestionBoxBotton bg={'#58793e'} color={'white'}>
         <div>
           <RiTimer2Line />
           <Moment locale="ko" fromNow>
             {props.createdAt}
           </Moment>
+          <AnswerText onClick={writeComment}>
+            <FaRegCommentAlt />
+          </AnswerText>
         </div>
       </QuestionBoxBotton>
     </QuestionBox>
@@ -92,12 +96,9 @@ function MyQuestion(props) {
 }
 export default MyQuestion;
 
-const AnswerText = styled.div`
-  ${(props) => props.theme.FlexCol};
-  align-items: flex-end;
-  font-size: ${(props) => props.theme.FS.m};
-  color: ${(props) => props.theme.CL.brandColor};
-  padding: 1rem;
+const AnswerText = styled.span`
+  margin-top: 1px;
+  margin-left: auto;
   cursor: pointer;
 `;
 
@@ -106,18 +107,15 @@ const AnswerContainer = styled.div`
   ${(props) => props.theme.FlexCol};
   width: 100%;
   margin-top: 10px;
-  padding: 1.25rem;
   background-color: ${(props) => props.theme.CL.brandColorLight};
-  border-radius: 30px;
+
   /* box-shadow: 4px 4px 0px 1px ${(props) => props.theme.CL.brandColor}; */
 
   display: ${(props) => (props.isShow === true ? 'block' : 'none')};
   > textarea {
     width: 100%;
     min-height: 20px;
-    padding: 1.25rem;
-    border-radius: 0.625rem;
-    border: 1px solid ${(props) => props.theme.CL.brandColor};
+
     background-color: transparent;
     font-size: ${(props) => props.theme.FS.m};
     resize: none;

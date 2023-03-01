@@ -84,7 +84,6 @@ export const imgUpload = async (data) => {
   }
 };
 
-
 export const deleteQuestion = async ({ id, token }) => {
   try {
     const response = await api.delete(`/api/post/${id}`, {
@@ -93,7 +92,6 @@ export const deleteQuestion = async ({ id, token }) => {
       },
     });
     return response.data;
-    console.log(response.data);
   } catch (error) {
     console.log(error);
   }
@@ -114,3 +112,19 @@ export const addComment = async ({ id, content, token }) => {
   }
 };
 
+export const editQuestion = async ({ id, content, token }) => {
+  try {
+    const response = await api.put(
+      `/api/post/${id}`,
+      { content: content },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -4,19 +4,19 @@ import Button from '../elements/Button';
 import { useState } from 'react';
 import { useRef } from 'react';
 import Cookies from 'js-cookie';
+import { TbTrash } from 'react-icons/tb';
 import {
   addQuestion,
   deleteQuestion,
+  editQuestion,
   getPostList,
 } from '../../util/api/detailList';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
-import { useLoginUserCheck } from '../../hooks/useLoginUserCheck';
 import { FcUnlock, FcLock } from 'react-icons/fc';
 import QuestionBoxs from './components/QuestionBoxs';
 
 function DetailWriteQuestion() {
-  const loginInfo = useLoginUserCheck();
   const [question, setQuestion] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const handleCheckboxChange = (event) => {
@@ -110,17 +110,11 @@ function DetailWriteQuestion() {
             nickname={item.nickname}
             content={item.content}
             date={item.createdAt}
+            comment={item.commentResponseDto}
           >
-            <Button
-              w={'60px'}
-              bg={'#58793e'}
-              color={'white'}
-              onClick={() => {
-                onDeleteHandler(item.postId);
-              }}
-            >
-              삭제
-            </Button>
+            <QuestionDelete onClick={() => onDeleteHandler(item.postId)}>
+              <TbTrash />
+            </QuestionDelete>
           </QuestionBoxs>
         ))}
       </QuestionContainer>
@@ -154,6 +148,12 @@ function DetailWriteQuestion() {
 
 export default DetailWriteQuestion;
 
+const QuestionDelete = styled.span`
+  margin-left: auto;
+  margin-top: 2px;
+  font-size: ${(props) => props.theme.FS.m};
+  cursor: pointer;
+`;
 export const WriteQuestionContainer = styled.div`
   background-color: ${(props) => props.theme.CL.brandColorLight};
   border-radius: 30px;

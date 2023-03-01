@@ -20,6 +20,11 @@ function EditMyInfomation({ setEdit }) {
   const navigate = useNavigate;
   const [myIntro, setMyIntro] = useState('아직 등록된 자기소개가 없습니다.');
   const [nickname, setNickname] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
+
+  // useEffect(() => {
+  //   setIsEdit(true);
+  // }, []);
 
   const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
@@ -109,6 +114,7 @@ function EditMyInfomation({ setEdit }) {
           viewUrl: String(fileReader.result),
         });
       };
+      setIsEdit(true);
     } catch (error) {
       console.log(error);
     }
@@ -144,7 +150,7 @@ function EditMyInfomation({ setEdit }) {
       setEdit('');
     },
   });
-
+  console.log(isEdit);
   return (
     <EditMyInfoContainer>
       <EditInputContainer>
@@ -220,11 +226,15 @@ function EditMyInfomation({ setEdit }) {
       <ProfileContainer>
         <ProfileImgContainer>
           <ImgContainer htmlFor="inputProfile">
-            {profileImg.proImg !== '' ? (
-              <ProfileImg src={profileImg.viewUrl} alt=""></ProfileImg>
+            {getInfo.data?.image ? (
+              <ProfileImg
+                src={isEdit ? profileImg.viewUrl : getInfo.data?.image}
+                alt=""
+              />
             ) : (
-              <ProfileImg src={defaultImg} alt=""></ProfileImg>
+              <ProfileImg src={defaultImg} alt="" />
             )}
+
             <input
               id="inputProfile"
               type="file"

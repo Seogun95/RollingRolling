@@ -68,17 +68,9 @@ function EditMyInfomation({ setEdit }) {
     },
   });
 
-  console.log('getInfo', getInfo);
   useEffect(() => {
     getInfo.mutate({ token });
   }, [token]);
-
-  /*
-    이미지 클릭시 formdata 형식으로 저장..
-    수정 버튼 눌렀을때
-    api/upload 먼저 보낸 후 response 200 오면
-    모든 정보 db 저장 !!
-  */
 
   const [profileImg, setProfileImg] = useState({ proImg: '', viewUrl: '' });
   // img url return값
@@ -118,7 +110,6 @@ function EditMyInfomation({ setEdit }) {
   // img api
   const uploadImg = useMutation('uploadImg', imgUpload, {
     onSuccess: (data) => {
-      console.log('uploadImg ', data);
       const newInfo = {
         newPassword: inputPw,
         newPasswordConfirm: inputCheckPw,
@@ -127,7 +118,11 @@ function EditMyInfomation({ setEdit }) {
         email: getInfo.data.email,
         introduction: myIntro,
       };
-
+      if (data.status === 400) {
+        newInfo.image = getInfo.data.image;
+      } else {
+        newInfo.image = data;
+      }
       editInfo.mutate({ token, newInfo });
     },
   });
@@ -145,7 +140,7 @@ function EditMyInfomation({ setEdit }) {
       setEdit('');
     },
   });
-  console.log(isEdit);
+
   return (
     <EditMyInfoContainer>
       <EditInputContainer>

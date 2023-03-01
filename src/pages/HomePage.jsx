@@ -10,7 +10,8 @@ import { CustomHr } from '../style/Theme';
 import { useMutation, useQuery } from 'react-query';
 import { userInfo } from '../util/api/userInfo';
 import { useInView } from 'react-intersection-observer';
-import { getHomePostList } from '../util/api/homePostList';
+import { getHomePostList, searchUser } from '../util/api/homePostList';
+import Cookies from 'js-cookie';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
@@ -59,6 +60,21 @@ export default function HomePage() {
 
   // -----------------------
 
+  // 검색기능
+  //console.log('search', search);
+  const token = Cookies.get('accessJWTToken');
+  // 돋보기 클릭시
+  const searchClick = () => {
+    searchResult.mutate({ search, token });
+  };
+
+  const searchResult = useMutation(searchUser, {
+    onSuccess: (data) => {
+      console.log('search data : ', data);
+    },
+  });
+  // -------------------------
+
   if (isLoading) {
     return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
   }
@@ -79,7 +95,10 @@ export default function HomePage() {
             </span>
             <HomeSearchContainer>
               <SearchForm>
-                <SearchIcon isInputFocused={isInputFocused}>
+                <SearchIcon
+                  isInputFocused={isInputFocused}
+                  onClick={searchClick}
+                >
                   <FaSearch size={'1.2rem'} />
                 </SearchIcon>
                 <SearchInput

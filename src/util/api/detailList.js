@@ -128,3 +128,23 @@ export const editQuestion = async ({ id, content, token }) => {
     console.log(error);
   }
 };
+
+// 회원 게시판 좋아요(sidebar)
+export const likeUser = async ({ id, token }) => {
+  console.log(id);
+  try {
+    const response = await api.post(
+      `/api/user/like/고유아이디 삽입`,
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    console.log('likeUser', response);
+    //return response.data;
+  } catch (err) {
+    console.log('likeUser', err);
+  }
+};

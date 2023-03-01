@@ -4,11 +4,30 @@ import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
 import { FcLikePlaceholder } from 'react-icons/fc';
+import { useMutation } from 'react-query';
+import { likeUser } from '../../util/api/detailList';
+import { useState } from 'react';
+import { useParams } from 'react-router';
+import Cookies from 'js-cookie';
 
 export default function Sidebar({ data, setEdit }) {
+  const param = useParams();
+
   const editMyProfileClick = () => {
     setEdit('pwCheck');
   };
+
+  // 내 게시판 좋아요
+  const [isLike, setIsLike] = useState(false);
+  const token = Cookies.get('accessJWTToken');
+
+  const likeClickHandler = () => {
+    //likeCheck.mutate({ id: param.id, token });
+  };
+
+  const likeCheck = useMutation(likeUser, {
+    onSuccess: () => {},
+  });
 
   return (
     <LayoutSidebar>
@@ -19,12 +38,12 @@ export default function Sidebar({ data, setEdit }) {
         src={data.user.image ? data.user.image : defaultImg}
         alt=""
       ></Profile>
-      <div>
-        <MyUrl>
-          www.rolling.com/{data.user.username}
-          <FcLikePlaceholder />
+      <MyUrlContainer>
+        <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
+        <MyUrl onClick={likeClickHandler}>
+          <FcLikePlaceholder style={{ cursor: 'pointer' }} />
         </MyUrl>
-      </div>
+      </MyUrlContainer>
       <MyDesc
         value={
           data.user.introduction !== null
@@ -113,9 +132,14 @@ const Profile = styled.img`
   border-radius: 30px;
 `;
 
+const MyUrlContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
 const MyUrl = styled.span`
-  width: 25rem;
-  margin-top: 1.875rem;
   font-size: ${(props) => props.theme.FS.m};
   text-align: center;
 `;

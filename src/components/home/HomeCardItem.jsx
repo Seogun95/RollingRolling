@@ -7,6 +7,9 @@ export default function HomeCardItem(props) {
     <>
       <HomeCardItemWrapper>
         <CardContainer to={`/home/${props.userid}`}>
+          <CardUserNameBox>
+            <div>{props.userid}</div>
+          </CardUserNameBox>
           <CardImgLink>{props.children}</CardImgLink>
           <CardDescLink>
             <CardLinkContainer>
@@ -51,6 +54,15 @@ const HomeCardItemWrapper = styled.article`
   }
 `;
 
+const CardUserNameBox = styled.div`
+  padding: 0.2rem 0.4rem;
+  border-radius: 1rem;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 2;
+  background: #e2e2e2a1;
+`;
 const CardImgLink = styled.div`
   position: relative;
   display: flex;

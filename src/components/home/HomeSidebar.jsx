@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import useOutsideClick from '../../hooks/useOutsideClick';
 import Button from '../elements/Button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { BsPersonLinesFill } from 'react-icons/bs';
 import defaultImg from '../../style/img/example.png';
 import { MdEmail } from 'react-icons/md';
@@ -14,6 +14,13 @@ export default function HomeSidebar(props) {
     props.setState(false);
   });
 
+  //페이지가 이동되었을때 사이드바 닫기
+  const location = useLocation();
+  useEffect(() => {
+    props.setState(false);
+  }, [location.pathname]);
+
+  //스크롤이 감지되었을때 사이바 닫기
   useEffect(() => {
     function handleScroll() {
       props.setState(false);

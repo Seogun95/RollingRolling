@@ -1,20 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../elements/Button';
+import Button from '../../elements/Button';
+import Moment from 'react-moment';
+import 'moment/locale/ko';
+import { RiUser3Line, RiTimer2Line } from 'react-icons/ri';
 import { useState } from 'react';
+import {
+  QuestionBox,
+  QuestionBoxHead,
+  NickName,
+  Contents,
+  QuestionBoxBotton,
+} from './QuestionBoxs';
 
-function MyQuestion({ list }) {
+function MyQuestion(props) {
   const [display, setDisplay] = useState(false);
   // 답변 영역
   const writeComment = () => {
     setDisplay(!display);
   };
   return (
-    <NewQuestionBox>
-      <NewQuestionContent>
-        <span>{list.nickname}</span>
-        <h3>{list.content}</h3>
-      </NewQuestionContent>
+    <QuestionBox>
+      <QuestionBoxHead>
+        <NickName>
+          <div>
+            <RiUser3Line />
+            {props.nickname}
+          </div>
+        </NickName>
+      </QuestionBoxHead>
+      <Contents>{props.content}</Contents>
       <AnswerText onClick={writeComment}>답변하기</AnswerText>
       <AnswerContainer isShow={display}>
         <textarea></textarea>
@@ -24,56 +39,48 @@ function MyQuestion({ list }) {
           </Button>
         </WriterButtonContainer>
       </AnswerContainer>
-    </NewQuestionBox>
+      <QuestionBoxBotton>
+        <div>
+          <RiTimer2Line />
+          <Moment locale="ko" fromNow>
+            {props.date}
+          </Moment>
+        </div>
+      </QuestionBoxBotton>
+    </QuestionBox>
   );
 }
 export default MyQuestion;
 
-const NewQuestionBox = styled.div`
-  width: 100%;
-  margin-bottom: 0.625rem;
-  padding: 1.5rem;
-  border: none;
-  border-radius: 30px;
-  background-color: white;
-  font-size: ${(props) => props.theme.FS.m};
-`;
-
-const NewQuestionContent = styled.div`
-  margin-bottom: 150px;
-`;
-
-const AnswerText = styled.span`
+const AnswerText = styled.div`
+  ${(props) => props.theme.FlexCol};
+  align-items: flex-end;
   font-size: ${(props) => props.theme.FS.m};
   color: ${(props) => props.theme.CL.brandColor};
-  font-weight: bold;
-
-  &:hover {
-    cursor: pointer;
-  }
+  padding: 1rem;
+  cursor: pointer;
 `;
 
 const AnswerContainer = styled.div`
   background-color: royalblue;
   ${(props) => props.theme.FlexCol};
   width: 100%;
-  height: 220px;
   margin-top: 10px;
+  padding: 1.25rem;
   background-color: ${(props) => props.theme.CL.brandColorLight};
   border-radius: 30px;
-  box-shadow: 4px 4px 0px 1px ${(props) => props.theme.CL.brandColor};
+  /* box-shadow: 4px 4px 0px 1px ${(props) => props.theme.CL.brandColor}; */
 
   display: ${(props) => (props.isShow === true ? 'block' : 'none')};
   > textarea {
     width: 100%;
-    height: 150px;
+    min-height: 20px;
     padding: 1.25rem;
-    border-radius: 30px;
-    border: none;
+    border-radius: 0.625rem;
+    border: 1px solid ${(props) => props.theme.CL.brandColor};
     background-color: transparent;
     font-size: ${(props) => props.theme.FS.m};
     resize: none;
-    outline: none;
   }
 `;
 
@@ -81,7 +88,4 @@ const WriterButtonContainer = styled.div`
   display: flex;
   justify-content: right;
   width: 100%;
-  > button {
-    margin-right: 30px;
-  }
 `;

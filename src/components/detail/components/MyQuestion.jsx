@@ -5,6 +5,10 @@ import Moment from 'react-moment';
 import 'moment/locale/ko';
 import { RiUser3Line, RiTimer2Line } from 'react-icons/ri';
 import { useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
+import Cookies from 'js-cookie';
+import { addComment } from '../../../util/api/detailList';
 import {
   QuestionBox,
   QuestionBoxHead,
@@ -14,11 +18,38 @@ import {
 } from './QuestionBoxs';
 
 function MyQuestion(props) {
+  const [comment, setComment] = useState('');
   const [display, setDisplay] = useState(false);
+
   // 답변 영역
   const writeComment = () => {
     setDisplay(!display);
   };
+
+  // 답변 작성
+  // => 답변 작성되면 답변 완료 쪽으로 바로 이동
+  const queryClient = useQueryClient();
+  const muation = useMutation(addComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getPost');
+    },
+  });
+
+  const submitComment = () => {
+    if (comment !== '') {
+      // 토큰
+      const token = Cookies.get('accessJWTToken');
+      const resultComment = comment.replace(/(?:\n)/g, '\n');
+
+      muation.mutate({
+        id: props.postId,
+        token: token,
+        content: { content: resultComment },
+      });
+      setDisplay(!display);
+    }
+  };
+
   return (
     <QuestionBox>
       <QuestionBoxHead>
@@ -32,9 +63,18 @@ function MyQuestion(props) {
       <Contents>{props.content}</Contents>
       <AnswerText onClick={writeComment}>답변하기</AnswerText>
       <AnswerContainer isShow={display}>
-        <textarea></textarea>
+        <textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        ></textarea>
         <WriterButtonContainer>
-          <Button w={'80px'} bg={'#58793e'} color={'white'} size={'0.9rem'}>
+          <Button
+            w={'80px'}
+            bg={'#58793e'}
+            color={'white'}
+            size={'0.9rem'}
+            onClick={submitComment}
+          >
             작성
           </Button>
         </WriterButtonContainer>
@@ -43,7 +83,7 @@ function MyQuestion(props) {
         <div>
           <RiTimer2Line />
           <Moment locale="ko" fromNow>
-            {props.date}
+            {props.createdAt}
           </Moment>
         </div>
       </QuestionBoxBotton>

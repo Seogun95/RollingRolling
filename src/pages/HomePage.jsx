@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
 import { FcLikePlaceholder } from 'react-icons/fc';
@@ -7,8 +7,10 @@ import defaultImg from '../style/img/example.png';
 import bg1 from '../style/img/bg1.jpeg';
 import { ReactComponent as PaperHr } from '../style/img/hr.svg';
 import { CustomHr } from '../style/Theme';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { userInfo } from '../util/api/userInfo';
+import { useInView } from 'react-intersection-observer';
+import { getHomePostList } from '../util/api/homePostList';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
@@ -24,8 +26,39 @@ export default function HomePage() {
     setSearch(e.target.value);
   }, []);
 
-  const { isLoading, isError, data } = useQuery('userQueryKey', userInfo);
-  console.log(data);
+  const { isLoading, isError, data } = useQuery('userQueryKey', () =>
+    userInfo({ data: page })
+  );
+  //console.log(data);
+
+  // 무한 스크롤 ---------------
+  // ref가 보이면 inView=true, 안보이면 inView=false 자동으로 변경
+  const [ref, inView] = useInView();
+  // 서버에 보낼 페이지
+  const [page, setPage] = useState(1);
+  // 로딩
+  const [loading, setLoading] = useState(false);
+
+  const postList = useMutation('postList', getHomePostList, {
+    onSuccess: (data) => {
+      setLoading(false);
+    },
+  });
+  useEffect(() => {
+    postList.mutate(page);
+    // page 값 변경되면 서버 요청 = 로딩 true
+    setLoading(true);
+  }, [page]);
+
+  useEffect(() => {
+    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
+    if (inView && !loading) {
+      setPage((prevState) => prevState + 1);
+    }
+  }, [inView]);
+
+  // -----------------------
+
   if (isLoading) {
     return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
   }
@@ -104,9 +137,16 @@ export default function HomePage() {
           ))}
         </HomeCardContainer>
       </HomeWrapper>
+
+      <ScrollTest ref={ref}>까꿍</ScrollTest>
     </>
   );
 }
+
+const ScrollTest = styled.div`
+  background-color: coral;
+  height: 80px;
+`;
 
 const HomeMainContainer = styled.div`
   position: relative;

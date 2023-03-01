@@ -38,7 +38,7 @@ export const passwordCheck = async (data) => {
     });
     return response.data;
   } catch (err) {
-    return err.response.data;
+    console.log(err);
   }
 };
 
@@ -68,19 +68,31 @@ export const editMyInfo = async (data) => {
 
 // img upload
 export const imgUpload = async (data) => {
-  console.log('imgUpload : ', data);
+  console.log('imgUpload : ', data); //formData{}
   try {
-    const response = await api({
-      url: `/api/upload`,
-      method: 'post',
-      data: data.formImg,
+    const response = await api.post(`/api/upload`, data.img, {
       headers: {
         Authorization: data.token,
         'Content-Type': 'multipart/form-data',
       },
     });
     console.log('사진', response);
+    return response;
   } catch (err) {
     console.log('사진 err:', err);
+  }
+};
+
+// question - comment 작성
+export const addComment = async ({ id, content, token }) => {
+  try {
+    const response = await api.post(`/api/comment/${id}`, content, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log('comment', response.data);
+  } catch (error) {
+    console.log(error);
   }
 };

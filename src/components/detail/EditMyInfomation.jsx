@@ -13,18 +13,13 @@ import SuccessCheckButton from './SuccessCheckButton';
 import imageCompression from 'browser-image-compression';
 import Cookies from 'js-cookie';
 import { loginInfo } from '../../util/api/userInfo';
-import { async } from 'q';
 
 function EditMyInfomation({ setEdit }) {
   const param = useParams();
   const navigate = useNavigate;
-  const [myIntro, setMyIntro] = useState('아직 등록된 자기소개가 없습니다.');
+  const [myIntro, setMyIntro] = useState('');
   const [nickname, setNickname] = useState('');
   const [isEdit, setIsEdit] = useState(false);
-
-  // useEffect(() => {
-  //   setIsEdit(true);
-  // }, []);
 
   const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
@@ -192,7 +187,6 @@ function EditMyInfomation({ setEdit }) {
         </InputMessageSpan>
 
         <Input
-          disabled
           text={'닉네임'}
           onChange={changeNickname}
           type={'text'}
@@ -243,7 +237,11 @@ function EditMyInfomation({ setEdit }) {
               onChange={uploadProfile}
             ></input>
           </ImgContainer>
-          <textarea value={myIntro} onChange={changeIntro}></textarea>
+          <textarea
+            value={myIntro}
+            onChange={changeIntro}
+            placeholder="자기소개를 입력해주세요."
+          ></textarea>
         </ProfileImgContainer>
       </ProfileContainer>
     </EditMyInfoContainer>
@@ -295,11 +293,14 @@ const ProfileImgContainer = styled.div`
     padding: 1.5rem;
     border: none;
     border-radius: 30px;
-    background-color: ${(props) => props.theme.CL.brandColorLight};
-    font-size: ${(props) => props.theme.FS.s};
-    box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
+    color: white;
+    background-color: ${(props) => props.theme.CL.brandColor};
+    box-shadow: 0 1px 10px #0000008a;
+    font-size: ${(props) => props.theme.FS.m};
     resize: none;
-    outline: none;
+    &::placeholder {
+      color: #d0d0d0;
+    }
   }
 `;
 const ImgContainer = styled.label`
@@ -312,7 +313,7 @@ const ProfileImg = styled.img`
   border: 5px solid ${(props) => props.theme.CL.brandColor};
   border-radius: 30px;
   margin-bottom: 30px;
-  box-shadow: 3px 3px 0px 1px ${(props) => props.theme.CL.brandColor};
+
   position: relative;
   cursor: pointer;
 `;

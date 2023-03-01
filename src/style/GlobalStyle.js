@@ -47,6 +47,9 @@ export const GlobalStyle = createGlobalStyle`
     -moz-user-drag: none;
     -o-user-drag: none;
 }
+  *:focus {
+    outline: none !important;
+  }
     * {
       box-sizing: border-box;
     @font-face {

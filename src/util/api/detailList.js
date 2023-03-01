@@ -44,7 +44,7 @@ export const passwordCheck = async (data) => {
 
 // editMyInfo
 export const editMyInfo = async (data) => {
-  console.log('editMyInfo : ', data);
+  // console.log('editMyInfo api data : ', data);
   try {
     const response = await api({
       url: `/api/mypage`,
@@ -54,13 +54,14 @@ export const editMyInfo = async (data) => {
         newPasswordConfirm: data.newInfo.newPasswordConfirm,
         nickname: data.newInfo.nickname,
         image: data.newInfo.image,
+        email: data.newInfo.email,
         introduction: data.newInfo.introduction,
       },
       headers: {
         Authorization: data.token,
       },
     });
-    console.log('정보수정', response);
+    return response.data;
   } catch (err) {
     console.log('정보수정 err:', err);
   }
@@ -68,7 +69,7 @@ export const editMyInfo = async (data) => {
 
 // img upload
 export const imgUpload = async (data) => {
-  console.log('imgUpload : ', data); //formData{}
+  // console.log('imgUpload : ', data); //formData{}
   try {
     const response = await api.post(`/api/upload`, data.img, {
       headers: {
@@ -76,8 +77,8 @@ export const imgUpload = async (data) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log('사진', response);
-    return response;
+    console.log('사진', response.data);
+    return response.data;
   } catch (err) {
     console.log('사진 err:', err);
   }
@@ -92,6 +93,7 @@ export const addComment = async ({ id, content, token }) => {
       },
     });
     console.log('comment', response.data);
+    return response.data;
   } catch (error) {
     console.log(error);
   }

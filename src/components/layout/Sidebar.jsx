@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
+import { FcLikePlaceholder } from 'react-icons/fc';
 
 export default function Sidebar({ data, setEdit }) {
   const editMyProfileClick = () => {
@@ -18,7 +19,12 @@ export default function Sidebar({ data, setEdit }) {
         src={data.user.image ? data.user.image : defaultImg}
         alt=""
       ></Profile>
-      <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
+      <div>
+        <MyUrl>
+          www.rolling.com/{data.user.username}
+          <FcLikePlaceholder />
+        </MyUrl>
+      </div>
       <MyDesc
         value={
           data.user.introduction !== null

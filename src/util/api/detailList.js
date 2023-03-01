@@ -38,13 +38,13 @@ export const passwordCheck = async (data) => {
     });
     return response.data;
   } catch (err) {
-    return err.response.data;
+    console.log(err);
   }
 };
 
 // editMyInfo
 export const editMyInfo = async (data) => {
-  console.log('editMyInfo : ', data);
+  // console.log('editMyInfo api data : ', data);
   try {
     const response = await api({
       url: `/api/mypage`,
@@ -54,13 +54,14 @@ export const editMyInfo = async (data) => {
         newPasswordConfirm: data.newInfo.newPasswordConfirm,
         nickname: data.newInfo.nickname,
         image: data.newInfo.image,
+        email: data.newInfo.email,
         introduction: data.newInfo.introduction,
       },
       headers: {
         Authorization: data.token,
       },
     });
-    console.log('정보수정', response);
+    return response.data;
   } catch (err) {
     console.log('정보수정 err:', err);
   }
@@ -68,22 +69,21 @@ export const editMyInfo = async (data) => {
 
 // img upload
 export const imgUpload = async (data) => {
-  console.log('imgUpload : ', data);
+  // console.log('imgUpload : ', data); //formData{}
   try {
-    const response = await api({
-      url: `/api/upload`,
-      method: 'post',
-      data: data.formImg,
+    const response = await api.post(`/api/upload`, data.img, {
       headers: {
         Authorization: data.token,
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log('사진', response);
+    console.log('사진', response.data);
+    return response.data;
   } catch (err) {
     console.log('사진 err:', err);
   }
 };
+
 
 export const deleteQuestion = async ({ id, token }) => {
   try {
@@ -98,3 +98,19 @@ export const deleteQuestion = async ({ id, token }) => {
     console.log(error);
   }
 };
+
+// question - comment 작성
+export const addComment = async ({ id, content, token }) => {
+  try {
+    const response = await api.post(`/api/comment/${id}`, content, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log('comment', response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+

@@ -73,7 +73,7 @@ const EditContainer = styled.div`
 `;
 
 const PasswordContainer = styled.div`
-  background-color: #b1b1b1;
+  background: #ffffff76;
   ${(props) => props.theme.FlexCol};
   width: 400px;
   height: 400px;

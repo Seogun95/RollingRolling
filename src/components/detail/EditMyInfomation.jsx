@@ -13,6 +13,7 @@ import SuccessCheckButton from './SuccessCheckButton';
 import imageCompression from 'browser-image-compression';
 import Cookies from 'js-cookie';
 import { loginInfo } from '../../util/api/userInfo';
+import { async } from 'q';
 
 function EditMyInfomation({ setEdit }) {
   const param = useParams();
@@ -67,7 +68,7 @@ function EditMyInfomation({ setEdit }) {
     },
   });
 
-  console.log(getInfo);
+  console.log('getInfo', getInfo);
   useEffect(() => {
     getInfo.mutate({ token });
   }, [token]);
@@ -78,17 +79,15 @@ function EditMyInfomation({ setEdit }) {
     api/upload 먼저 보낸 후 response 200 오면
     모든 정보 db 저장 !!
   */
-  const [profileImg, setProfileImg] = useState({ proImg: '', viewUrl: '' });
 
-  const formImg = new FormData();
+  const [profileImg, setProfileImg] = useState({ proImg: '', viewUrl: '' });
+  // img url return값
+  const [updateImg, setUpdataImg] = useState(new FormData());
 
   // 이미지 클릭시 change event
   const uploadProfile = async (e) => {
     const profileImg = e.target.files[0];
 
-    formImg.append('img', profileImg);
-    //console.log(formImg);
-    //console.log('Before Compression: ', profileImg.size);
     const options = {
       maxSizeMB: 1,
       maxWidthOrHeight: 1920,
@@ -96,9 +95,13 @@ function EditMyInfomation({ setEdit }) {
     };
     try {
       const compressedFile = await imageCompression(profileImg, options);
-      console.log('After Compression: ', compressedFile.size);
+
+      const formImg = new FormData();
+      formImg.append('img', profileImg);
+      setUpdataImg(formImg);
+
       const fileReader = new FileReader();
-      // console.log(compressedFile);
+
       fileReader.readAsDataURL(compressedFile);
 
       fileReader.onload = () => {
@@ -109,34 +112,34 @@ function EditMyInfomation({ setEdit }) {
     } catch (error) {
       console.log(error);
     }
-
-    uploadImg.mutate({ token, img: formImg });
   };
 
   // img api
   const uploadImg = useMutation('uploadImg', imgUpload, {
     onSuccess: (data) => {
-      console.log('mutation : ', data);
+      console.log('uploadImg ', data);
+      const newInfo = {
+        newPassword: inputPw,
+        newPasswordConfirm: inputCheckPw,
+        nickname: nickname,
+        image: data,
+        email: getInfo.data.email,
+        introduction: myIntro,
+      };
+
+      editInfo.mutate({ token, newInfo });
     },
   });
 
-  // 수정 버튼 클릭시 정보수정 : img는 아직
-  const editMyInfoClick = (e) => {
+  // 수정 버튼 클릭시 정보수정
+  const editMyInfoClick = async (e) => {
     e.preventDefault();
-
-    const newInfo = {
-      newPassword: inputPw,
-      newPasswordConfirm: inputCheckPw,
-      nickname: nickname,
-      image: '',
-      introduction: myIntro,
-    };
-    editInfo.mutate({ token, newInfo });
+    uploadImg.mutate({ token, img: updateImg });
   };
+
   // api
   const editInfo = useMutation('editinfo', editMyInfo, {
     onSuccess: (data) => {
-      console.log('mutation : ', data);
       alert('정보가 수정되었습니다.');
       setEdit('');
     },

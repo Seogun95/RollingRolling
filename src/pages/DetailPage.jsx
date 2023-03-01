@@ -18,7 +18,7 @@ export default function Detailpage() {
   const { isLoading, isError, data, refetch } = useQuery('getPost', () =>
     getPostList({ id: param.id, token })
   );
-
+  console.log('detailpage : ', data);
   useEffect(() => {
     refetch();
   }, [param, refetch]);

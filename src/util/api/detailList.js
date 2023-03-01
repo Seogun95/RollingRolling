@@ -84,3 +84,17 @@ export const imgUpload = async (data) => {
     console.log('사진 err:', err);
   }
 };
+
+export const deleteQuestion = async ({ id, token }) => {
+  try {
+    const response = await api.delete(`/api/post/${id}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response.data;
+    console.log(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+};

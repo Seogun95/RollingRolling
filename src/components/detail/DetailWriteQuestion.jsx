@@ -4,7 +4,11 @@ import Button from '../elements/Button';
 import { useState } from 'react';
 import { useRef } from 'react';
 import Cookies from 'js-cookie';
-import { addQuestion, getPostList } from '../../util/api/detailList';
+import {
+  addQuestion,
+  deleteQuestion,
+  getPostList,
+} from '../../util/api/detailList';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient, useMutation } from 'react-query';
 import { useLoginUserCheck } from '../../hooks/useLoginUserCheck';
@@ -26,7 +30,6 @@ function DetailWriteQuestion() {
   const { data } = useQuery('getPost', () =>
     getPostList({ id: param.id, token })
   );
-
   console.log(data);
 
   const changeContent = (e) => {
@@ -36,6 +39,13 @@ function DetailWriteQuestion() {
   //POST 데이터 추가
   const muation = useMutation(addQuestion, {
     onSuccess: () => {
+      queryClient.invalidateQueries('getPost');
+    },
+  });
+
+  const deleteMutation = useMutation(deleteQuestion, {
+    onSuccess: () => {
+      console.log('삭제 성공');
       queryClient.invalidateQueries('getPost');
     },
   });
@@ -51,6 +61,17 @@ function DetailWriteQuestion() {
       setQuestion('');
       anonymous.current.checked = false;
     }
+  };
+
+  const onDeleteHandler = (postid) => {
+    const confirmText = window.confirm('정말로 삭제하시겠습니까?');
+    if (confirmText) {
+      deleteMutation.mutate({ id: postid, token: token });
+    } else {
+      return;
+    }
+
+    console.log(postid);
   };
 
   return (
@@ -90,7 +111,18 @@ function DetailWriteQuestion() {
             nickname={item.nickname}
             content={item.content}
             date={item.createdAt}
-          />
+          >
+            <Button
+              w={'60px'}
+              bg={'#58793e'}
+              color={'white'}
+              onClick={() => {
+                onDeleteHandler(item.postId);
+              }}
+            >
+              삭제
+            </Button>
+          </QuestionBoxs>
         ))}
       </QuestionContainer>
       <QuestionContainer>

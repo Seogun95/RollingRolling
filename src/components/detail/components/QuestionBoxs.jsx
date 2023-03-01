@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Moment from 'react-moment';
 import 'moment/locale/ko';
 import { RiUser3Line, RiTimer2Line } from 'react-icons/ri';
+import Button from '../../elements/Button';
 
 export default function QuestionBoxs(props) {
   return (
@@ -23,6 +24,7 @@ export default function QuestionBoxs(props) {
             <Moment locale="ko" fromNow>
               {props.date}
             </Moment>
+            {props.children}
           </div>
         </QuestionBoxBotton>
       </QuestionBox>

@@ -221,7 +221,10 @@ function EditMyInfomation({ setEdit }) {
                 alt=""
               />
             ) : (
-              <ProfileImg src={defaultImg} alt="" />
+              <ProfileImg
+                src={isEdit ? profileImg.viewUrl : defaultImg}
+                alt=""
+              />
             )}
 
             <input

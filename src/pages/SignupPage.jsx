@@ -26,7 +26,7 @@ function SignupPage() {
     idRegex
   );
 
-  const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
+  const pwRegex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
     '',
     '비밀번호를 입력해주세요.',

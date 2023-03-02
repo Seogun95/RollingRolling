@@ -30,12 +30,17 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none; /* 언더바 제거 */
     color: inherit; /* 부모 요소의 색을 상속 받음 */
     }
-    input:focus {
-      outline: none;
-    }
     input {
       border: 0;
     }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+	 transition: background-color 5000s ease-in-out 0s;
+   }
+
     img {
     -webkit-user-select: none;
     -khtml-user-select: none;

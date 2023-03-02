@@ -10,6 +10,7 @@ import { likeUser } from '../../util/api/detailList';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import Cookies from 'js-cookie';
+import { useQueryClient } from 'react-query';
 
 export default function Sidebar({ data, setEdit }) {
   const param = useParams();

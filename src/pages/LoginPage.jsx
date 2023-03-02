@@ -20,7 +20,7 @@ function LoginPage() {
     idRegex
   );
 
-  const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,15}$/;
+  const pwRegex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
     '',
     '비밀번호를 입력해주세요.',
@@ -51,7 +51,7 @@ function LoginPage() {
       Cookies.set('accessJWTToken', Token, { expires: expiryDate });
       navigate('/home');
     } catch (error) {
-      alert(error.response.data.result);
+      alert(error.response.data);
     }
   };
 

@@ -146,3 +146,21 @@ export const likeUser = async ({ id, token }) => {
     console.log('likeUser', err);
   }
 };
+
+// 답변 좋아요
+export const likeComment = async ({ id, token }) => {
+  try {
+    const response = await api.post(
+      `/api/comment/like/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log('likeComment', err);
+  }
+};

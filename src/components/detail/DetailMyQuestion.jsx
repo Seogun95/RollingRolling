@@ -19,6 +19,7 @@ function DetailMyQuestion({ data }) {
             <EmptyQuestion>새로운 질문이 존재하지 않습니다.</EmptyQuestion>
           </label>
         )}
+
         {data.upperPost.map((list) => {
           return (
             <MyQuestion

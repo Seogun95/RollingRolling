@@ -130,17 +130,18 @@ export const editQuestion = async ({ id, content, token }) => {
 };
 
 // 회원 게시판 좋아요(sidebar)
-export const likeUser = async ({ id, token }) => {
+export const likeUser = async ({ id, token, liked }) => {
   try {
     const response = await api.post(
       `/api/user/like/${id}`,
-      {},
+      { liked },
       {
         headers: {
           Authorization: token,
         },
       }
     );
+    //console.log(response);
     return response.data;
   } catch (err) {
     console.log('likeUser', err);

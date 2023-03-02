@@ -84,7 +84,7 @@ function MyQuestion(props) {
         <div>
           <RiTimer2Line />
           <Moment locale="ko" fromNow>
-            {props.createdAt}
+            {props.date}
           </Moment>
           <AnswerText onClick={writeComment}>
             <FaRegCommentAlt />

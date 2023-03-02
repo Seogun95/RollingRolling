@@ -16,6 +16,9 @@
 
 [롤링롤링.com](http://rolling-rolling.s3-website.ap-northeast-2.amazonaws.com/home)
 
+## 롤링롤링 시연 영상 사이트
+[롤링롤링.youtube](https://www.youtube.com/watch?v=Sp30bkW_I4M)
+
 ## 깃허브 레포
 
 > FE :

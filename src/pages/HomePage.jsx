@@ -34,7 +34,7 @@ export default function HomePage() {
   }, []);
 
   const { isLoading, isError, data } = useQuery('userQueryKey', () =>
-    userInfo({ data: page })
+    userInfo()
   );
 
   // 검색기능

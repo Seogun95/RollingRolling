@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Button from '../elements/Button';
 import defaultImg from '../../style/img/example.png';
 import { FiEdit3 } from 'react-icons/fi';
-import { FcLikePlaceholder } from 'react-icons/fc';
+import { ReactComponent as Heart } from '../../style/img/heart.svg';
+import { ReactComponent as HeartFill } from '../../style/img/heartFill.svg';
 import { useMutation } from 'react-query';
 import { likeUser } from '../../util/api/detailList';
 import { useState } from 'react';
@@ -22,7 +23,6 @@ export default function Sidebar({ data, setEdit }) {
   const token = Cookies.get('accessJWTToken');
 
   const likeClickHandler = () => {
-    setIsLike(false);
     likeCheck.mutate({ id: param.id, token });
   };
 
@@ -43,9 +43,9 @@ export default function Sidebar({ data, setEdit }) {
       ></Profile>
       <MyUrlContainer>
         <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
-        <MyUrl onClick={likeClickHandler}>
-          {isLike ? <FcLikePlaceholder /> : <FcLikePlaceholder />}
-        </MyUrl>
+        <LikeBtn isLike={isLike} onClick={likeClickHandler}>
+          {isLike ? <Heart /> : <HeartFill />} <span>{data.user.likeCnt}</span>
+        </LikeBtn>
       </MyUrlContainer>
       <MyDesc
         value={
@@ -78,6 +78,22 @@ export default function Sidebar({ data, setEdit }) {
     </LayoutSidebar>
   );
 }
+
+export const LikeBtn = styled.div`
+  ${(props) => props.theme.FlexRow};
+  padding: 0.2rem 0.4rem;
+  background: ${(props) => (props.isLike ? '#eeee' : '#ffdcdc')};
+  border-radius: 1rem;
+  gap: 0.25rem;
+  cursor: pointer;
+  span {
+    font-size: ${(props) => props.theme.FS.s};
+    margin-top: 1px;
+  }
+  svg {
+    width: 15px;
+  }
+`;
 
 const AdminNickNameBubble = styled.div`
   position: absolute;
@@ -145,9 +161,6 @@ const MyUrlContainer = styled.div`
 const MyUrl = styled.span`
   font-size: ${(props) => props.theme.FS.m};
   text-align: center;
-  > svg {
-    cursor: pointer;
-  }
 `;
 
 const MyDesc = styled.textarea`

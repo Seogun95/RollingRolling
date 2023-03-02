@@ -19,6 +19,7 @@ import Button from '../components/elements/Button';
 export default function HomePage() {
   const [search, setSearch] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
 
   const handleInputFocus = () => {
@@ -70,6 +71,7 @@ export default function HomePage() {
   const searchClick = (e) => {
     e.preventDefault();
     searchResult.mutate({ search, token });
+    setIsSearch(true);
   };
 
   const searchResult = useMutation(searchUser, {
@@ -77,6 +79,7 @@ export default function HomePage() {
       console.log('search data : ', data);
     },
   });
+
   // -------------------------
 
   const movePostPage = () => {
@@ -120,7 +123,7 @@ export default function HomePage() {
             </HomeSearchContainer>
 
             <HomeSearchImgWrapper onClick={movePostPage}>
-              {searchResult?.data && (
+              {searchResult?.data ? (
                 <SearchImgContainer>
                   <ImgContainer>
                     <CardUserNameBox>
@@ -150,7 +153,11 @@ export default function HomePage() {
                     </SearchHowMuchQuestions>
                   </SearchInfoContainer>
                 </SearchImgContainer>
-              )}
+              ) : isSearch && search !== '' ? (
+                <h3 style={{ cursor: 'default' }}>
+                  {search}님에 대한 정보를 찾을 수 없습니다.
+                </h3>
+              ) : null}
             </HomeSearchImgWrapper>
           </HomeSearchWrapper>
           <PaperHrContainer>

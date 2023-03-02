@@ -20,19 +20,21 @@ export default function Sidebar({ data, setEdit }) {
   };
 
   const [isLike, setIsLike] = useState(data.user.liked);
+  const [isLikeCnt, setIsLikeCnt] = useState(0);
 
   const token = Cookies.get('accessJWTToken');
 
   const queryClient = useQueryClient();
   const likeCheck = useMutation(likeUser, {
     onSuccess: (data) => {
+      setIsLikeCnt(data.likeCount);
       queryClient.invalidateQueries('getPost');
     },
   });
 
   const likeClickHandler = () => {
     setIsLike(!isLike);
-    likeCheck.mutate({ id: param.id, token, liked: !isLike });
+    likeCheck.mutate({ id: param.id, token, liked: isLike });
   };
 
   return (
@@ -47,8 +49,7 @@ export default function Sidebar({ data, setEdit }) {
       <MyUrlContainer>
         <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
         <LikeBtn isLike={isLike} onClick={likeClickHandler}>
-          {data.user.liked ? <Heart /> : <HeartFill />}{' '}
-          <span>{data.user.likeCnt}</span>
+          {data.user.liked ? <Heart /> : <HeartFill />} <span>{isLikeCnt}</span>
         </LikeBtn>
       </MyUrlContainer>
       <MyDesc

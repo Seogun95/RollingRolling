@@ -78,6 +78,9 @@ export default function HomePage() {
     onSuccess: (data) => {
       console.log('search data : ', data);
     },
+    onError: (data) => {
+      return data;
+    },
   });
 
   // -------------------------
@@ -144,20 +147,18 @@ export default function HomePage() {
                     <h3>{searchResult.data.userResponseDto.introduction}</h3>
                     <SearchHowMuchQuestions>
                       <SearchSpan>
-                        질문 <span>{searchResult.data.comPostCnt}</span>
+                        질문 <span>{searchResult.data.newPostCnt}</span>
                       </SearchSpan>
                       <SearchSpan>
-                        답변 <span>{searchResult.data.newPostCnt}</span>
+                        답변 <span>{searchResult.data.comPostCnt}</span>
                       </SearchSpan>
                       <FcLikePlaceholder />
                     </SearchHowMuchQuestions>
                   </SearchInfoContainer>
                 </SearchImgContainer>
-              ) : isSearch && search !== '' ? (
-                <h3 style={{ cursor: 'default' }}>
-                  {search}님에 대한 정보를 찾을 수 없습니다.
-                </h3>
-              ) : null}
+              ) : (
+                <h3>{searchResult.error?.response.data}</h3>
+              )}
             </HomeSearchImgWrapper>
           </HomeSearchWrapper>
           <PaperHrContainer>

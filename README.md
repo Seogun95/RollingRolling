@@ -14,7 +14,7 @@
 
 ## 롤링롤링 배포 사이트
 
-[롤링롤링.com]('http://rolling-rolling.s3-website.ap-northeast-2.amazonaws.com/home')
+[롤링롤링.com](http://rolling-rolling.s3-website.ap-northeast-2.amazonaws.com/home)
 
 ## 깃허브 레포
 

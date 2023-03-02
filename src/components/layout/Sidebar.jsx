@@ -149,6 +149,7 @@ const Profile = styled.img`
   margin-top: 50px;
   border: 5px solid ${(props) => props.theme.CL.brandColor};
   border-radius: 30px;
+  object-fit: cover;
 `;
 
 const MyUrlContainer = styled.div`

@@ -95,6 +95,7 @@ function DetailWriteQuestion() {
   // 수정과 관련된 기능 객체
   const editHandlerProps = {
     editInputValue: editInput,
+    setEditInputValue: setEditInput,
     editInputChangeHandler: changeQuestion,
     editSubmitHandler: onEditHandler,
   };
@@ -209,7 +210,7 @@ export const QuestionContainer = styled.div`
   }
   textarea {
     width: 100%;
-    min-height: 9.375rem;
+    min-height: 1.25rem;
     padding: 1.25rem;
     border: none;
     border-radius: 30px;

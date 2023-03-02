@@ -34,7 +34,11 @@ export default function QuestionBoxs(props) {
             ></textarea>
             <WriterButtonContainer>
               <Button
-                onClick={() => props.edit.editSubmitHandler(props.postId)}
+                onClick={() => {
+                  props.edit.editSubmitHandler(props.postId);
+                  handleClick();
+                  props.edit.setEditInputValue('');
+                }}
                 w={'80px'}
                 bg={'#58793e'}
                 color={'white'}

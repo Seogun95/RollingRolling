@@ -125,7 +125,7 @@ export const editQuestion = async ({ id, content, token }) => {
     );
     return response.data;
   } catch (error) {
-    //console.log(error);
+    console.log(error);
   }
 };
 

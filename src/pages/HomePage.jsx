@@ -12,10 +12,15 @@ import { userInfo } from '../util/api/userInfo';
 import { useInView } from 'react-intersection-observer';
 import { getHomePostList, searchUser } from '../util/api/homePostList';
 import Cookies from 'js-cookie';
+import { CardUserNameBox } from '../components/home/HomeCardItem';
+import { useNavigate } from 'react-router';
+import Button from '../components/elements/Button';
 
 export default function HomePage() {
   const [search, setSearch] = useState('');
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const navigate = useNavigate();
+
   const handleInputFocus = () => {
     setIsInputFocused(true);
   };
@@ -30,7 +35,6 @@ export default function HomePage() {
   const { isLoading, isError, data } = useQuery('userQueryKey', () =>
     userInfo({ data: page })
   );
-  //console.log(data);
 
   // 무한 스크롤 ---------------
   // ref가 보이면 inView=true, 안보이면 inView=false 자동으로 변경
@@ -61,10 +65,10 @@ export default function HomePage() {
   // -----------------------
 
   // 검색기능
-  //console.log('search', search);
   const token = Cookies.get('accessJWTToken');
   // 돋보기 클릭시
-  const searchClick = () => {
+  const searchClick = (e) => {
+    e.preventDefault();
     searchResult.mutate({ search, token });
   };
 
@@ -74,6 +78,10 @@ export default function HomePage() {
     },
   });
   // -------------------------
+
+  const movePostPage = () => {
+    navigate(`/home/${searchResult.data.userResponseDto.username}`);
+  };
 
   if (isLoading) {
     return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
@@ -94,12 +102,11 @@ export default function HomePage() {
               물어보세요!
             </span>
             <HomeSearchContainer>
-              <SearchForm>
-                <SearchIcon
-                  isInputFocused={isInputFocused}
-                  onClick={searchClick}
-                >
-                  <FaSearch size={'1.2rem'} />
+              <SearchForm onSubmit={searchClick}>
+                <SearchIcon isInputFocused={isInputFocused}>
+                  <Button>
+                    <FaSearch size={'1.2rem'} />
+                  </Button>
                 </SearchIcon>
                 <SearchInput
                   value={search}
@@ -112,23 +119,38 @@ export default function HomePage() {
               </SearchForm>
             </HomeSearchContainer>
 
-            <HomeSearchImgWrapper>
-              <SearchImgContainer>
-                <img src={defaultImg} alt="" />
-                <SearchInfoContainer>
-                  <h1>정다정</h1>
-                  <h3>자기 소개가 들어올 자리입니다.</h3>
-                  <SearchHowMuchQuestions>
-                    <SearchSpan>
-                      질문 <span>1</span>
-                    </SearchSpan>
-                    <SearchSpan>
-                      답변 <span>1</span>
-                    </SearchSpan>
-                    <FcLikePlaceholder />
-                  </SearchHowMuchQuestions>
-                </SearchInfoContainer>
-              </SearchImgContainer>
+            <HomeSearchImgWrapper onClick={movePostPage}>
+              {searchResult?.data && (
+                <SearchImgContainer>
+                  <ImgContainer>
+                    <CardUserNameBox>
+                      {searchResult.data.userResponseDto.username}
+                    </CardUserNameBox>
+                    {searchResult.data.userResponseDto.image &&
+                    searchResult.data.userResponseDto.image !== 'null' ? (
+                      <img
+                        src={searchResult.data.userResponseDto.image}
+                        alt=""
+                      ></img>
+                    ) : (
+                      <img src={defaultImg} alt=""></img>
+                    )}
+                  </ImgContainer>
+                  <SearchInfoContainer>
+                    <h1>{searchResult.data.userResponseDto.nickname}</h1>
+                    <h3>{searchResult.data.userResponseDto.introduction}</h3>
+                    <SearchHowMuchQuestions>
+                      <SearchSpan>
+                        질문 <span>{searchResult.data.comPostCnt}</span>
+                      </SearchSpan>
+                      <SearchSpan>
+                        답변 <span>{searchResult.data.newPostCnt}</span>
+                      </SearchSpan>
+                      <FcLikePlaceholder />
+                    </SearchHowMuchQuestions>
+                  </SearchInfoContainer>
+                </SearchImgContainer>
+              )}
             </HomeSearchImgWrapper>
           </HomeSearchWrapper>
           <PaperHrContainer>
@@ -296,17 +318,11 @@ const HomeCardContainer = styled.div`
 const HomeSearchImgWrapper = styled.div`
   ${(props) => props.theme.FlexCol};
   padding: 0 2rem;
+  cursor: pointer;
 `;
 const SearchImgContainer = styled.div`
   ${(props) => props.theme.FlexRow};
   height: 250px;
-
-  img {
-    width: 300px;
-    height: 100%;
-    border-radius: 1rem 0 0 1rem;
-    object-fit: cover;
-  }
 `;
 const SearchInfoContainer = styled.div`
   ${(props) => props.theme.FlexCol};
@@ -334,4 +350,16 @@ const SearchSpan = styled.div`
   color: white;
   border-radius: 1rem;
   margin: 2rem 1rem 0 0;
+`;
+
+const ImgContainer = styled.div`
+  height: 250px;
+  position: relative;
+
+  img {
+    width: 300px;
+    height: 100%;
+    border-radius: 1rem 0 0 1rem;
+    object-fit: cover;
+  }
 `;

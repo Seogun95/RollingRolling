@@ -22,11 +22,14 @@ export default function Sidebar({ data, setEdit }) {
   const token = Cookies.get('accessJWTToken');
 
   const likeClickHandler = () => {
-    //likeCheck.mutate({ id: param.id, token });
+    setIsLike(false);
+    likeCheck.mutate({ id: param.id, token });
   };
 
   const likeCheck = useMutation(likeUser, {
-    onSuccess: () => {},
+    onSuccess: (data) => {
+      setIsLike(data.isLike);
+    },
   });
 
   return (
@@ -41,7 +44,7 @@ export default function Sidebar({ data, setEdit }) {
       <MyUrlContainer>
         <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
         <MyUrl onClick={likeClickHandler}>
-          <FcLikePlaceholder style={{ cursor: 'pointer' }} />
+          {isLike ? <FcLikePlaceholder /> : <FcLikePlaceholder />}
         </MyUrl>
       </MyUrlContainer>
       <MyDesc
@@ -142,6 +145,9 @@ const MyUrlContainer = styled.div`
 const MyUrl = styled.span`
   font-size: ${(props) => props.theme.FS.m};
   text-align: center;
+  > svg {
+    cursor: pointer;
+  }
 `;
 
 const MyDesc = styled.textarea`

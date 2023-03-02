@@ -9,12 +9,9 @@ export const getHomePostList = async (data) => {
   return response.data;
 };
 
+// user nickname 검색
 export const searchUser = async (data) => {
-  console.log(typeof data.search);
-  const input = 'aaa123';
-
-  const encodedInput = encodeURIComponent(input);
-  const response = await api.get(`/api/user/search/aaa123`, {
+  const response = await api.get(`/api/user/search?nickname=${data.search}`, {
     headers: {
       Authorization: data.token,
     },

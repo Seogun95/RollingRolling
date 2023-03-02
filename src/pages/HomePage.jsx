@@ -37,34 +37,6 @@ export default function HomePage() {
     userInfo({ data: page })
   );
 
-  // 무한 스크롤 ---------------
-  // ref가 보이면 inView=true, 안보이면 inView=false 자동으로 변경
-  const [ref, inView] = useInView();
-  // 서버에 보낼 페이지
-  const [page, setPage] = useState(1);
-  // 로딩
-  const [loading, setLoading] = useState(false);
-
-  const postList = useMutation('postList', getHomePostList, {
-    onSuccess: (data) => {
-      setLoading(false);
-    },
-  });
-  useEffect(() => {
-    postList.mutate(page);
-    // page 값 변경되면 서버 요청 = 로딩 true
-    setLoading(true);
-  }, [page]);
-
-  useEffect(() => {
-    // 사용자가 마지막 요소를 보고 있고, 로딩 중이 아니라면
-    if (inView && !loading) {
-      setPage((prevState) => prevState + 1);
-    }
-  }, [inView]);
-
-  // -----------------------
-
   // 검색기능
   const token = Cookies.get('accessJWTToken');
   // 돋보기 클릭시
@@ -82,8 +54,6 @@ export default function HomePage() {
       return data;
     },
   });
-
-  // -------------------------
 
   const movePostPage = () => {
     navigate(`/home/${searchResult.data.userResponseDto.username}`);
@@ -186,16 +156,9 @@ export default function HomePage() {
           ))}
         </HomeCardContainer>
       </HomeWrapper>
-
-      <ScrollTest ref={ref}>까꿍</ScrollTest>
     </>
   );
 }
-
-const ScrollTest = styled.div`
-  background-color: coral;
-  height: 80px;
-`;
 
 const HomeMainContainer = styled.div`
   position: relative;

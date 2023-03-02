@@ -1,59 +1,178 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useQuery } from 'react-query';
-import { getMyPostList } from '../../util/api/detailList';
-import { useParams } from 'react-router-dom';
 import Button from '../elements/Button';
+import { useState } from 'react';
+import { useRef } from 'react';
+import Cookies from 'js-cookie';
+import { TbTrash } from 'react-icons/tb';
+import {
+  addQuestion,
+  deleteQuestion,
+  editQuestion,
+  getPostList,
+} from '../../util/api/detailList';
+import { useParams } from 'react-router-dom';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { FcUnlock, FcLock } from 'react-icons/fc';
+import QuestionBoxs from './components/QuestionBoxs';
 
 function DetailWriteQuestion() {
-  // 내가 A사람의 게시판 들어갔을때
-  // 1. 질문하기
-
-  // 2. 내가 남긴 질문 가져오기
-
-  // 파라미터로 해당 게시글의 회원id 가져오기
+  const [question, setQuestion] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
+  const anonymous = useRef();
   const param = useParams();
-  // console.log(param); //{id: '55'} 게시글의 회원id
+  const token = Cookies.get('accessJWTToken');
 
-  // 로그인한 유저가 이 게시글에 남긴 질문 가져오기
-  const { isLoading, isError, data } = useQuery('myPostList', getMyPostList);
+  // GET 데이터 불러옴
+  const { data } = useQuery('getPost', () =>
+    getPostList({ id: param.id, token })
+  );
 
-  if (isLoading) {
-    return <div>로딩중!!...</div>;
-  }
-  if (isError) {
-    return <div>오류가 발생했습니다.</div>;
-  }
+  const changeContent = (e) => {
+    setQuestion(e.target.value);
+  };
+  const queryClient = useQueryClient();
+  //POST 데이터 추가
+  const muation = useMutation(addQuestion, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getPost');
+    },
+  });
+
+  const deleteMutation = useMutation(deleteQuestion, {
+    onSuccess: () => {
+      console.log('삭제 성공');
+      queryClient.invalidateQueries('getPost');
+    },
+  });
+
+  const submitPostContent = (e) => {
+    e.preventDefault();
+    if (question !== '') {
+      const form = {
+        content: question,
+        anonymous: anonymous.current.checked,
+      };
+      muation.mutate({ id: param.id, token: token, content: form });
+      setQuestion('');
+      anonymous.current.checked = false;
+    }
+  };
+
+  const onDeleteHandler = (postid) => {
+    const confirmText = window.confirm('정말로 삭제하시겠습니까?');
+    if (confirmText) {
+      deleteMutation.mutate({ id: postid, token: token });
+    } else {
+      return;
+    }
+
+    // console.log(postid);
+  };
+
+  //수정
+
+  const [editInput, setEditInput] = useState('');
+
+  const changeQuestion = (e) => {
+    setEditInput(e.target.value);
+  };
+
+  const editMutation = useMutation(editQuestion, {
+    onSuccess: () => {
+      alert('수정완료');
+      queryClient.invalidateQueries('getPost');
+    },
+  });
+
+  const onEditHandler = (postid) => {
+    editMutation.mutate({ id: postid, token: token, content: editInput });
+  };
+
+  // 수정과 관련된 기능 객체
+  const editHandlerProps = {
+    editInputValue: editInput,
+    setEditInputValue: setEditInput,
+    editInputChangeHandler: changeQuestion,
+    editSubmitHandler: onEditHandler,
+  };
 
   return (
     <WriteQuestionContainer>
-      <QuestionContainer>
-        <label>질문하기</label>
-        <textarea />
+      <QuestionFormContainer onSubmit={submitPostContent}>
+        <label>
+          <NicknameSpan>{data.user.nickname}</NicknameSpan>님에게 질문하기
+        </label>
+        <textarea name="content" value={question} onChange={changeContent} />
         <QuestionSubmitContainer>
-          <input type="radio" value="익명" />
-          <label>익명으로 작성</label>
+          <input
+            type="checkbox"
+            ref={anonymous}
+            id={'anonymous'}
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
+          {/* <lable style={{ paddingRight: '5px' }}>익명으로 작성</lable> */}
+          <label htmlFor={'anonymous'}>
+            {isChecked ? <FcLock fill="tomato" /> : <FcUnlock />}
+          </label>
+
           <Button w={'60px'} bg={'#58793e'} color={'white'}>
             확인
           </Button>
         </QuestionSubmitContainer>
-      </QuestionContainer>
+      </QuestionFormContainer>
       <QuestionContainer>
-        <label>내가 남긴 질문</label>
-        {data.length === 0 ? (
-          <QuestionBox>
-            질문한 내역이 없습니다. 궁금한 점을 물어보세요 !
-          </QuestionBox>
-        ) : (
-          data.map((list) => (
-            <QuestionBox key={list.postid}>{list.content}</QuestionBox>
-          ))
+        {data.upperPost.length !== 0 && (
+          <label>
+            <NicknameSpan>내가</NicknameSpan> 남긴 질문
+          </label>
         )}
+        {data?.upperPost.map((item, i) => (
+          <QuestionBoxs
+            key={i}
+            nickname={item.nickname}
+            content={item.content}
+            date={item.createdAt}
+            comment={item.commentResponseDto}
+            postId={item.postId}
+            edit={editHandlerProps}
+          >
+            {!item.commentResponseDto && (
+              <QuestionDelete onClick={() => onDeleteHandler(item.postId)}>
+                <TbTrash />
+              </QuestionDelete>
+            )}
+          </QuestionBoxs>
+        ))}
       </QuestionContainer>
+
       <QuestionContainer>
-        <label> dajeong 님에게 작성된 질문</label>
-        <QuestionBox>질문한 내용~~</QuestionBox>
-        <QuestionBox>질문한 내용~~</QuestionBox>
+        {data.bottomPost.content.length !== 0 ? (
+          <label>
+            <NicknameSpan>{data.user.nickname}</NicknameSpan>님에게 작성된 질문
+          </label>
+        ) : (
+          <label>
+            <EmptyQuestion>
+              다른 사람이<NicknameSpan> {data.user.nickname} </NicknameSpan>
+              님에게 질문을 작성하지 않았어요
+            </EmptyQuestion>
+          </label>
+        )}
+        {data?.bottomPost.content.map((item, i) => (
+          <QuestionBoxs
+            key={i}
+            nickname={item.nickname}
+            content={item.content}
+            date={item.createdAt}
+            postId={item.postId}
+            comment={item.commentResponseDto}
+          />
+        ))}
       </QuestionContainer>
     </WriteQuestionContainer>
   );
@@ -61,9 +180,21 @@ function DetailWriteQuestion() {
 
 export default DetailWriteQuestion;
 
+const QuestionDelete = styled.span`
+  margin-left: auto;
+  margin-top: 2px;
+  font-size: ${(props) => props.theme.FS.m};
+  cursor: pointer;
+`;
+
 export const WriteQuestionContainer = styled.div`
   background-color: ${(props) => props.theme.CL.brandColorLight};
   border-radius: 30px;
+`;
+
+export const NicknameSpan = styled.span`
+  color: #aa7d0a;
+  padding-left: 0.3125rem;
 `;
 
 export const QuestionContainer = styled.div`
@@ -79,7 +210,7 @@ export const QuestionContainer = styled.div`
   }
   textarea {
     width: 100%;
-    min-height: 9.375rem;
+    min-height: 1.25rem;
     padding: 1.25rem;
     border: none;
     border-radius: 30px;
@@ -91,30 +222,55 @@ export const QuestionContainer = styled.div`
   }
 `;
 
-export const QuestionBox = styled.div`
-  width: 100%;
-  height: 10rem;
-  margin-bottom: 0.625rem;
-  padding: 1.25rem;
-  border: none;
-  border-radius: 30px;
-  background-color: white;
-  font-size: ${(props) => props.theme.FS.m};
-`;
+const QuestionFormContainer = styled(QuestionContainer.withComponent('form'))``;
 
+export const EmptyQuestion = styled.div`
+  ${(props) => props.theme.FlexRow};
+`;
 const QuestionSubmitContainer = styled.div`
   ${(props) => props.theme.FlexRow};
   justify-content: end;
   margin-top: 10px;
 
   > input {
-    margin: 0;
-    margin-right: 10px;
+    display: none;
+  }
+  input:checked + label,
+  input + label:hover:not(input:checked + label) {
+    animation: 4.72s infinite shake;
+    @keyframes shake {
+      0% {
+        transform: translate(0, 0);
+      }
+      1.78571% {
+        transform: translate(5px, 0);
+      }
+      3.57143% {
+        transform: translate(0, 0);
+      }
+      5.35714% {
+        transform: translate(5px, 0);
+      }
+      7.14286% {
+        transform: translate(0, 0);
+      }
+      8.92857% {
+        transform: translate(5px, 0);
+      }
+      10.71429% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(0, 0);
+      }
+    }
   }
   > label {
     width: auto;
     font-size: ${(props) => props.theme.FS.m};
-    margin: 0;
-    margin-right: 10px;
+    margin: 4px 10px 0 0;
+    svg {
+      font-size: ${(props) => props.theme.FS.xl};
+    }
   }
 `;

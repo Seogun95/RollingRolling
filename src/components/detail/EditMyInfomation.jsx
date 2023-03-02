@@ -1,110 +1,279 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import Sidebar from '../layout/Sidebar';
 import Input from '../elements/Input';
-import Button from '../elements/Button';
+import { FaUserAlt, FaLock } from 'react-icons/fa';
+import { BsEmojiSunglassesFill, BsEnvelopeFill } from 'react-icons/bs';
+import useLoginInput from '../../hooks/useLoginInput';
+import defaultImg from '../../style/img/example.png';
+import { useNavigate, useParams } from 'react-router';
 import { useState } from 'react';
-import { FaUserAlt, FaLock, FaEnvelope } from 'react-icons/fa';
-import { BsFillEmojiSunglassesFill } from 'react-icons/bs';
-import { LoginInputContainer, LoginAlertSpan } from '../../pages/LoginPage';
-import defaultImg from '../style/img/example.png';
+import { useMutation } from 'react-query';
+import { editMyInfo, imgUpload } from '../../util/api/detailList';
+import SuccessCheckButton from './SuccessCheckButton';
+import imageCompression from 'browser-image-compression';
+import Cookies from 'js-cookie';
+import { loginInfo } from '../../util/api/userInfo';
 
-function EditMyInfomation() {
-  const [inputId, setinputId] = useState('');
-  const [inputPw, setinputPw] = useState('');
-  const [inputCheckPw, setinputCheckPw] = useState('');
-  const [inputEmail, setinputEmail] = useState('');
-  const [inputNickname, setinputNickname] = useState('');
+function EditMyInfomation({ setEdit }) {
+  const param = useParams();
+  const navigate = useNavigate;
+  const [myIntro, setMyIntro] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
 
-  const [idMessage, setIdMessage] = useState('아이디를 입력해주세요');
-  const [pwMessage, setPwMessage] = useState('비밀번호를 입력해주세요');
-  const [checkPwMessage, setCheckPwMessage] =
-    useState('비밀번호를 다시 입력해주세요');
-  const [emailMessage, setEmailMessage] = useState('이메일을 입력해주세요');
-  const [nicknameMessage, setNicknameMessage] =
-    useState('닉네임을 입력해주세요');
+  const pwRegex = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,20}$/;
+  const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useLoginInput(
+    '',
+    '비밀번호를 입력해주세요.',
+    '영문과 숫자, 특수문자 조합의 8-20자의 비밀번호를 사용해야 합니다.',
+    '사용 가능한 비밀번호 입니다.',
+    pwRegex
+  );
 
-  const [isId, setIsId] = useState(false);
-  const [isPw, setIsPw] = useState(false);
-  const [isCheckPw, setIsCheckPw] = useState(false);
-  const [isEmail, setIsEmail] = useState(false);
-  const [isNickname, setIsNickname] = useState(false);
+  const [inputCheckPw, , alertCheckPw, doubleCheckPwRegex, checkSame] =
+    useLoginInput(
+      '',
+      '비밀번호를 다시 입력해주세요',
+      '비밀번호가 같지 않습니다. 다시 입력해주세요.',
+      '비밀번호가 같습니다.',
+      pwRegex,
+      inputPw
+    );
+
+  // 취소 버튼 클릭시 -> myQuestion 페이지
+  const moveMyQuestion = () => {
+    navigate(`/home/${param.id}`);
+  };
+  // textarea
+  const changeIntro = (e) => {
+    setMyIntro(e.target.value);
+  };
+  // nickname
+  const changeNickname = (e) => {
+    setNickname(e.target.value);
+  };
+
+  // 토큰
+  const token = Cookies.get('accessJWTToken');
+
+  // 회원정보 불러오기
+  const getInfo = useMutation('getInfo', loginInfo, {
+    onSuccess: (data) => {
+      setMyIntro(data.introduction);
+      if (data.nickname !== null) {
+        setNickname(data.nickname);
+      } else {
+        setNickname(data.username);
+      }
+    },
+  });
+
+  useEffect(() => {
+    getInfo.mutate({ token });
+  }, [token]);
+
+  const [profileImg, setProfileImg] = useState({ proImg: '', viewUrl: '' });
+  // img url return값
+  const [updateImg, setUpdataImg] = useState(new FormData());
+
+  // 이미지 클릭시 change event
+  const uploadProfile = async (e) => {
+    const profileImg = e.target.files[0];
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(profileImg, options);
+
+      const formImg = new FormData();
+      formImg.append('img', profileImg);
+      setUpdataImg(formImg);
+
+      const fileReader = new FileReader();
+
+      fileReader.readAsDataURL(compressedFile);
+
+      fileReader.onload = () => {
+        setProfileImg({
+          viewUrl: String(fileReader.result),
+        });
+      };
+      setIsEdit(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // img api
+  const uploadImg = useMutation('uploadImg', imgUpload, {
+    onSuccess: (data) => {
+      const newInfo = {
+        newPassword: inputPw,
+        newPasswordConfirm: inputCheckPw,
+        nickname: nickname,
+        image: data,
+        email: getInfo.data.email,
+        introduction: myIntro,
+      };
+      if (data === undefined) {
+        newInfo.image = getInfo.data.image;
+      } else {
+        newInfo.image = data;
+      }
+      editInfo.mutate({ token, newInfo });
+    },
+  });
+
+  // 수정 버튼 클릭시 정보수정
+  const editMyInfoClick = async (e) => {
+    e.preventDefault();
+    uploadImg.mutate({ token, img: updateImg });
+  };
+
+  // api
+  const editInfo = useMutation('editinfo', editMyInfo, {
+    onSuccess: (data) => {
+      alert('정보가 수정되었습니다.');
+      setEdit('');
+    },
+  });
+
   return (
-    <EditWrapper>
-      <Sidebar />
-      <EditContainer>
-        <ProfileContainer>
-          <h1>Profile</h1>
-          <ProfileImgContainer>
-            <ProfileImg src={defaultImg} alt=""></ProfileImg>
-            <label>www.rolling.com/정다정</label>
-            <textarea placeholder="아직 작성된 소개글이 없습니다."></textarea>
-          </ProfileImgContainer>
-        </ProfileContainer>
+    <EditMyInfoContainer>
+      <EditInputContainer>
+        <Input
+          disabled
+          text={'아이디'}
+          type={'text'}
+          width={'60%'}
+          value={
+            getInfo.data && getInfo.data.username !== null
+              ? getInfo.data && getInfo.data.username
+              : ''
+          }
+          readOnly
+        >
+          <FaUserAlt />
+        </Input>
 
-        <LoginInputContainer>
-          <Input text={'아이디'} type={'text'}>
-            <FaUserAlt />
-          </Input>
+        <Input
+          text={'새 비밀번호'}
+          value={inputPw}
+          onChange={inputPwHandler}
+          type={'password'}
+        >
+          <FaLock />
+        </Input>
+        <InputMessageSpan isIdOrPw={checkPwRegex}>{alertPw}</InputMessageSpan>
 
-          <Input text={'비밀번호'} value={inputPw} type={'password'}>
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={isPw}>{pwMessage}</LoginAlertSpan>
+        <Input
+          text={'새 비밀번호 확인'}
+          value={inputCheckPw}
+          onChange={checkSame}
+          type={'password'}
+        >
+          <FaLock />
+        </Input>
+        <InputMessageSpan isIdOrPw={doubleCheckPwRegex}>
+          {alertCheckPw}
+        </InputMessageSpan>
 
-          <Input text={'비밀번호 확인'} value={inputCheckPw} type={'password'}>
-            <FaLock />
-          </Input>
-          <LoginAlertSpan isIdOrPw={isCheckPw}>{checkPwMessage}</LoginAlertSpan>
+        <Input
+          text={'닉네임'}
+          onChange={changeNickname}
+          type={'text'}
+          value={nickname}
+        >
+          <BsEmojiSunglassesFill />
+        </Input>
 
-          <Input text={'닉네임'} value={inputNickname} type={'text'}>
-            <BsFillEmojiSunglassesFill />
-          </Input>
+        <Input
+          disabled
+          text={'이메일'}
+          type={'email'}
+          value={
+            getInfo.data && getInfo.data.email !== null
+              ? getInfo.data && getInfo.data.email
+              : ''
+          }
+          readOnly
+        >
+          <BsEnvelopeFill />
+        </Input>
 
-          <LoginAlertSpan isIdOrPw={isNickname}>
-            {nicknameMessage}
-          </LoginAlertSpan>
+        <SuccessCheckButton
+          name1={'취소'}
+          name2={'수정'}
+          click1={moveMyQuestion}
+          click2={editMyInfoClick}
+        />
+      </EditInputContainer>
 
-          <Input text={'이메일'} value={inputEmail} type={'email'}>
-            <FaEnvelope />
-          </Input>
-          <LoginAlertSpan isIdOrPw={isEmail}>{emailMessage}</LoginAlertSpan>
+      <ProfileContainer>
+        <ProfileImgContainer>
+          <ImgContainer htmlFor="inputProfile">
+            {getInfo.data?.image ? (
+              <ProfileImg
+                src={isEdit ? profileImg.viewUrl : getInfo.data?.image}
+                alt=""
+              />
+            ) : (
+              <ProfileImg
+                src={isEdit ? profileImg.viewUrl : defaultImg}
+                alt=""
+              />
+            )}
 
-          <Button bg={'#8CB46D'} h={'3.125rem'} size={'0.9rem'}>
-            회원가입
-          </Button>
-          <button>취소</button>
-          <button>수정</button>
-        </LoginInputContainer>
-      </EditContainer>
-    </EditWrapper>
+            <input
+              id="inputProfile"
+              type="file"
+              accept="image/*"
+              style={{ display: 'none' }}
+              onChange={uploadProfile}
+            ></input>
+          </ImgContainer>
+          <textarea
+            value={myIntro}
+            onChange={changeIntro}
+            placeholder="자기소개를 입력해주세요."
+          ></textarea>
+        </ProfileImgContainer>
+      </ProfileContainer>
+    </EditMyInfoContainer>
   );
 }
 
 export default EditMyInfomation;
 
-const EditWrapper = styled.div`
-  ${(props) => props.theme.FlexRow};
-  width: 100vw;
-  height: 100vh;
+const EditMyInfoContainer = styled.form`
+  ${(props) => props.theme.FlexRow}
+  justify-content: space-between;
+  background-color: ${(props) => props.theme.CL.brandColorLight};
+  height: 100%;
+  padding: 1.25rem 3rem;
+  border-radius: 30px;
 `;
 
-const EditContainer = styled.div`
-  /* background-color: ${(props) => props.theme.CL.brandColor}; */
-  ${(props) => props.theme.FlexRow}
-  background-color: #4c4b4b;
-  border-radius: 30px;
-  width: 60vw;
-  min-height: 90vh;
-  padding: 50px 150px;
+const EditInputContainer = styled.div`
+  ${(props) => props.theme.FlexCol}
   align-items: flex-start;
+  margin: 1rem 0;
+  margin-right: 50px;
+`;
+
+const InputMessageSpan = styled.div`
+  font-size: 0.8rem;
+  padding: 0.4rem 0.5rem 0.5rem;
+  height: ${(props) => props.height};
+  color: ${(props) => (props.isIdOrPw ? '#58793e' : 'tomato')};
 `;
 
 const ProfileContainer = styled.div`
-  background-color: pink;
   width: 400px;
-  margin: 20px;
-  margin-right: 50px;
+
   > h1 {
     width: 100%;
     margin-bottom: 30px;
@@ -115,19 +284,42 @@ const ProfileContainer = styled.div`
 const ProfileImgContainer = styled.div`
   ${(props) => props.theme.FlexCol}
 
-  > label {
-    font-size: ${(props) => props.theme.FS.s};
-    margin-bottom: 30px;
-  }
-
   > textarea {
     width: 300px;
-    height: 200px;
+    height: 220px;
+    margin-top: 30px;
+    padding: 1.5rem;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    background-color: ${(props) => props.theme.CL.brandColor};
+    box-shadow: 0 1px 10px #0000008a;
+    font-size: ${(props) => props.theme.FS.m};
+    resize: none;
+    &::placeholder {
+      color: #d0d0d0;
+    }
   }
+`;
+const ImgContainer = styled.label`
+  position: relative;
 `;
 
 const ProfileImg = styled.img`
+  width: 250px;
   height: 250px;
-  border-radius: 50%;
+  border: 5px solid ${(props) => props.theme.CL.brandColor};
+  border-radius: 30px;
   margin-bottom: 30px;
+
+  position: relative;
+  cursor: pointer;
 `;
+
+// const ChangeImg = styled.div`
+//   width: 100%;
+//   height: 100%;
+//   position: absolute;
+//   top: 40%;
+//   left: 38%;
+// `;

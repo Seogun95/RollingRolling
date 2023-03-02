@@ -2,27 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import DetailWriteQuestion from './DetailWriteQuestion';
 import DetailMyQuestion from './DetailMyQuestion';
+import EditMyInfomation from './EditMyInfomation';
+import EditMyInfoPasswordCheck from './EditMyInfoPasswordCheck';
 
-function DetailContent() {
-  // if (isLoading) {
-  //   return <CardEmptyContainer>로딩중!!...</CardEmptyContainer>;
-  // }
-
-  // if (isError) {
-  //   return <CardEmptyContainer>오류가 발생했습니다.</CardEmptyContainer>;
-  // }
+function DetailContent({ data, edit, setEdit }) {
+  // data.myPost : 게시판 유저와 로그인 유저가 같으면 true / 다르면 false
 
   return (
     <DetailContainer>
       <DetailScrollContainer>
-        {/* 
-        추후 조건문으로 컴포넌트 걸러줄 예정...?
-        ex) 파라미터로 id 받고, 클릭한 페이지 id값 받아서 비교한 후
-            같으면 -> DetailMyQuestion component
-            다르면 -> DetailWriteQuestion component
-       */}
-        {/* <DetailWriteQuestion /> */}
-        <DetailMyQuestion />
+        {!data.myPost ? (
+          <DetailWriteQuestion />
+        ) : edit === 'pwCheck' ? (
+          <EditMyInfoPasswordCheck setEdit={setEdit} />
+        ) : edit === 'edit' ? (
+          <EditMyInfomation setEdit={setEdit} />
+        ) : (
+          <DetailMyQuestion data={data} />
+        )}
       </DetailScrollContainer>
     </DetailContainer>
   );
@@ -40,6 +37,7 @@ const DetailContainer = styled.div`
 `;
 
 const DetailScrollContainer = styled.div`
+  justify-content: center;
   height: 100%;
   padding-left: 1.875rem;
   // scroll

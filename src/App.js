@@ -9,6 +9,7 @@ import {
   CL,
   FS,
   DarkBlur,
+  Shadow,
 } from './style/Theme';
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function App() {
     CL,
     FS,
     DarkBlur,
+    Shadow,
   };
 
   return (

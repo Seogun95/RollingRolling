@@ -30,12 +30,17 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none; /* 언더바 제거 */
     color: inherit; /* 부모 요소의 색을 상속 받음 */
     }
-    input:focus {
-      outline: none;
-    }
     input {
       border: 0;
     }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+	 transition: background-color 5000s ease-in-out 0s;
+   }
+
     img {
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -47,6 +52,9 @@ export const GlobalStyle = createGlobalStyle`
     -moz-user-drag: none;
     -o-user-drag: none;
 }
+  *:focus {
+    outline: none !important;
+  }
     * {
       box-sizing: border-box;
     @font-face {
@@ -62,7 +70,14 @@ export const GlobalStyle = createGlobalStyle`
       font-weight: normal;
       font-style: normal;
     }
-      /* font-family: 'IBMPlexSansKR-Regular'; */
+
+    @font-face {
+    font-family: 'GangwonEdu_OTFBoldA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEdu_OTFBoldA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    }
+      font-family: 'GangwonEdu_OTFBoldA';
     }
 
     //반드시 overflow: overlay해야 -webkit-scrollbar-track 투명도를 설정할 수 있다.

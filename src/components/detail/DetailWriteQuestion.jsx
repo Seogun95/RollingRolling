@@ -70,7 +70,33 @@ function DetailWriteQuestion() {
       return;
     }
 
-    console.log(postid);
+    // console.log(postid);
+  };
+
+  //수정
+
+  const [editInput, setEditInput] = useState('');
+
+  const changeQuestion = (e) => {
+    setEditInput(e.target.value);
+  };
+
+  const editMutation = useMutation(editQuestion, {
+    onSuccess: () => {
+      alert('수정완료');
+      queryClient.invalidateQueries('getPost');
+    },
+  });
+
+  const onEditHandler = (postid) => {
+    editMutation.mutate({ id: postid, token: token, content: editInput });
+  };
+
+  // 수정과 관련된 기능 객체
+  const editHandlerProps = {
+    editInputValue: editInput,
+    editInputChangeHandler: changeQuestion,
+    editSubmitHandler: onEditHandler,
   };
 
   return (
@@ -111,13 +137,18 @@ function DetailWriteQuestion() {
             content={item.content}
             date={item.createdAt}
             comment={item.commentResponseDto}
+            postId={item.postId}
+            edit={editHandlerProps}
           >
-            <QuestionDelete onClick={() => onDeleteHandler(item.postId)}>
-              <TbTrash />
-            </QuestionDelete>
+            {!item.commentResponseDto && (
+              <QuestionDelete onClick={() => onDeleteHandler(item.postId)}>
+                <TbTrash />
+              </QuestionDelete>
+            )}
           </QuestionBoxs>
         ))}
       </QuestionContainer>
+
       <QuestionContainer>
         {data.bottomPost.content.length !== 0 ? (
           <label>
@@ -154,6 +185,7 @@ const QuestionDelete = styled.span`
   font-size: ${(props) => props.theme.FS.m};
   cursor: pointer;
 `;
+
 export const WriteQuestionContainer = styled.div`
   background-color: ${(props) => props.theme.CL.brandColorLight};
   border-radius: 30px;

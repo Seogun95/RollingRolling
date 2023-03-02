@@ -18,19 +18,21 @@ export default function Sidebar({ data, setEdit }) {
     setEdit('pwCheck');
   };
 
-  // 내 게시판 좋아요
-  const [isLike, setIsLike] = useState(false);
+  const [isLike, setIsLike] = useState(data.user.liked);
+
   const token = Cookies.get('accessJWTToken');
 
-  const likeClickHandler = () => {
-    likeCheck.mutate({ id: param.id, token });
-  };
-
+  const queryClient = useQueryClient();
   const likeCheck = useMutation(likeUser, {
     onSuccess: (data) => {
-      setIsLike(data.isLike);
+      queryClient.invalidateQueries('getPost');
     },
   });
+
+  const likeClickHandler = () => {
+    setIsLike(!isLike);
+    likeCheck.mutate({ id: param.id, token, liked: !isLike });
+  };
 
   return (
     <LayoutSidebar>
@@ -44,7 +46,8 @@ export default function Sidebar({ data, setEdit }) {
       <MyUrlContainer>
         <MyUrl>www.rolling.com/{data.user.username}</MyUrl>
         <LikeBtn isLike={isLike} onClick={likeClickHandler}>
-          {isLike ? <Heart /> : <HeartFill />} <span>{data.user.likeCnt}</span>
+          {data.user.liked ? <Heart /> : <HeartFill />}{' '}
+          <span>{data.user.likeCnt}</span>
         </LikeBtn>
       </MyUrlContainer>
       <MyDesc

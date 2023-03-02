@@ -118,7 +118,7 @@ function EditMyInfomation({ setEdit }) {
         email: getInfo.data.email,
         introduction: myIntro,
       };
-      if (data.status === 400) {
+      if (data === undefined) {
         newInfo.image = getInfo.data.image;
       } else {
         newInfo.image = data;

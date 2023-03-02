@@ -54,7 +54,7 @@ const HomeCardItemWrapper = styled.article`
   }
 `;
 
-const CardUserNameBox = styled.div`
+export const CardUserNameBox = styled.div`
   padding: 0.2rem 0.4rem;
   border-radius: 1rem;
   position: absolute;

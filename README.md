@@ -54,6 +54,7 @@
 > 문에 답변을 남기기 전까지 질문을 수정 및 삭제를 할 수 있지만, 답변이 완료되면
 > 수정과 삭제를 모두 할 수 없습니다. 자신의 페이지에 남겨진 질문에는 본인만 답변
 > 을 남길 수 있으며, 원치 않는 질문은 삭제할 수 있습니다.
+<img width="700" alt="image" src="https://user-images.githubusercontent.com/76584961/233805410-9204a46f-09b5-4b8a-be81-e3b2b7cd4834.png">
 
 ### ❤️ 좋아요 기능
 
@@ -102,7 +103,8 @@
 
 ### ☑ 검색 기능
 
-> 검색 기능 구현 - 다정
+> 검색 기능 구현 - 선중, 다정
+<img width="960" alt="CleanShot 2023-04-23 at 05 26 36" src="https://user-images.githubusercontent.com/76584961/233805372-245034b4-5e96-4a2e-a155-b57d34471825.png">
 
 ### ☑ 좋아요 기능 - 
 
@@ -111,6 +113,8 @@
 > - base64로 받아온 이미지 파일을 formData로 서버에 전송 (S3)
 > - (사용자의 이미지가 없다면) ? 디폴트 이미지 : 사용자 이미지
 > - 이미지 업로드를 통한 프로필 수정 기능
+<img width="960" alt="CleanShot 2023-04-23 at 05 32 45" src="https://user-images.githubusercontent.com/76584961/233805520-1886d199-6415-43b4-9902-69c7be08505f.png">
+
 
 ## BE적용 기술
 
